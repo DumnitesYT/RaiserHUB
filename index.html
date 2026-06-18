@@ -257,54 +257,63 @@
         };
 
         // ЛОГИКА РЕЗОЛВЕРА ССЫЛОК (Аналог Neferon Link Downloader)
-        window.resolveOtaLink = async function() {
-            const input = document.getElementById('ota-input').value.trim();
-            const btn = document.getElementById('resolver-btn');
-            const resultBox = document.getElementById('resolver-result');
-            const txtOutput = document.getElementById('resolved-url-text');
-            const dlBtn = document.getElementById('resolved-download-btn');
+window.resolveOtaLink = async function() {
+    const input = document.getElementById('ota-input').value.trim();
+    const btn = document.getElementById('resolver-btn');
+    const resultBox = document.getElementById('resolver-result');
+    const txtOutput = document.getElementById('resolved-url-text');
+    const dlBtn = document.getElementById('resolved-download-btn');
 
-            if(!input) {
-                alert("Пожалуйста, введите корректную ссылку downloadCheck!");
-                return;
-            }
+    if(!input) {
+        alert("Пожалуйста, введите корректную ссылку downloadCheck!");
+        return;
+    }
 
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> СВЯЗЬ С СЕРВЕРОМ OTA...`;
-            lucide.createIcons();
-            resultBox.classList.add('hidden');
+    btn.disabled = true;
+    btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> СВЯЗЬ С СЕРВЕРОМ OTA...`;
+    lucide.createIcons();
+    resultBox.classList.add('hidden');
 
-            try {
-                // Используем allorigins JSON прокси для обхода CORS ограничений браузера
-                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(input)}`;
+    try {
+        // Используем прозрачный CORS-прокси (он отдает чистый JSON без лишних оберток)
+        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(input)}`;
+        
+        const response = await fetch(proxyUrl);
+        if(!response.ok) {
+            throw new Error(`Прокси вернул статус HTTP ${response.status}`);
+        }
+        
+        // Получаем чистый JSON напрямую от OnePlus
+        const otaData = await response.json();
+        console.log("Ответ от OTA сервера:", otaData);
+
+        // Проверяем успешный статус ответа серверов OPPO
+        if (otaData.responseCode === 200 || otaData.responseCode === "200") {
+            if (otaData.body && otaData.body.fileList && otaData.body.fileList.length > 0) {
+                const realZipUrl = otaData.body.fileList[0].url;
                 
-                const response = await fetch(proxyUrl);
-                if(!response.ok) throw new Error("Прокси-сервер не ответил.");
+                txtOutput.innerText = realZipUrl;
+                dlBtn.href = realZipUrl;
                 
-                const jsonWrapper = await response.json();
-                // Парсим внутренний ответ, который вернул сервер OnePlus
-                const otaData = JSON.parse(jsonWrapper.contents);
-
-                if (otaData.responseCode === 200 && otaData.body && otaData.body.fileList && otaData.body.fileList.length > 0) {
-                    const realZipUrl = otaData.body.fileList[0].url;
-                    
-                    txtOutput.innerText = realZipUrl;
-                    dlBtn.href = realZipUrl;
-                    
-                    resultBox.classList.remove('hidden');
-                } else {
-                    const errCode = otaData.responseCode || otaData.errMsg || "Неизвестно";
-                    alert(`❌ Ошибка сервера OnePlus (Код ${errCode}). Похоже, срок действия этой сессии истек. Сгенерируйте ссылку заново на телефоне.`);
-                }
-            } catch (err) {
-                console.error(err);
-                alert("❌ Ошибка разбора ссылки. Проверьте правильность переданных параметров или попробуйте позже.");
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i> ДЕКОДИРОВАТЬ И НАЧАТЬ СКАЧИВАНИЕ`;
-                lucide.createIcons();
+                resultBox.classList.remove('hidden');
+            } else {
+                alert("❌ Сессия успешна, но массив файлов ('fileList') пуст. Проверьте параметры ссылки.");
             }
-        };
+        } else {
+            // Если сервер вернул ошибку параметров (например, код 2306 или 405)
+            const errCode = otaData.responseCode || otaData.status || "Неизвестно";
+            const errMsg = otaData.errMsg || otaData.message || "Ошибка параметров сессии";
+            alert(`❌ Ошибка сервера OnePlus (Код: ${errCode})\nТекст: ${errMsg}\n\nПохоже, ссылка устарела или скопирована не полностью. Сгенерируйте новую ссылку на смартфоне!`);
+        }
+    } catch (err) {
+        console.error("Детали ошибки резолвера:", err);
+        alert(`❌ Ошибка сети или разбора данных:\n${err.message}\n\nУбедитесь, что ссылка живая и не заблокирована сервером.`);
+    } finally {
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i> ДЕКОДИРОВАТЬ И НАЧАТЬ СКАЧИВАНИЕ`;
+        lucide.createIcons();
+    }
+};
 
         window.copyResolvedLink = function() {
             const text = document.getElementById('resolved-url-text').innerText;
