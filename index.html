@@ -3,576 +3,485 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FirmwareCloud — ROM Cloud for oplus!</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>FirmwareCloud | OnePlus Ecosystem Hub</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Базовые стили для интерфейса */
-        :root {
-            --bg-color: #0b0f19;
-            --card-bg: #111827;
-            --accent-color: #eb0029; /* СТИЛЬ ONEPLUS */
-            --text-main: #ffffff;
-            --text-muted: #9ca3af;
-            --input-bg: #1f2937;
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-space { font-family: 'Space Grotesk', sans-serif; }
+        
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(12px) scale(0.98); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-message {
+            animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.15; transform: scale(1); }
+            50% { opacity: 0.25; transform: scale(1.05); }
         }
-
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 40px;
-            background-color: rgba(17, 24, 39, 0.8);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid #1f2937;
-        }
-
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
-        .logo span {
-            color: var(--accent-color);
-        }
-
-        .auth-buttons button {
-            background: transparent;
-            color: var(--text-main);
-            border: 1px solid var(--text-muted);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .auth-buttons button:hover {
-            border-color: var(--text-main);
-        }
-
-        /* Главный экран выбора устройств */
-        .main-container {
-            max-width: 1200px;
-            margin: 60px auto;
-            text-align: center;
-            padding: 0 20px;
-        }
-
-        .main-title {
-            font-size: 48px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
-
-        .main-title span {
-            color: var(--accent-color);
-        }
-
-        .subtitle {
-            color: var(--text-muted);
-            margin-bottom: 40px;
-            font-size: 16px;
-        }
-
-        .search-container {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto 50px;
-        }
-
-        .search-container i {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 16px 16px 16px 50px;
-            background-color: var(--card-bg);
-            border: 1px solid #1f2937;
-            border-radius: 30px;
-            color: var(--text-main);
-            font-size: 16px;
-            box-sizing: border-box;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--accent-color);
-        }
-
-        /* Грид для карточек устройств */
-        .devices-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-            justify-content: center;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .device-card {
-            background-color: var(--card-bg);
-            border: 1px solid #1f2937;
-            border-radius: 12px;
-            padding: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            text-align: left;
-            cursor: pointer;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-
-        .device-card:hover {
-            transform: translateY(-2px);
-            border-color: #374151;
-        }
-
-        .device-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-
-        .device-icon-box {
-            background-color: #1f2937;
-            padding: 12px;
-            border-radius: 8px;
-            color: var(--text-muted);
-        }
-
-        .device-name {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 4px;
-        }
-
-        .device-count {
-            font-size: 12px;
-            color: var(--accent-color);
-            text-transform: uppercase;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .arrow-icon {
-            color: var(--text-muted);
-        }
-
-        /* Модальные окна (Авторизация) */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.75);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background-color: var(--card-bg);
-            border: 1px solid #1f2937;
-            border-radius: 16px;
-            width: 100%;
-            max-width: 400px;
-            padding: 32px;
-            box-sizing: border-box;
-            position: relative;
-        }
-
-        .close-modal {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 20px;
-            cursor: pointer;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 12px;
-            font-weight: bold;
-            color: var(--text-muted);
-            margin-bottom: 8px;
-            text-transform: uppercase;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--input-bg);
-            border: 1px solid #374151;
-            border-radius: 6px;
-            color: var(--text-main);
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        .form-group input:focus {
-            border-color: var(--accent-color);
-        }
-
-        .error-message {
-            color: var(--accent-color);
-            font-size: 14px;
-            margin-bottom: 15px;
-            text-align: left;
-            display: none;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 14px;
-            background-color: var(--accent-color);
-            border: none;
-            border-radius: 6px;
-            color: white;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
-        .divider {
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--text-muted);
-            margin-bottom: 20px;
-            font-size: 14px;
-        }
-
-        .divider::before, .divider::after {
-            content: '';
-            flex: 1;
-            border-bottom: 1px solid #1f2937;
-        }
-
-        .divider:not(:empty)::before { margin-right: .25em; }
-        .divider:not(:empty)::after { margin-left: .25em; }
-
-        .google-btn {
-            width: 100%;
-            padding: 12px;
-            background: transparent;
-            border: 1px solid #374151;
-            border-radius: 6px;
-            color: var(--text-main);
-            font-size: 15px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background-color 0.2s;
-        }
-
-        .google-btn:hover {
-            background-color: #1f2937;
-        }
-
-        .switch-auth-mode {
-            margin-top: 15px;
-            font-size: 14px;
-            color: var(--text-muted);
-        }
-
-        .switch-auth-mode a {
-            color: var(--text-main);
-            text-decoration: none;
-            font-weight: 500;
-        }
+        .neon-glow { animation: pulse-glow 8s infinite ease-in-out; }
     </style>
 </head>
-<body>
+<body class="bg-[#020613] text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-red-500/30">
 
-    <header>
-        <div class="logo">Firmware<span>Cloud</span></div>
-        <div class="auth-buttons">
-            <button id="openAuthBtn">Войти</button>
+    <div class="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[160px] pointer-events-none neon-glow"></div>
+    <div class="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none neon-glow" style="animation-delay: -4s;"></div>
+
+    <header class="border-b border-slate-900/60 bg-[#020613]/40 backdrop-blur-md sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
+                <div class="bg-gradient-to-tr from-red-500 via-rose-500 to-orange-500 p-2.5 rounded-xl text-white shadow-lg shadow-red-500/20">
+                    <i data-lucide="box" class="w-5 h-5"></i>
+                </div>
+                <span class="text-2xl font-black font-space tracking-tight text-white">
+                    FW<span class="text-red-500">CLOUD</span>
+                </span>
+            </div>
+
+            <div id="auth-zone">
+                <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
+                    <i data-lucide="log-in" class="w-4 h-4 text-red-500"></i> Войти
+                </button>
+            </div>
         </div>
     </header>
 
-    <div class="main-container">
-        <h1 class="main-title">Выберите устройство <span>OnePlus</span></h1>
-        <p class="subtitle">Интерактивный доступ к архивам OxygenOS. Выберите модель ниже для просмотра доступных пакетов прошивок.</p>
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
         
-        <div class="search-container">
-            <i class="fa-solid fa-magnifying-glass"></i>
-            <input type="text" id="searchInput" class="search-input" placeholder="Поиск смартфона (например, OnePlus 12)...">
+        <div class="text-center max-w-3xl space-y-4 mb-16 w-full">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> Стенд Модифицирован
+            </div>
+            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight text-center w-full block">
+                Выберите устройство <span class="bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">OnePlus</span>
+            </h1>
+            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-medium text-center">
+                Интерактивный доступ к архивам OxygenOS. Выберите модель ниже для просмотра доступных пакетов прошивок.
+            </p>
         </div>
 
-        <div class="devices-grid" id="devicesGrid">
-            <p style="color: var(--text-muted)">Загрузка списка устройств...</p>
-        </div>
-    </div>
-
-    <div class="modal-overlay" id="authModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModalBtn">&times;</button>
-            <h2 id="modalTitle" style="margin-top: 0; margin-bottom: 24px; text-align: left;">Войти</h2>
-            
-            <form id="authForm">
-                <div class="form-group">
-                    <label for="email">Email (для входа)</label>
-                    <input type="email" id="email" placeholder="user@domain.com" required>
-                </div>
-                <div class="form-group">
-                    <label for="password">Пароль</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
-                </div>
-                
-                <div class="error-message" id="authError">
-                    <i class="fa-solid fa-circle-xmark"></i> <span id="errorText">Ошибка сети Google</span>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitFormBtn">ВОЙТИ</button>
-            </form>
-
-            <div class="divider">или</div>
-
-            <button class="google-btn" id="googleLoginBtn">
-                <i class="fa-brands fa-google"></i> Продолжить с Google
-            </button>
-
-            <div class="switch-auth-mode" id="switchAuthBlock">
-                Нет аккаунта? <a href="#" id="toggleAuthModeLink">Создать аккаунт</a>
+        <div class="w-full max-w-xl mb-14 relative group">
+            <div class="relative bg-[#090d16]/90 border border-slate-800/80 rounded-2xl flex items-center px-4 py-1.5 focus-within:border-red-500/40 transition-colors shadow-inner">
+                <i data-lucide="search" class="w-5 h-5 text-slate-500 mr-3"></i>
+                <input type="text" id="search" placeholder="Поиск смартфона (например, OnePlus 12)..." class="w-full bg-transparent border-none text-white focus:outline-none text-base py-2">
             </div>
         </div>
+
+        <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+            </div>
+    </main>
+
+    <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-[#070b14] border border-slate-800/80 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
+            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <h2 id="modal-device-name" class="text-2xl sm:text-3xl font-black text-white mb-1">Device Name</h2>
+            <p class="text-sm text-slate-400 mb-6">Доступные сборки OxygenOS для данной модели:</p>
+            <div id="modal-firmware-list" class="space-y-4"></div>
+        </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, 
-            signInWithEmailAndPassword, 
-            createUserWithEmailAndPassword, 
-            signInWithPopup, 
-            GoogleAuthProvider,
-            onAuthStateChanged,
-            signOut
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-[#070b14] border border-slate-800/80 w-full max-w-md rounded-3xl p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="flex gap-4 border-b border-slate-900 pb-4 mb-6 font-space text-lg font-bold">
+                <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-red-500 pb-2 cursor-pointer">Вход</button>
+                <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-2 cursor-pointer">Регистрация</button>
+            </div>
+            <form onsubmit="handleAuth(event)" class="space-y-4">
+                <div>
+                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Email (для входа)</label>
+                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
+                </div>
+                <div>
+                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Пароль</label>
+                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
+                </div>
+                <div id="confirm-pass-container" class="hidden">
+                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Повторите пароль</label>
+                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
+                </div>
+                
+                <div id="auth-error-msg" class="text-xs font-medium text-red-400 min-h-[16px] hidden"></div>
 
-        // КОНФИГУРАЦИЯ FIREBASE (Подставь сюда свои настоящие ключи, если они отличаются)
+                <button type="submit" id="auth-submit-btn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space">ВОЙТИ</button>
+                
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-slate-900"></div>
+                    <span class="flex-shrink mx-4 text-slate-500 text-xs font-bold font-space">ИЛИ</span>
+                    <div class="flex-grow border-t border-slate-900"></div>
+                </div>
+
+                <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition text-sm font-space cursor-pointer">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
+                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                    </svg>
+                    Продолжить с Google
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-40 w-80 sm:w-96 flex flex-col transition-all duration-300 translate-y-[380px]">
+        <div onclick="toggleChat()" class="bg-gradient-to-r from-slate-900 to-[#0b1324] border border-slate-800/80 rounded-t-2xl p-4 flex items-center justify-between cursor-pointer shadow-xl">
+            <div class="flex items-center gap-2">
+                <div class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></div>
+                <span class="font-bold text-sm font-space tracking-wide">ОБЩИЙ ЧАТ (REALTIME)</span>
+            </div>
+            <i data-lucide="chevron-up" id="chat-toggle-icon" class="w-4 h-4 text-slate-400 transition-transform duration-300"></i>
+        </div>
+        <div class="bg-[#070b14]/95 backdrop-blur-md border-x border-b border-slate-800 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
+            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-slate-900 flex gap-2 rounded-b-2xl relative">
+                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-red-500/50 disabled:opacity-50">
+                <button type="submit" id="chat-send-btn" class="bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition">
+                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <footer class="border-t border-slate-950 bg-[#02050b] py-8 text-center text-xs text-slate-600 font-bold font-space">
+        &copy; 2026 FIRMWARECLOUD. NEVER SETTLE.
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+        import { getFirestore, collection, addDoc, query, orderBy, limit, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
         const firebaseConfig = {
-            apiKey: "AIzaSyA4...", // ВСТАВЬ СЮДА СВОЙ ДЕЙСТВИТЕЛЬНЫЙ API КЛЮЧ
+            apiKey: "AIzaSyBmf1Fu7WYGkaen5vWaxctPpKY6A-5yils",
             authDomain: "fwcloud-70490.firebaseapp.com",
             projectId: "fwcloud-70490",
-            storageBucket: "fwcloud-70490.appspot.com",
+            storageBucket: "fwcloud-70490.firebasestorage.app",
             messagingSenderId: "562358328378",
-            appId: "1:562358328378:web:..." 
+            appId: "1:562358328378:web:8af0273dfee473f6712903",
+            measurementId: "G-BHBYVKF302"
         };
 
-        // Инициализируем Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const provider = new GoogleAuthProvider();
+        const db = getFirestore(app);
+        const googleProvider = new GoogleAuthProvider();
 
-        // Форсируем окно выбора аккаунта Google (без промежуточных зависаний)
-        provider.setCustomParameters({
-            prompt: 'select_account'
+        const DEVICES_DATA = [
+          { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 3, firmwares: [
+              { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15" },
+              { version: "OxygenOS 14.0.0.550", type: "Stable", region: "EU", size: "5.1 GB", date: "2026-05-10" },
+              { version: "OxygenOS 15.0.0.010 (Beta)", type: "Beta", region: "Global", size: "5.5 GB", date: "2026-06-01" }
+          ]},
+          { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
+              { version: "OxygenOS 14.0.0.501", type: "Stable", region: "EU", size: "4.8 GB", date: "2026-05-20" },
+              { version: "OxygenOS 14.0.0.300", type: "Stable", region: "IN", size: "4.7 GB", date: "2026-03-15" }
+          ]},
+          { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
+              { version: "OxygenOS 14.1.0.110", type: "Stable", region: "IN", size: "4.5 GB", date: "2026-05-02" },
+              { version: "OxygenOS 14.1.0.090", type: "Stable", region: "Global", size: "4.4 GB", date: "2026-04-10" }
+          ]},
+          { name: "OnePlus Open", imageIcon: "tablet", totalBuilds: 1, firmwares: [
+              { version: "OxygenOS 14.0.0.400", type: "Stable", region: "Global", size: "5.6 GB", date: "2026-04-18" }
+          ]}
+        ];
+
+        let currentUserEmail = null;
+        let authMode = 'login';
+        let lastMessageTime = 0;
+
+        lucide.createIcons();
+        renderDevices(DEVICES_DATA);
+
+        document.getElementById('search').addEventListener('input', (e) => {
+            const q = e.target.value.toLowerCase();
+            const filtered = DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q));
+            renderDevices(filtered);
         });
 
-        // ПЕРЕМЕННЫЕ ИНТЕРФЕЙСА
-        let isSignUpMode = false; // Режим: false = Вход, true = Регистрация
-        let devicesData = []; // Сюда скачаем данные из JSON
-
-        const authModal = document.getElementById('authModal');
-        const openAuthBtn = document.getElementById('openAuthBtn');
-        const closeModalBtn = document.getElementById('closeModalBtn');
-        const authForm = document.getElementById('authForm');
-        const modalTitle = document.getElementById('modalTitle');
-        const submitFormBtn = document.getElementById('submitFormBtn');
-        const toggleAuthModeLink = document.getElementById('toggleAuthModeLink');
-        const switchAuthBlock = document.getElementById('switchAuthBlock');
-        const googleLoginBtn = document.getElementById('googleLoginBtn');
-        const authError = document.getElementById('authError');
-        const errorText = document.getElementById('errorText');
-        const devicesGrid = document.getElementById('devicesGrid');
-        const searchInput = document.getElementById('searchInput');
-
-        // СЛЕЖКА ЗА СОСТОЯНИЕМ ПОЛЬЗОВАТЕЛЯ (Вошел или вышел)
+        // Статус авторизации
         onAuthStateChanged(auth, (user) => {
+            const az = document.getElementById('auth-zone');
             if (user) {
-                console.log("Пользователь авторизован:", user.email);
-                openAuthBtn.innerText = "Выйти (" + (user.displayName || user.email.split('@')[0]) + ")";
-                openAuthBtn.onclick = () => {
-                    signOut(auth).then(() => { window.location.reload(); });
-                };
+                currentUserEmail = user.email;
+                const shortName = user.email.split('@')[0];
+                az.innerHTML = `
+                    <div class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl py-1.5 pl-4 pr-2">
+                        <span class="text-sm font-bold text-white">${shortName}</span>
+                        <div class="w-8 h-8 bg-gradient-to-tr from-red-500 to-rose-500 rounded-lg flex items-center justify-center font-bold text-xs">${shortName.charAt(0).toUpperCase()}</div>
+                        <button id="logout-btn" class="text-slate-500 hover:text-red-400 p-1 transition cursor-pointer"><i data-lucide="log-out" class="w-4 h-4"></i></button>
+                    </div>`;
+                document.getElementById('logout-btn').onclick = () => signOut(auth);
             } else {
-                openAuthBtn.innerText = "Войти";
-                openAuthBtn.onclick = () => { openModal(); };
+                currentUserEmail = null;
+                az.innerHTML = `
+                    <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
+                        <i data-lucide="log-in" class="w-4 h-4 text-red-500"></i> Войти
+                    </button>`;
             }
+            lucide.createIcons();
         });
 
-        // УПРАВЛЕНИЕ МОДАЛКОЙ
-        function openModal() {
-            authModal.style.display = 'flex';
-            hideError();
-        }
-        function closeModal() {
-            authModal.style.display = 'none';
-            authForm.reset();
-        }
-        closeModalBtn.onclick = closeModal;
-        window.onclick = (e) => { if (e.target === authModal) closeModal(); };
+        // Стриминг чата
+        const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(50));
+        onSnapshot(qMessages, (snapshot) => {
+            const box = document.getElementById('chat-messages');
+            let html = `<div class="text-slate-500 text-[11px] text-center py-2 border-b border-slate-900 font-medium">Ссылки запрещены • Кулдаун 2 сек.</div>`;
+            
+            snapshot.forEach((doc) => {
+                const msg = doc.data();
+                const shortName = msg.user.split('@')[0];
+                const isMe = msg.user === currentUserEmail;
+                html += `
+                    <div class="bg-slate-900/40 p-2.5 rounded-xl border border-slate-900/60 animate-message">
+                        <div class="flex items-center justify-between mb-1">
+                            <span class="font-bold text-xs ${isMe ? 'text-red-400' : 'text-indigo-400'}">${shortName}</span>
+                            <span class="text-[10px] text-slate-600 font-space">${msg.time}</span>
+                        </div>
+                        <p class="${msg.system ? 'text-rose-400 italic' : 'text-slate-300'} text-xs leading-relaxed">${msg.text}</p>
+                    </div>`;
+            });
+            box.innerHTML = html;
+            box.scrollTop = box.scrollHeight;
+        });
 
-        // ПЕРЕКЛЮЧЕНИЕ МЕЖДУ ВХОДОМ И РЕГИСТРАЦИЕЙ
-        toggleAuthModeLink.onclick = (e) => {
+        // Отправка сообщений в чат
+        window.sendChatMessage = async function(e) {
             e.preventDefault();
-            isSignUpMode = !isSignUpMode;
-            hideError();
-            if (isSignUpMode) {
-                modalTitle.innerText = "Регистрация";
-                submitFormBtn.innerText = "СОЗДАТЬ АККАУНТ";
-                switchAuthBlock.innerHTML = 'Уже есть аккаунт? <a href="#" id="toggleAuthModeLink">Войти</a>';
-            } else {
-                modalTitle.innerText = "Войти";
-                submitFormBtn.innerText = "ВОЙТИ";
-                switchAuthBlock.innerHTML = 'Нет аккаунта? <a href="#" id="toggleAuthModeLink">Создать аккаунт</a>';
-            }
-            // Перепривязываем событие на новую ссылку
-            document.getElementById('toggleAuthModeLink').onclick = toggleAuthModeLink.onclick;
-        };
+            const input = document.getElementById('chat-input');
+            const sendBtn = document.getElementById('chat-send-btn');
+            const txt = input.value.trim();
+            if(!txt) return;
 
-        // ФУНКЦИИ ВЫВОДА ОШИБОК
-        function showError(msg) {
-            errorText.innerText = msg;
-            authError.style.display = 'flex';
-        }
-        function hideError() {
-            authError.style.display = 'none';
-        }
+            const now = Date.now();
+            if (now - lastMessageTime < 2000) return;
 
-        // ОТПРАВКА ФОРМЫ (Почта + Пароль)
-        authForm.onsubmit = async (e) => {
-            e.preventDefault();
-            hideError();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-
-            try {
-                if (isSignUpMode) {
-                    // Регистрация нового юзера
-                    await createUserWithEmailAndPassword(auth, email, password);
-                    console.log("Регистрация успешна!");
-                } else {
-                    // Обычный логин
-                    await signInWithEmailAndPassword(auth, email, password);
-                    console.log("Вход успешен!");
-                }
-                closeModal();
-            } catch (error) {
-                console.error("Ошибка формы:", error.code);
-                if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
-                    showError("Неверный email или пароль.");
-                } else if (error.code === 'auth/weak-password') {
-                    showError("Пароль должен быть не менее 6 символов.");
-                } else if (error.code === 'auth/email-already-in-use') {
-                    showError("Этот email уже зарегистрирован.");
-                } else {
-                    showError("Ошибка: " + error.message);
-                }
-            }
-        };
-
-        // АВТОРИЗАЦИЯ GOOGLE ЧЕРЕЗ POPUP (Идеально фиксит белые экраны)
-        googleLoginBtn.onclick = async (e) => {
-            e.preventDefault();
-            hideError();
-            try {
-                const result = await signInWithPopup(auth, provider);
-                console.log("Успешный вход через Google:", result.user.displayName);
-                closeModal();
-            } catch (error) {
-                console.error("Ошибка Google Auth:", error.code);
-                if (error.code === 'auth/popup-closed-by-user') {
-                    showError("Вход отменен пользователем.");
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    console.log("Повторный запрос отменил старый поп-ап.");
-                } else {
-                    showError("Ошибка сети Google. Добавьте dumnitesyt.github.io в Authorized Domains в Firebase!");
-                }
-            }
-        };
-
-        // ЗАГРУЗКА И ОТОБРАЖЕНИЕ УСТРОЙСТВ ИЗ JSON
-        async function loadDevices() {
-            try {
-                // Относительный fetch работает и на локалхосте, и на гитхабе!
-                const response = await fetch('firmwares.json');
-                if (!response.ok) throw new Error('Ошибка сети при чтении JSON');
-                devicesData = await response.json();
-                renderDevices(devicesData);
-            } catch (error) {
-                console.error(error);
-                devicesGrid.innerHTML = `<p style="color: var(--accent-color)">Ошибка загрузки данных: Failed to fetch json</p>`;
-            }
-        }
-
-        function renderDevices(list) {
-            if (list.length === 0) {
-                devicesGrid.innerHTML = `<p style="color: var(--text-muted)">Ничего не найдено</p>`;
+            const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9-]+\.(com|ru|net|org|io|biz|info|xyz|me))/gi;
+            if (urlRegex.test(txt)) {
+                await addDoc(collection(db, "messages"), {
+                    user: "Система",
+                    text: "❌ Ссылки запрещены в глобальном чате!",
+                    time: getCurrentTimeStr(),
+                    timestamp: now,
+                    system: true
+                });
+                input.value = '';
                 return;
             }
-            devicesGrid.innerHTML = list.map(device => `
-                <div class="device-card" onclick="alert('Выбрано устройство: ${device.name}')">
-                    <div class="device-info">
-                        <div class="device-icon-box">
-                            <i class="fa-solid fa-mobile-screen-button"></i>
+
+            await addDoc(collection(db, "messages"), {
+                user: currentUserEmail || "Анонимный Ванпласер",
+                text: txt,
+                time: getCurrentTimeStr(),
+                timestamp: now
+            });
+
+            input.value = '';
+            lastMessageTime = now;
+            triggerCooldown(input, sendBtn);
+        };
+
+        // Вход и регистрация Email/Пароль
+        window.handleAuth = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('auth-email').value.trim();
+            const pass = document.getElementById('auth-pass').value;
+            const confirmPass = document.getElementById('auth-pass-confirm').value;
+            const errorDiv = document.getElementById('auth-error-msg');
+            
+            errorDiv.classList.add('hidden');
+            errorDiv.innerText = '';
+
+            // Проверка совпадения паролей при регистрации
+            if (authMode === 'register' && pass !== confirmPass) {
+                errorDiv.innerText = '❌ Пароли не совпадают!';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            try {
+                if (authMode === 'login') {
+                    await signInWithEmailAndPassword(auth, email, pass);
+                } else {
+                    await createUserWithEmailAndPassword(auth, email, pass);
+                }
+                closeAuthModal();
+            } catch (err) {
+                errorDiv.classList.remove('hidden');
+                if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
+                    errorDiv.innerText = '❌ Неверный email или пароль';
+                } else if (err.code === 'auth/weak-password') {
+                    errorDiv.innerText = '❌ Пароль должен быть не менее 6 символов';
+                } else if (err.code === 'auth/email-already-in-use') {
+                    errorDiv.innerText = '❌ Этот Email уже зарегистрирован';
+                } else {
+                    errorDiv.innerText = `❌ Ошибка: ${err.message}`;
+                }
+            }
+        };
+
+        // Авторизация через Google (Вход / Регистрация в один клик)
+        window.handleGoogleAuth = async function() {
+            const errorDiv = document.getElementById('auth-error-msg');
+            errorDiv.classList.add('hidden');
+            
+            try {
+                await signInWithPopup(auth, googleProvider);
+                closeAuthModal();
+            } catch (err) {
+                errorDiv.classList.remove('hidden');
+                if (err.code === 'auth/popup-closed-by-user') {
+                    errorDiv.innerText = '❌ Окно авторизации было закрыто';
+                } else {
+                    errorDiv.innerText = `❌ Ошибка сети Google`;
+                }
+            }
+        };
+
+        function renderDevices(devices) {
+            const container = document.getElementById('devices-container');
+            if (devices.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-slate-500 py-10">Устройство не найдено</p>`;
+                return;
+            }
+            container.innerHTML = devices.map((dev) => `
+                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" 
+                     class="relative p-[1px] bg-slate-900 border border-slate-900/60 rounded-2xl hover:bg-gradient-to-br hover:from-red-500 hover:via-rose-600 hover:to-orange-500 transition-all duration-300 cursor-pointer group shadow-xl hover:-translate-y-1">
+                    <div class="bg-[#070b15]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full relative z-10">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#02050b] border border-slate-800 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-red-400 transition-all duration-300">
+                                <i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-lg font-bold text-white tracking-tight group-hover:text-red-400 transition-colors duration-200">${dev.name}</h3>
+                                <p class="text-[11px] text-slate-500 font-bold font-space uppercase mt-0.5 tracking-wider flex items-center gap-1.5">
+                                    <span class="w-1 h-1 rounded-full bg-red-500"></span> ${dev.totalBuilds} Сборки
+                                </p>
+                            </div>
                         </div>
-                        <div>
-                            <div class="device-name">${device.name}</div>
-                            <div class="device-count">● ${device.count || '1 СБОРКА'}</div>
+                        <div class="w-8 h-8 rounded-lg bg-slate-900/40 border border-slate-900/80 group-hover:bg-red-500/10 flex items-center justify-center text-slate-600 group-hover:text-red-400 transition-all duration-300">
+                            <i data-lucide="arrow-up-right" class="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
                         </div>
-                    </div>
-                    <div class="arrow-icon">
-                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </div>
                 </div>
             `).join('');
+            lucide.createIcons();
         }
 
-        // ЖИВОЙ ПОИСК
-        searchInput.oninput = (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            const filtered = devicesData.filter(d => d.name.toLowerCase().includes(query));
-            renderDevices(filtered);
+        window.openFirmwareModal = function(device) {
+            document.getElementById('modal-device-name').innerText = device.name;
+            const listContainer = document.getElementById('modal-firmware-list');
+            listContainer.innerHTML = device.firmwares.map(fw => `
+                <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                    <div class="space-y-1.5">
+                        <div class="flex items-center gap-2">
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${fw.type === 'Beta' ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}">${fw.type}</span>
+                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-slate-900 text-slate-400 rounded">${fw.region}</span>
+                            <span class="text-xs text-slate-500 font-medium font-space ml-2">${fw.date}</span>
+                        </div>
+                        <h4 class="text-white font-bold text-base tracking-tight">${fw.version}</h4>
+                    </div>
+                    <div class="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-none pt-2 sm:pt-0 border-slate-900">
+                        <span class="text-xs text-slate-400 font-space font-medium flex items-center gap-1"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i> ${fw.size}</span>
+                        <button onclick="downloadFirmware('${device.name}', '${fw.version}')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition cursor-pointer">СКАЧАТЬ</button>
+                    </div>
+                </div>`).join('');
+            document.getElementById('firmware-modal').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('fw-modal-card').classList.remove('scale-95');
+            lucide.createIcons();
         };
 
-        // Запускаем загрузку данных при открытии страницы
-        loadDevices();
+        window.closeFirmwareModal = function() {
+            document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('fw-modal-card').classList.add('scale-95');
+        };
+
+        window.downloadFirmware = function(devName, version) {
+            if (!currentUserEmail) {
+                openAuthModal('login');
+                document.getElementById('auth-error-msg').innerText = "🔒 Авторизуйтесь, чтобы скачать прошивку.";
+                document.getElementById('auth-error-msg').classList.remove('hidden');
+                closeFirmwareModal();
+            } else {
+                alert(`📥 Начинается скачивание:\n${devName} — ${version}`);
+            }
+        };
+
+        window.openAuthModal = function(tab = 'login') {
+            document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('auth-modal-card').classList.remove('scale-95');
+            switchAuthTab(tab);
+        };
+        window.closeAuthModal = function() {
+            document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('auth-modal-card').classList.add('scale-95');
+        };
+        window.switchAuthTab = function(tab) {
+            authMode = tab;
+            document.getElementById('auth-error-msg').classList.add('hidden');
+            document.getElementById('auth-error-msg').innerText = '';
+            
+            const confirmContainer = document.getElementById('confirm-pass-container');
+            const confirmInput = document.getElementById('auth-pass-confirm');
+
+            if (tab === 'login') {
+                document.getElementById('tab-login').className = "text-white border-b-2 border-red-500 pb-2 cursor-pointer";
+                document.getElementById('tab-register').className = "text-slate-500 pb-2 cursor-pointer";
+                document.getElementById('auth-submit-btn').innerText = "ВОЙТИ";
+                confirmContainer.classList.add('hidden');
+                confirmInput.required = false;
+            } else {
+                document.getElementById('tab-login').className = "text-slate-500 pb-2 cursor-pointer";
+                document.getElementById('tab-register').className = "text-white border-b-2 border-red-500 pb-2 cursor-pointer";
+                document.getElementById('auth-submit-btn').innerText = "СОЗДАТЬ АККАУНТ";
+                confirmContainer.classList.remove('hidden');
+                confirmInput.required = true;
+            }
+        };
+
+        window.toggleChat = function() {
+            const widget = document.getElementById('chat-widget');
+            const icon = document.getElementById('chat-toggle-icon');
+            if(widget.classList.contains('translate-y-[380px]')) {
+                widget.classList.remove('translate-y-[380px]');
+                icon.style.transform = 'rotate(180deg)';
+                const box = document.getElementById('chat-messages');
+                box.scrollTop = box.scrollHeight;
+            } else {
+                widget.classList.add('translate-y-[380px]');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        };
+
+        function triggerCooldown(input, button) {
+            input.disabled = true;
+            button.disabled = true;
+            let originalPlaceholder = input.placeholder;
+            input.placeholder = "Кулдаун 2 сек...";
+            setTimeout(() => {
+                input.disabled = false;
+                button.disabled = false;
+                input.placeholder = originalPlaceholder;
+            }, 2000);
+        }
+
+        function getCurrentTimeStr() {
+            const now = new Date();
+            return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+        }
     </script>
 </body>
 </html>
