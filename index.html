@@ -6,11 +6,10 @@
     <title>FirmwareCloud — ROM Cloud for oplus!</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Базовые стили для интерфейса */
         :root {
             --bg-color: #0b0f19;
             --card-bg: #111827;
-            --accent-color: #eb0029; /* СТИЛЬ ONEPLUS */
+            --accent-color: #eb0029;
             --text-main: #ffffff;
             --text-muted: #9ca3af;
             --input-bg: #1f2937;
@@ -59,7 +58,6 @@
             border-color: var(--text-main);
         }
 
-        /* Главный экран выбора устройств */
         .main-container {
             max-width: 1200px;
             margin: 60px auto;
@@ -114,7 +112,6 @@
             border-color: var(--accent-color);
         }
 
-        /* Грид для карточек устройств */
         .devices-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
@@ -175,7 +172,6 @@
             color: var(--text-muted);
         }
 
-        /* Модальные окна (Авторизация) */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -345,7 +341,7 @@
             
             <form id="authForm">
                 <div class="form-group">
-                    <label for="email">Email (для входа)</label>
+                    <label for="email">Email</label>
                     <input type="email" id="email" placeholder="user@domain.com" required>
                 </div>
                 <div class="form-group">
@@ -354,7 +350,7 @@
                 </div>
                 
                 <div class="error-message" id="authError">
-                    <i class="fa-solid fa-circle-xmark"></i> <span id="errorText">Ошибка сети Google</span>
+                    <i class="fa-solid fa-circle-xmark"></i> <span id="errorText">Ошибка</span>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitFormBtn">ВОЙТИ</button>
@@ -384,29 +380,26 @@
             signOut
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // КОНФИГУРАЦИЯ FIREBASE (Подставь сюда свои настоящие ключи, если они отличаются)
+        // ТВОИ РЕАЛЬНЫЕ ДАННЫЕ ИЗ КОНСОЛИ ФАЕРБЕЙС
         const firebaseConfig = {
-            apiKey: "AIzaSyA4...", // ВСТАВЬ СЮДА СВОЙ ДЕЙСТВИТЕЛЬНЫЙ API КЛЮЧ
+            apiKey: "ВСТАВЬ_СЮДА_СВОЙ_API_KEY_ИЗ_НАСТРОЕК", 
             authDomain: "fwcloud-70490.firebaseapp.com",
             projectId: "fwcloud-70490",
             storageBucket: "fwcloud-70490.appspot.com",
             messagingSenderId: "562358328378",
-            appId: "1:562358328378:web:..." 
+            appId: "1:562358328378:web:757451631be8bf49911e3b" // Вставь свой полный appId если он другой
         };
 
-        // Инициализируем Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
-        // Форсируем окно выбора аккаунта Google (без промежуточных зависаний)
         provider.setCustomParameters({
             prompt: 'select_account'
         });
 
-        // ПЕРЕМЕННЫЕ ИНТЕРФЕЙСА
-        let isSignUpMode = false; // Режим: false = Вход, true = Регистрация
-        let devicesData = []; // Сюда скачаем данные из JSON
+        let isSignUpMode = false;
+        let devicesData = [];
 
         const authModal = document.getElementById('authModal');
         const openAuthBtn = document.getElementById('openAuthBtn');
@@ -422,10 +415,8 @@
         const devicesGrid = document.getElementById('devicesGrid');
         const searchInput = document.getElementById('searchInput');
 
-        // СЛЕЖКА ЗА СОСТОЯНИЕМ ПОЛЬЗОВАТЕЛЯ (Вошел или вышел)
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                console.log("Пользователь авторизован:", user.email);
                 openAuthBtn.innerText = "Выйти (" + (user.displayName || user.email.split('@')[0]) + ")";
                 openAuthBtn.onclick = () => {
                     signOut(auth).then(() => { window.location.reload(); });
@@ -436,7 +427,6 @@
             }
         });
 
-        // УПРАВЛЕНИЕ МОДАЛКОЙ
         function openModal() {
             authModal.style.display = 'flex';
             hideError();
@@ -448,7 +438,6 @@
         closeModalBtn.onclick = closeModal;
         window.onclick = (e) => { if (e.target === authModal) closeModal(); };
 
-        // ПЕРЕКЛЮЧЕНИЕ МЕЖДУ ВХОДОМ И РЕГИСТРАЦИЕЙ
         toggleAuthModeLink.onclick = (e) => {
             e.preventDefault();
             isSignUpMode = !isSignUpMode;
@@ -462,11 +451,9 @@
                 submitFormBtn.innerText = "ВОЙТИ";
                 switchAuthBlock.innerHTML = 'Нет аккаунта? <a href="#" id="toggleAuthModeLink">Создать аккаунт</a>';
             }
-            // Перепривязываем событие на новую ссылку
             document.getElementById('toggleAuthModeLink').onclick = toggleAuthModeLink.onclick;
         };
 
-        // ФУНКЦИИ ВЫВОДА ОШИБОК
         function showError(msg) {
             errorText.innerText = msg;
             authError.style.display = 'flex';
@@ -475,7 +462,6 @@
             authError.style.display = 'none';
         }
 
-        // ОТПРАВКА ФОРМЫ (Почта + Пароль)
         authForm.onsubmit = async (e) => {
             e.preventDefault();
             hideError();
@@ -484,59 +470,48 @@
 
             try {
                 if (isSignUpMode) {
-                    // Регистрация нового юзера
                     await createUserWithEmailAndPassword(auth, email, password);
-                    console.log("Регистрация успешна!");
                 } else {
-                    // Обычный логин
                     await signInWithEmailAndPassword(auth, email, password);
-                    console.log("Вход успешен!");
                 }
                 closeModal();
             } catch (error) {
-                console.error("Ошибка формы:", error.code);
                 if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
                     showError("Неверный email или пароль.");
                 } else if (error.code === 'auth/weak-password') {
                     showError("Пароль должен быть не менее 6 символов.");
                 } else if (error.code === 'auth/email-already-in-use') {
-                    showError("Этот email уже зарегистрирован.");
+                    showError("Этот email уже занят.");
                 } else {
-                    showError("Ошибка: " + error.message);
+                    showError(error.message);
                 }
             }
         };
 
-        // АВТОРИЗАЦИЯ GOOGLE ЧЕРЕЗ POPUP (Идеально фиксит белые экраны)
+        // Вход через Google (Popup)
         googleLoginBtn.onclick = async (e) => {
             e.preventDefault();
             hideError();
             try {
-                const result = await signInWithPopup(auth, provider);
-                console.log("Успешный вход через Google:", result.user.displayName);
+                await signInWithPopup(auth, provider);
                 closeModal();
             } catch (error) {
-                console.error("Ошибка Google Auth:", error.code);
                 if (error.code === 'auth/popup-closed-by-user') {
-                    showError("Вход отменен пользователем.");
-                } else if (error.code === 'auth/cancelled-popup-request') {
-                    console.log("Повторный запрос отменил старый поп-ап.");
+                    showError("Окно входа закрыто пользователем.");
                 } else {
-                    showError("Ошибка сети Google. Добавьте dumnitesyt.github.io в Authorized Domains в Firebase!");
+                    showError("Ошибка сети или домен не авторизован в Firebase.");
                 }
             }
         };
 
-        // ЗАГРУЗКА И ОТОБРАЖЕНИЕ УСТРОЙСТВ ИЗ JSON
+        // Загрузка локального JSON
         async function loadDevices() {
             try {
-                // Относительный fetch работает и на локалхосте, и на гитхабе!
                 const response = await fetch('firmwares.json');
-                if (!response.ok) throw new Error('Ошибка сети при чтении JSON');
+                if (!response.ok) throw new Error();
                 devicesData = await response.json();
                 renderDevices(devicesData);
             } catch (error) {
-                console.error(error);
                 devicesGrid.innerHTML = `<p style="color: var(--accent-color)">Ошибка загрузки данных: Failed to fetch json</p>`;
             }
         }
@@ -564,14 +539,12 @@
             `).join('');
         }
 
-        // ЖИВОЙ ПОИСК
         searchInput.oninput = (e) => {
             const query = e.target.value.toLowerCase().trim();
             const filtered = devicesData.filter(d => d.name.toLowerCase().includes(query));
             renderDevices(filtered);
         };
 
-        // Запускаем загрузку данных при открытии страницы
         loadDevices();
     </script>
 </body>
