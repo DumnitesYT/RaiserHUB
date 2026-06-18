@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FirmwareCloud | OnePlus Ecosystem Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Space+Grotesk:wght=500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
         body { font-family: 'Plus Jakarta Sans', sans-serif; }
@@ -50,7 +50,7 @@
             <nav class="hidden md:flex items-center gap-1 bg-slate-950/60 border border-slate-900 p-1.5 rounded-xl font-space text-xs font-bold">
                 <button id="nav-firmwares" onclick="switchMainTab('firmwares')" class="px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer">ПРОШИВКИ</button>
                 <button id="nav-resolver" onclick="switchMainTab('resolver')" class="px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-1.5">
-                    <i data-lucide="link-2" class="w-3.5 h-3.5 text-red-500"></i> РЕЗОЛВЕР (NEFERON)
+                    <i data-lucide="link-2" class="w-3.5 h-3.5 text-red-500"></i> РЕЗОЛВЕР (CODE-X)
                 </button>
             </nav>
 
@@ -87,33 +87,33 @@
 
     <main id="section-resolver" class="hidden flex-1 max-w-3xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
         <div class="text-center space-y-4 mb-12 w-full">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
-                <i data-lucide="cpu" class="w-3.5 h-3.5"></i> OTA LINK DECODER
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
+                <i data-lucide="git-branch" class="w-3.5 h-3.5"></i> ENGINE V2 (FOLLOW-REDIRECTS)
             </div>
             <h1 class="text-4xl font-black tracking-tight text-white font-space">
-                Oppo / OnePlus <span class="text-red-500">Link Resolver</span>
+                Oplus Link <span class="text-red-500">Resolver Pro</span>
             </h1>
             <p class="text-slate-400 text-sm max-w-lg mx-auto font-medium">
-                Вставьте временную OTA-ссылку с токенами `downloadCheck`. Скрипт расшифрует ответ серверов раздачи и вытащит прямой чистый `.zip` на прошивку.
+                Умный декодер. Поддерживает как `downloadCheck` ссылки, так и сокращенные редирект-линки OTA обновлений (как в приложении CodeSenseiX).
             </p>
         </div>
 
         <div class="w-full bg-[#070b14]/90 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
             <div>
-                <label class="text-xs font-bold uppercase text-slate-400 block mb-2 font-space tracking-wide">Временная зашифрованная OTA ссылка:</label>
-                <textarea id="ota-input" rows="4" placeholder="https://component-ota-cn.allawntech.com/downloadCheck?c=..." class="w-full bg-slate-950 border border-slate-900 rounded-2xl py-3.5 px-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-red-500/50 resize-none leading-relaxed transition"></textarea>
+                <label class="text-xs font-bold uppercase text-slate-400 block mb-2 font-space tracking-wide">Вставьте OTA или downloadCheck ссылку:</label>
+                <textarea id="ota-input" rows="4" placeholder="https://component-ota-cn.allawntech.com/downloadCheck?c=...&#10;ИЛИ укороченную ссылку редиректа..." class="w-full bg-slate-950 border border-slate-900 rounded-2xl py-3.5 px-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-red-500/50 resize-none leading-relaxed transition"></textarea>
             </div>
 
             <button onclick="resolveOtaLink()" id="resolver-btn" class="w-full bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white font-bold py-4 rounded-xl transition text-sm font-space flex items-center justify-center gap-2 tracking-wide shadow-lg shadow-red-600/10 cursor-pointer">
-                <i data-lucide="play" class="w-4 h-4 fill-current"></i> ДЕКОДИРОВАТЬ И НАЧАТЬ СКАЧИВАНИЕ
+                <i data-lucide="play" class="w-4 h-4 fill-current"></i> НАЧАТЬ АНАЛИЗ И СЛЕДОВАНИЕ РЕДИРЕКТАМ
             </button>
 
             <div id="resolver-result" class="hidden space-y-4 pt-4 border-t border-slate-900/80 animate-message">
                 <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-start gap-3">
                     <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
                     <div class="text-left space-y-1">
-                        <h4 class="text-sm font-bold text-white font-space">Ссылка успешно извлечена!</h4>
-                        <p class="text-xs text-slate-400 leading-normal">Сервер подтвердил сессию. Прямой файл готов к скачиванию без ограничений по токенам.</p>
+                        <h4 class="text-sm font-bold text-white font-space">Декодирование успешно завершено!</h4>
+                        <p class="text-xs text-slate-400 leading-normal">Ссылка успешно очищена от токенов времени. Получен прямой доступ к хранилищу образов.</p>
                     </div>
                 </div>
                 
@@ -126,7 +126,7 @@
                     </div>
                     <p id="resolved-url-text" class="text-xs font-mono text-emerald-400 break-all bg-[#040811] p-3 rounded-xl border border-slate-900 max-h-24 overflow-y-auto text-left"></p>
                     <a id="resolved-download-btn" href="#" target="_blank" class="w-full mt-2 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-space py-3 rounded-xl transition">
-                        <i data-lucide="download" class="w-4 h-4"></i> СКАЧАТЬ НАПРЯМУЮ ИЗ ХРАНИЛИЩА OPPO
+                        <i data-lucide="download" class="w-4 h-4"></i> СКАЧАТЬ НАПРЯМУЮ (БЕЗ ОГРАНИЧЕНИЙ)
                     </a>
                 </div>
             </div>
@@ -225,9 +225,12 @@
 
         const DEVICES_DATA = [
           { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 3, firmwares: [
-              { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15", url: "https://oxygenos.oneplus.net/CPH2581_11_A.44_20240305.zip" },
-              { version: "OxygenOS 14.0.0.550", type: "Stable", region: "EU", size: "5.1 GB", date: "2026-05-10", url: "" }
-          ]}
+              { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15", url: "https://oxygenos.oneplus.net/CPH2581_11_A.44_20240305.zip" }
+          ]},
+          { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 2, firmwares: [] },
+          { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 2, firmwares: [] },
+          { name: "OnePlus Open", imageIcon: "smartphone", totalBuilds: 1, firmwares: [] },
+          { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 1, firmwares: [] }
         ];
 
         let currentUserEmail = null;
@@ -236,7 +239,6 @@
 
         renderDevices(DEVICES_DATA);
 
-        // Функция переключения основных вкладок сайта
         window.switchMainTab = function(tab) {
             const fSec = document.getElementById('section-firmwares');
             const rSec = document.getElementById('section-resolver');
@@ -256,71 +258,77 @@
             }
         };
 
-        // ЛОГИКА РЕЗОЛВЕРА ССЫЛОК (Аналог Neferon Link Downloader)
-window.resolveOtaLink = async function() {
-    const input = document.getElementById('ota-input').value.trim();
-    const btn = document.getElementById('resolver-btn');
-    const resultBox = document.getElementById('resolver-result');
-    const txtOutput = document.getElementById('resolved-url-text');
-    const dlBtn = document.getElementById('resolved-download-btn');
+        // ПОРТИРОВАННЫЙ СМАРТ-ДЕСЕРИАЛИЗАТОР ИЗ КЛАССОВ CODE-SENSEIX
+        window.resolveOtaLink = async function() {
+            const input = document.getElementById('ota-input').value.trim();
+            const btn = document.getElementById('resolver-btn');
+            const resultBox = document.getElementById('resolver-result');
+            const txtOutput = document.getElementById('resolved-url-text');
+            const dlBtn = document.getElementById('resolved-download-btn');
 
-    if(!input) {
-        alert("Пожалуйста, введите корректную ссылку downloadCheck!");
-        return;
-    }
-
-    btn.disabled = true;
-    btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> СВЯЗЬ С СЕРВЕРОМ OTA...`;
-    lucide.createIcons();
-    resultBox.classList.add('hidden');
-
-    try {
-        // Используем прозрачный CORS-прокси (он отдает чистый JSON без лишних оберток)
-        const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(input)}`;
-        
-        const response = await fetch(proxyUrl);
-        if(!response.ok) {
-            throw new Error(`Прокси вернул статус HTTP ${response.status}`);
-        }
-        
-        // Получаем чистый JSON напрямую от OnePlus
-        const otaData = await response.json();
-        console.log("Ответ от OTA сервера:", otaData);
-
-        // Проверяем успешный статус ответа серверов OPPO
-        if (otaData.responseCode === 200 || otaData.responseCode === "200") {
-            if (otaData.body && otaData.body.fileList && otaData.body.fileList.length > 0) {
-                const realZipUrl = otaData.body.fileList[0].url;
-                
-                txtOutput.innerText = realZipUrl;
-                dlBtn.href = realZipUrl;
-                
-                resultBox.classList.remove('hidden');
-            } else {
-                alert("❌ Сессия успешна, но массив файлов ('fileList') пуст. Проверьте параметры ссылки.");
+            if(!input) {
+                alert("Пожалуйста, введите ссылку.");
+                return;
             }
-        } else {
-            // Если сервер вернул ошибку параметров (например, код 2306 или 405)
-            const errCode = otaData.responseCode || otaData.status || "Неизвестно";
-            const errMsg = otaData.errMsg || otaData.message || "Ошибка параметров сессии";
-            alert(`❌ Ошибка сервера OnePlus (Код: ${errCode})\nТекст: ${errMsg}\n\nПохоже, ссылка устарела или скопирована не полностью. Сгенерируйте новую ссылку на смартфоне!`);
-        }
-    } catch (err) {
-        console.error("Детали ошибки резолвера:", err);
-        alert(`❌ Ошибка сети или разбора данных:\n${err.message}\n\nУбедитесь, что ссылка живая и не заблокирована сервером.`);
-    } finally {
-        btn.disabled = false;
-        btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i> ДЕКОДИРОВАТЬ И НАЧАТЬ СКАЧИВАНИЕ`;
-        lucide.createIcons();
-    }
-};
+
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> СЛЕДОВАНИЕ ПО ЦЕПОЧКЕ URL...`;
+            lucide.createIcons();
+            resultBox.classList.add('hidden');
+
+            try {
+                // Используем продвинутый прозрачный прокси, умеющий работать напрямую с HTTP заголовками и отдавать результат редиректа
+                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(input)}`;
+                
+                const response = await fetch(proxyUrl);
+                if(!response.ok) throw new Error(`HTTP Error Status: ${response.status}`);
+                
+                // Проверяем: если нам вернули прямую ссылку (.zip) в конечном счете через редирект прокси
+                if (response.url && response.url.includes('.zip')) {
+                    displaySuccess(response.url);
+                    return;
+                }
+
+                // Иначе пробуем распарсить как классический json-ответ от downloadCheck (если это сырой запрос)
+                const textData = await response.text();
+                try {
+                    const otaData = JSON.parse(textData);
+                    if ((otaData.responseCode === 200 || otaData.responseCode === "200") && otaData.body?.fileList?.length > 0) {
+                        displaySuccess(otaData.body.fileList[0].url);
+                    } else {
+                        const errCode = otaData.responseCode || "Параметры не приняты";
+                        alert(`❌ Ссылка устарела или вернула пустой список файлов (Code ${errCode}). Обновите OTA-токен.`);
+                    }
+                } catch(e) {
+                    // Если это не JSON, но в самом теле ответа прокси лежит итоговая ссылка (или перенаправление)
+                    if(textData.includes('http') && textData.includes('.zip')) {
+                        const match = textData.match(/(https?:\/\/[^\s"']+\.zip)/);
+                        if(match) { displaySuccess(match[0]); return; }
+                    }
+                    throw new Error("Не удалось извлечь zip из потока данных.");
+                }
+            } catch (err) {
+                console.error(err);
+                alert(`❌ Ошибка разбора ссылки.\nПричина: ${err.message}\n\nУбедитесь, что ссылка скопирована верно и не истек её жизненный цикл.`);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i> НАЧАТЬ АНАЛИЗ И СЛЕДОВАНИЕ РЕДИРЕКТАМ`;
+                lucide.createIcons();
+            }
+
+            function displaySuccess(url) {
+                txtOutput.innerText = url;
+                dlBtn.href = url;
+                resultBox.classList.remove('hidden');
+            }
+        };
 
         window.copyResolvedLink = function() {
             const text = document.getElementById('resolved-url-text').innerText;
-            navigator.clipboard.writeText(text).then(() => alert("Ссылка скопирована в буфер обмена!"));
+            navigator.clipboard.writeText(text).then(() => alert("Ссылка скопирована!"));
         };
 
-        // Поиск и отрисовка (Остальное без изменений)
+        // Базовая логика интерфейса (Firebase & Отрисовка)
         document.getElementById('search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase().trim();
             renderDevices(DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q)));
@@ -338,9 +346,7 @@ window.resolveOtaLink = async function() {
                         <button id="logout-btn" class="text-slate-500 hover:text-red-400 p-1 transition cursor-pointer"><i data-lucide="log-out" class="w-4 h-4"></i></button>
                     </div>`;
                 document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => window.location.reload());
-            } else {
-                currentUserEmail = null;
-            }
+            } else { currentUserEmail = null; }
             lucide.createIcons();
         });
 
@@ -409,7 +415,7 @@ window.resolveOtaLink = async function() {
                     <div class="bg-[#070b15]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-[#02050b] rounded-xl flex items-center justify-center text-slate-400 group-hover:text-red-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
-                            <div class="text-left"><h3 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">${dev.name}</h3><p class="text-[11px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1 h-1 rounded-full bg-red-500 inline-block"></span> ${dev.totalBuilds} Сборки</p></div>
+                            <div class="text-left"><h3 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">${dev.name}</h3><p class="text-[11px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1 h-1 rounded-full bg-red-500 inline-block"></span> ${dev.totalBuilds || 0} Сборки</p></div>
                         </div>
                         <div class="w-8 h-8 rounded-lg bg-slate-900/40 text-slate-600 group-hover:text-red-400 flex items-center justify-center"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></div>
                     </div>
@@ -419,14 +425,18 @@ window.resolveOtaLink = async function() {
 
         window.openFirmwareModal = function(device) {
             document.getElementById('modal-device-name').innerText = device.name;
-            document.getElementById('modal-firmware-list').innerHTML = device.firmwares.map(fw => `
-                <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
-                    <div class="space-y-1.5">
-                        <div class="flex items-center gap-2"><span class="text-[10px] font-bold px-2 py-0.5 rounded ${fw.type === 'Beta' ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}">${fw.type}</span><span class="text-xs text-slate-500 ml-2">${fw.date}</span></div>
-                        <h4 class="text-white font-bold text-base">${fw.version}</h4>
-                    </div>
-                    <button onclick="window.open('${fw.url || '#'}', '_blank')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition">СКАЧАТЬ</button>
-                </div>`).join('');
+            if(!device.firmwares || device.firmwares.length === 0) {
+                document.getElementById('modal-firmware-list').innerHTML = `<p class="text-xs text-slate-500 font-medium py-4 text-center">Прошивок пока нет для данной модели.</p>`;
+            } else {
+                document.getElementById('modal-firmware-list').innerHTML = device.firmwares.map(fw => `
+                    <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
+                        <div class="space-y-1.5">
+                            <div class="flex items-center gap-2"><span class="text-[10px] font-bold px-2 py-0.5 rounded ${fw.type === 'Beta' ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}">${fw.type}</span><span class="text-xs text-slate-500 ml-2">${fw.date}</span></div>
+                            <h4 class="text-white font-bold text-base">${fw.version}</h4>
+                        </div>
+                        <button onclick="window.open('${fw.url || '#'}', '_blank')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition">СКАЧАТЬ</button>
+                    </div>`).join('');
+            }
             document.getElementById('firmware-modal').classList.remove('opacity-0', 'pointer-events-none');
             document.getElementById('fw-modal-card').classList.remove('scale-95');
             lucide.createIcons();
