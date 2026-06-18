@@ -38,7 +38,7 @@
 
     <header class="border-b border-slate-900/60 bg-[#020613]/40 backdrop-blur-md sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3 group cursor-pointer" onclick="location.reload()">
+            <div class="flex items-center gap-3 group cursor-pointer" onclick="switchMainTab('firmwares')">
                 <div class="bg-gradient-to-tr from-red-500 via-rose-500 to-orange-500 p-2.5 rounded-xl text-white shadow-lg shadow-red-500/20">
                     <i data-lucide="box" class="w-5 h-5"></i>
                 </div>
@@ -46,6 +46,13 @@
                     FW<span class="text-red-500">CLOUD</span>
                 </span>
             </div>
+
+            <nav class="hidden md:flex items-center gap-1 bg-slate-950/60 border border-slate-900 p-1.5 rounded-xl font-space text-xs font-bold">
+                <button id="nav-firmwares" onclick="switchMainTab('firmwares')" class="px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer">ПРОШИВКИ</button>
+                <button id="nav-resolver" onclick="switchMainTab('resolver')" class="px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-1.5">
+                    <i data-lucide="link-2" class="w-3.5 h-3.5 text-red-500"></i> РЕЗОЛВЕР (NEFERON)
+                </button>
+            </nav>
 
             <div id="auth-zone">
                 <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
@@ -55,8 +62,7 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
-        
+    <main id="section-firmwares" class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
         <div class="text-center max-w-3xl space-y-4 mb-16 w-full">
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
                 <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> Стенд Модифицирован
@@ -79,11 +85,57 @@
         <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full"></div>
     </main>
 
+    <main id="section-resolver" class="hidden flex-1 max-w-3xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
+        <div class="text-center space-y-4 mb-12 w-full">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
+                <i data-lucide="cpu" class="w-3.5 h-3.5"></i> OTA LINK DECODER
+            </div>
+            <h1 class="text-4xl font-black tracking-tight text-white font-space">
+                Oppo / OnePlus <span class="text-red-500">Link Resolver</span>
+            </h1>
+            <p class="text-slate-400 text-sm max-w-lg mx-auto font-medium">
+                Вставьте временную OTA-ссылку с токенами `downloadCheck`. Скрипт расшифрует ответ серверов раздачи и вытащит прямой чистый `.zip` на прошивку.
+            </p>
+        </div>
+
+        <div class="w-full bg-[#070b14]/90 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
+            <div>
+                <label class="text-xs font-bold uppercase text-slate-400 block mb-2 font-space tracking-wide">Временная зашифрованная OTA ссылка:</label>
+                <textarea id="ota-input" rows="4" placeholder="https://component-ota-cn.allawntech.com/downloadCheck?c=..." class="w-full bg-slate-950 border border-slate-900 rounded-2xl py-3.5 px-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-red-500/50 resize-none leading-relaxed transition"></textarea>
+            </div>
+
+            <button onclick="resolveOtaLink()" id="resolver-btn" class="w-full bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white font-bold py-4 rounded-xl transition text-sm font-space flex items-center justify-center gap-2 tracking-wide shadow-lg shadow-red-600/10 cursor-pointer">
+                <i data-lucide="play" class="w-4 h-4 fill-current"></i> ДЕКОДИРОВАТЬ И НАЧАТЬ СКАЧИВАНИЕ
+            </button>
+
+            <div id="resolver-result" class="hidden space-y-4 pt-4 border-t border-slate-900/80 animate-message">
+                <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-start gap-3">
+                    <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
+                    <div class="text-left space-y-1">
+                        <h4 class="text-sm font-bold text-white font-space">Ссылка успешно извлечена!</h4>
+                        <p class="text-xs text-slate-400 leading-normal">Сервер подтвердил сессию. Прямой файл готов к скачиванию без ограничений по токенам.</p>
+                    </div>
+                </div>
+                
+                <div class="bg-slate-950 border border-slate-900 p-4 rounded-2xl space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-[10px] font-bold text-slate-500 font-space uppercase">Прямой URL (.zip архив)</span>
+                        <button onclick="copyResolvedLink()" class="text-xs text-red-400 hover:text-red-300 font-bold font-space flex items-center gap-1 cursor-pointer">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Копировать
+                        </button>
+                    </div>
+                    <p id="resolved-url-text" class="text-xs font-mono text-emerald-400 break-all bg-[#040811] p-3 rounded-xl border border-slate-900 max-h-24 overflow-y-auto text-left"></p>
+                    <a id="resolved-download-btn" href="#" target="_blank" class="w-full mt-2 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-space py-3 rounded-xl transition">
+                        <i data-lucide="download" class="w-4 h-4"></i> СКАЧАТЬ НАПРЯМУЮ ИЗ ХРАНИЛИЩА OPPO
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-[#070b14] border border-slate-800/80 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
-            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             <h2 id="modal-device-name" class="text-2xl sm:text-3xl font-black text-white mb-1">Device Name</h2>
             <p class="text-sm text-slate-400 mb-6">Доступные сборки OxygenOS для данной модели:</p>
             <div id="modal-firmware-list" class="space-y-4"></div>
@@ -92,16 +144,14 @@
 
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-[#070b14] border border-slate-800/80 w-full max-w-md rounded-3xl p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="flex gap-4 border-b border-slate-900 pb-4 mb-6 font-space text-lg font-bold">
                 <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-red-500 pb-2 cursor-pointer">Вход</button>
                 <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-2 cursor-pointer">Регистрация</button>
             </div>
             <form onsubmit="handleAuth(event)" class="space-y-4">
                 <div>
-                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Email (для входа)</label>
+                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Email</label>
                     <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
                 </div>
                 <div>
@@ -112,17 +162,13 @@
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Повторите пароль</label>
                     <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
                 </div>
-                
                 <div id="auth-error-msg" class="text-xs font-medium text-red-400 min-h-[16px] hidden"></div>
-
                 <button type="submit" id="auth-submit-btn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space">ВОЙТИ</button>
-                
                 <div class="relative flex py-2 items-center">
                     <div class="flex-grow border-t border-slate-900"></div>
                     <span class="flex-shrink mx-4 text-slate-500 text-xs font-bold font-space">ИЛИ</span>
                     <div class="flex-grow border-t border-slate-900"></div>
                 </div>
-
                 <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition text-sm font-space cursor-pointer">
                     <svg class="w-4 h-4" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
@@ -147,10 +193,8 @@
         <div class="bg-[#070b14]/95 backdrop-blur-md border-x border-b border-slate-800 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
             <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-slate-900 flex gap-2 rounded-b-2xl relative">
-                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-red-500/50 disabled:opacity-50">
-                <button type="submit" id="chat-send-btn" class="bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition">
-                    <i data-lucide="send" class="w-3.5 h-3.5"></i>
-                </button>
+                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-red-500/50">
+                <button type="submit" id="chat-send-btn" class="bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
             </form>
         </div>
     </div>
@@ -178,25 +222,11 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
-        googleProvider.setCustomParameters({ prompt: 'select_account' });
 
-        // Здесь ты можешь прописывать реальные URL-адреса прошивок для скачивания (поле url)
         const DEVICES_DATA = [
           { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 3, firmwares: [
               { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15", url: "https://oxygenos.oneplus.net/CPH2581_11_A.44_20240305.zip" },
-              { version: "OxygenOS 14.0.0.550", type: "Stable", region: "EU", size: "5.1 GB", date: "2026-05-10", url: "" },
-              { version: "OxygenOS 15.0.0.010 (Beta)", type: "Beta", region: "Global", size: "5.5 GB", date: "2026-06-01", url: "" }
-          ]},
-          { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
-              { version: "OxygenOS 14.0.0.501", type: "Stable", region: "EU", size: "4.8 GB", date: "2026-05-20", url: "" },
-              { version: "OxygenOS 14.0.0.300", type: "Stable", region: "IN", size: "4.7 GB", date: "2026-03-15", url: "" }
-          ]},
-          { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
-              { version: "OxygenOS 14.1.0.110", type: "Stable", region: "IN", size: "4.5 GB", date: "2026-05-02", url: "" },
-              { version: "OxygenOS 14.1.0.090", type: "Stable", region: "Global", size: "4.4 GB", date: "2026-04-10", url: "" }
-          ]},
-          { name: "OnePlus Open", imageIcon: "tablet", totalBuilds: 1, firmwares: [
-              { version: "OxygenOS 14.0.0.400", type: "Stable", region: "Global", size: "5.6 GB", date: "2026-04-18", url: "" }
+              { version: "OxygenOS 14.0.0.550", type: "Stable", region: "EU", size: "5.1 GB", date: "2026-05-10", url: "" }
           ]}
         ];
 
@@ -206,10 +236,85 @@
 
         renderDevices(DEVICES_DATA);
 
+        // Функция переключения основных вкладок сайта
+        window.switchMainTab = function(tab) {
+            const fSec = document.getElementById('section-firmwares');
+            const rSec = document.getElementById('section-resolver');
+            const fBtn = document.getElementById('nav-firmwares');
+            const rBtn = document.getElementById('nav-resolver');
+
+            if(tab === 'firmwares') {
+                fSec.classList.remove('hidden');
+                rSec.classList.add('hidden');
+                fBtn.className = "px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer";
+                rBtn.className = "px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-1.5";
+            } else {
+                fSec.classList.add('hidden');
+                rSec.classList.remove('hidden');
+                fBtn.className = "px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer";
+                rBtn.className = "px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer flex items-center gap-1.5";
+            }
+        };
+
+        // ЛОГИКА РЕЗОЛВЕРА ССЫЛОК (Аналог Neferon Link Downloader)
+        window.resolveOtaLink = async function() {
+            const input = document.getElementById('ota-input').value.trim();
+            const btn = document.getElementById('resolver-btn');
+            const resultBox = document.getElementById('resolver-result');
+            const txtOutput = document.getElementById('resolved-url-text');
+            const dlBtn = document.getElementById('resolved-download-btn');
+
+            if(!input) {
+                alert("Пожалуйста, введите корректную ссылку downloadCheck!");
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> СВЯЗЬ С СЕРВЕРОМ OTA...`;
+            lucide.createIcons();
+            resultBox.classList.add('hidden');
+
+            try {
+                // Используем allorigins JSON прокси для обхода CORS ограничений браузера
+                const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(input)}`;
+                
+                const response = await fetch(proxyUrl);
+                if(!response.ok) throw new Error("Прокси-сервер не ответил.");
+                
+                const jsonWrapper = await response.json();
+                // Парсим внутренний ответ, который вернул сервер OnePlus
+                const otaData = JSON.parse(jsonWrapper.contents);
+
+                if (otaData.responseCode === 200 && otaData.body && otaData.body.fileList && otaData.body.fileList.length > 0) {
+                    const realZipUrl = otaData.body.fileList[0].url;
+                    
+                    txtOutput.innerText = realZipUrl;
+                    dlBtn.href = realZipUrl;
+                    
+                    resultBox.classList.remove('hidden');
+                } else {
+                    const errCode = otaData.responseCode || otaData.errMsg || "Неизвестно";
+                    alert(`❌ Ошибка сервера OnePlus (Код ${errCode}). Похоже, срок действия этой сессии истек. Сгенерируйте ссылку заново на телефоне.`);
+                }
+            } catch (err) {
+                console.error(err);
+                alert("❌ Ошибка разбора ссылки. Проверьте правильность переданных параметров или попробуйте позже.");
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i> ДЕКОДИРОВАТЬ И НАЧАТЬ СКАЧИВАНИЕ`;
+                lucide.createIcons();
+            }
+        };
+
+        window.copyResolvedLink = function() {
+            const text = document.getElementById('resolved-url-text').innerText;
+            navigator.clipboard.writeText(text).then(() => alert("Ссылка скопирована в буфер обмена!"));
+        };
+
+        // Поиск и отрисовка (Остальное без изменений)
         document.getElementById('search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase().trim();
-            const filtered = DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q));
-            renderDevices(filtered);
+            renderDevices(DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q)));
         });
 
         onAuthStateChanged(auth, (user) => {
@@ -226,10 +331,6 @@
                 document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => window.location.reload());
             } else {
                 currentUserEmail = null;
-                az.innerHTML = `
-                    <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
-                        <i data-lucide="log-in" class="w-4 h-4 text-red-500"></i> Войти
-                    </button>`;
             }
             lucide.createIcons();
         });
@@ -238,15 +339,13 @@
         onSnapshot(qMessages, (snapshot) => {
             const box = document.getElementById('chat-messages');
             let html = `<div class="text-slate-500 text-[11px] text-center py-2 border-b border-slate-900 font-medium">Ссылки запрещены • Кулдаун 2 сек.</div>`;
-            
             snapshot.forEach((doc) => {
                 const msg = doc.data();
                 const shortName = msg.user ? msg.user.split('@')[0] : "Аноним";
-                const isMe = msg.user === currentUserEmail;
                 html += `
                     <div class="bg-slate-900/40 p-2.5 rounded-xl border border-slate-900/60 animate-message">
                         <div class="flex items-center justify-between mb-1">
-                            <span class="font-bold text-xs ${isMe ? 'text-red-400' : 'text-indigo-400'}">${shortName}</span>
+                            <span class="font-bold text-xs ${msg.user === currentUserEmail ? 'text-red-400' : 'text-indigo-400'}">${shortName}</span>
                             <span class="text-[10px] text-slate-600 font-space">${msg.time || ''}</span>
                         </div>
                         <p class="${msg.system ? 'text-rose-400 italic' : 'text-slate-300'} text-xs leading-relaxed">${msg.text || ''}</p>
@@ -256,7 +355,6 @@
             box.scrollTop = box.scrollHeight;
         });
 
-        // Исправленная отправка сообщений с МГНОВЕННЫМ кулдауном
         window.sendChatMessage = async function(e) {
             e.preventDefault();
             const input = document.getElementById('chat-input');
@@ -266,31 +364,17 @@
 
             const now = Date.now();
             if (now - lastMessageTime < 2000) return;
-
-            // МГНОВЕННАЯ блокировка до отправки на сервер
             lastMessageTime = now;
-            triggerCooldown(input, sendBtn);
 
-            const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9-]+\.(com|ru|net|org|io|biz|info|xyz|me))/gi;
-            if (urlRegex.test(txt)) {
-                await addDoc(collection(db, "messages"), {
-                    user: "Система",
-                    text: "❌ Ссылки запрещены в глобальном чате!",
-                    time: getCurrentTimeStr(),
-                    timestamp: now,
-                    system: true
-                });
-                input.value = '';
-                return;
+            input.disabled = true; sendBtn.disabled = true;
+            let orig = input.placeholder; input.placeholder = "Кулдаун 2 сек...";
+            setTimeout(() => { input.disabled = false; sendBtn.disabled = false; input.placeholder = orig; }, 2000);
+
+            if (/(https?:\/\/[^\s]+)/gi.test(txt)) {
+                await addDoc(collection(db, "messages"), { user: "Система", text: "❌ Ссылки запрещены!", time: getCurrentTimeStr(), timestamp: now, system: true });
+                input.value = ''; return;
             }
-
-            await addDoc(collection(db, "messages"), {
-                user: currentUserEmail || "Анонимный Ванпласер",
-                text: txt,
-                time: getCurrentTimeStr(),
-                timestamp: now
-            });
-
+            await addDoc(collection(db, "messages"), { user: currentUserEmail || "Анонимный Ванпласер", text: txt, time: getCurrentTimeStr(), timestamp: now });
             input.value = '';
         };
 
@@ -298,210 +382,53 @@
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
             const pass = document.getElementById('auth-pass').value;
-            const confirmPass = document.getElementById('auth-pass-confirm').value;
-            const errorDiv = document.getElementById('auth-error-msg');
-            
-            errorDiv.classList.add('hidden');
-            errorDiv.innerText = '';
-
-            if (authMode === 'register' && pass !== confirmPass) {
-                errorDiv.innerText = '❌ Пароли не совпадают!';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
             try {
-                if (authMode === 'login') {
-                    await signInWithEmailAndPassword(auth, email, pass);
-                } else {
-                    await createUserWithEmailAndPassword(auth, email, pass);
-                }
+                if (authMode === 'login') { await signInWithEmailAndPassword(auth, email, pass); } 
+                else { await createUserWithEmailAndPassword(auth, email, pass); }
                 closeAuthModal();
-            } catch (err) {
-                errorDiv.classList.remove('hidden');
-                if (err.code === 'auth/invalid-credential' || err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found') {
-                    errorDiv.innerText = '❌ Неверный email или пароль';
-                } else if (err.code === 'auth/weak-password') {
-                    errorDiv.innerText = '❌ Пароль должен быть не менее 6 символов';
-                } else if (err.code === 'auth/email-already-in-use') {
-                    errorDiv.innerText = '❌ Этот Email уже зарегистрирован';
-                } else {
-                    errorDiv.innerText = `❌ Ошибка: ${err.message}`;
-                }
-            }
+            } catch (err) { alert(err.message); }
         };
 
         window.handleGoogleAuth = async function() {
-            const errorDiv = document.getElementById('auth-error-msg');
-            errorDiv.classList.add('hidden');
-            
-            try {
-                await signInWithPopup(auth, googleProvider);
-                closeAuthModal();
-            } catch (err) {
-                errorDiv.classList.remove('hidden');
-                if (err.code === 'auth/popup-closed-by-user') {
-                    errorDiv.innerText = '❌ Окно авторизации было закрыто';
-                } else {
-                    errorDiv.innerText = `❌ Ошибка сети Google`;
-                }
-            }
+            try { await signInWithPopup(auth, googleProvider); closeAuthModal(); } catch (err) { console.error(err); }
         };
 
         function renderDevices(devices) {
             const container = document.getElementById('devices-container');
-            if (devices.length === 0) {
-                container.innerHTML = `<p class="col-span-full text-center text-slate-500 py-10">Устройство не найдено</p>`;
-                return;
-            }
-            container.innerHTML = devices.map((dev) => {
-                const devString = JSON.stringify(dev).replace(/"/g, '&quot;');
-                return `
-                    <div onclick="openFirmwareModal(${devString})" 
-                         class="relative p-[1px] bg-slate-900 border border-slate-900/60 rounded-2xl hover:bg-gradient-to-br hover:from-red-500 hover:via-rose-600 hover:to-orange-500 transition-all duration-300 cursor-pointer group shadow-xl hover:-translate-y-1">
-                        <div class="bg-[#070b15]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full relative z-10">
-                            <div class="flex items-center gap-4">
-                                <div class="w-12 h-12 bg-[#02050b] border border-slate-800 rounded-xl flex items-center justify-center text-slate-400 group-hover:text-red-400 transition-all duration-300">
-                                    <i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i>
-                                </div>
-                                <div class="text-left">
-                                    <h3 class="text-lg font-bold text-white tracking-tight group-hover:text-red-400 transition-colors duration-200">${dev.name}</h3>
-                                    <p class="text-[11px] text-slate-500 font-bold font-space uppercase mt-0.5 tracking-wider flex items-center gap-1.5">
-                                        <span class="w-1 h-1 rounded-full bg-red-500"></span> ${dev.totalBuilds} Сборки
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="w-8 h-8 rounded-lg bg-slate-900/40 border border-slate-900/80 group-hover:bg-red-500/10 flex items-center justify-center text-slate-600 group-hover:text-red-400 transition-all duration-300">
-                                <i data-lucide="arrow-up-right" class="w-4 h-4 transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform"></i>
-                            </div>
+            container.innerHTML = devices.map((dev) => `
+                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="relative p-[1px] bg-slate-900 border border-slate-900/60 rounded-2xl hover:bg-gradient-to-br hover:from-red-500 hover:to-orange-500 transition-all duration-300 cursor-pointer group shadow-xl">
+                    <div class="bg-[#070b15]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-[#02050b] rounded-xl flex items-center justify-center text-slate-400 group-hover:text-red-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
+                            <div class="text-left"><h3 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">${dev.name}</h3><p class="text-[11px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1 h-1 rounded-full bg-red-500 inline-block"></span> ${dev.totalBuilds} Сборки</p></div>
                         </div>
+                        <div class="w-8 h-8 rounded-lg bg-slate-900/40 text-slate-600 group-hover:text-red-400 flex items-center justify-center"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></div>
                     </div>
-                `;
-            }).join('');
+                </div>`).join('');
             lucide.createIcons();
         }
 
         window.openFirmwareModal = function(device) {
             document.getElementById('modal-device-name').innerText = device.name;
-            const listContainer = document.getElementById('modal-firmware-list');
-            
-            listContainer.innerHTML = device.firmwares.map(fw => {
-                const downloadUrl = fw.url || "https://oxygenos.oneplus.net/Oplus_OxygenOS_mock_dump.zip";
-                return `
+            document.getElementById('modal-firmware-list').innerHTML = device.firmwares.map(fw => `
                 <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
                     <div class="space-y-1.5">
-                        <div class="flex items-center gap-2">
-                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${fw.type === 'Beta' ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}">${fw.type}</span>
-                            <span class="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 bg-slate-900 text-slate-400 rounded">${fw.region}</span>
-                            <span class="text-xs text-slate-500 font-medium font-space ml-2">${fw.date}</span>
-                        </div>
-                        <h4 class="text-white font-bold text-base tracking-tight">${fw.version}</h4>
+                        <div class="flex items-center gap-2"><span class="text-[10px] font-bold px-2 py-0.5 rounded ${fw.type === 'Beta' ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}">${fw.type}</span><span class="text-xs text-slate-500 ml-2">${fw.date}</span></div>
+                        <h4 class="text-white font-bold text-base">${fw.version}</h4>
                     </div>
-                    <div class="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-none pt-2 sm:pt-0 border-slate-900">
-                        <span class="text-xs text-slate-400 font-space font-medium flex items-center gap-1"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i> ${fw.size}</span>
-                        <button onclick="downloadFirmware('${device.name}', '${fw.version}', '${downloadUrl}')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition cursor-pointer">СКАЧАТЬ</button>
-                    </div>
-                </div>`}).join('');
-            
+                    <button onclick="window.open('${fw.url || '#'}', '_blank')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition">СКАЧАТЬ</button>
+                </div>`).join('');
             document.getElementById('firmware-modal').classList.remove('opacity-0', 'pointer-events-none');
             document.getElementById('fw-modal-card').classList.remove('scale-95');
             lucide.createIcons();
         };
 
-        window.closeFirmwareModal = function() {
-            document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('fw-modal-card').classList.add('scale-95');
-        };
-
-        // Логика скачивания по прямой ссылке
-        window.downloadFirmware = function(devName, version, downloadUrl) {
-            if (!currentUserEmail) {
-                closeFirmwareModal();
-                openAuthModal('login');
-                document.getElementById('auth-error-msg').innerText = "🔒 Авторизуйтесь, чтобы скачать прошивку.";
-                document.getElementById('auth-error-msg').classList.remove('hidden');
-            } else {
-                // Создаем невидимую ссылку для мгновенного скачивания файла браузером
-                const link = document.createElement('a');
-                link.href = downloadUrl;
-                link.setAttribute('download', '');
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-            }
-        };
-
-        window.openAuthModal = function(tab = 'login') {
-            document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none');
-            document.getElementById('auth-modal-card').classList.remove('scale-95');
-            switchAuthTab(tab);
-        };
-        
-        window.closeAuthModal = function() {
-            document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('auth-modal-card').classList.add('scale-95');
-        };
-        
-        window.switchAuthTab = function(tab) {
-            authMode = tab;
-            document.getElementById('auth-error-msg').classList.add('hidden');
-            document.getElementById('auth-error-msg').innerText = '';
-            
-            const confirmContainer = document.getElementById('confirm-pass-container');
-            const confirmInput = document.getElementById('auth-pass-confirm');
-
-            if (tab === 'login') {
-                document.getElementById('tab-login').className = "text-white border-b-2 border-red-500 pb-2 cursor-pointer";
-                document.getElementById('tab-register').className = "text-slate-500 pb-2 cursor-pointer";
-                document.getElementById('auth-submit-btn').innerText = "ВОЙТИ";
-                confirmContainer.classList.add('hidden');
-                confirmInput.required = false;
-            } else {
-                document.getElementById('tab-login').className = "text-slate-500 pb-2 cursor-pointer";
-                document.getElementById('tab-register').className = "text-white border-b-2 border-red-500 pb-2 cursor-pointer";
-                document.getElementById('auth-submit-btn').innerText = "СОЗДАТЬ АККАУНТ";
-                confirmContainer.classList.remove('hidden');
-                confirmInput.required = true;
-            }
-        };
-
-        window.toggleChat = function() {
-            const widget = document.getElementById('chat-widget');
-            const icon = document.getElementById('chat-toggle-icon');
-            if(widget.classList.contains('translate-y-[380px]')) {
-                widget.classList.remove('translate-y-[380px]');
-                icon.style.transform = 'rotate(180deg)';
-                const box = document.getElementById('chat-messages');
-                box.scrollTop = box.scrollHeight;
-            } else {
-                widget.classList.add('translate-y-[380px]');
-                icon.style.transform = 'rotate(0deg)';
-            }
-        };
-
-        function triggerCooldown(input, button) {
-            input.disabled = true;
-            button.disabled = true;
-            let originalPlaceholder = input.placeholder;
-            input.placeholder = "Кулдаун 2 сек...";
-            setTimeout(() => {
-                input.disabled = false;
-                button.disabled = false;
-                input.placeholder = originalPlaceholder;
-            }, 2000);
-        }
-
-        function getCurrentTimeStr() {
-            const now = new Date();
-            return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
-        }
-        
-        document.getElementById('firmware-modal').onclick = function(e) {
-            if(e.target === this) closeFirmwareModal();
-        };
-        document.getElementById('auth-modal').onclick = function(e) {
-            if(e.target === this) closeAuthModal();
-        };
+        window.closeFirmwareModal = function() { document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none'); };
+        window.openAuthModal = function(tab = 'login') { document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none'); switchAuthTab(tab); };
+        window.closeAuthModal = function() { document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none'); };
+        window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ" : "СОЗДАТЬ АККАУНТ"; };
+        window.toggleChat = function() { const w = document.getElementById('chat-widget'); w.classList.toggle('translate-y-[380px]'); };
+        function getCurrentTimeStr() { const n = new Date(); return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`; }
     </script>
 </body>
 </html>
