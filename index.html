@@ -4,176 +4,142 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FirmwareCloud — ROM Cloud for oplus!</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* Базовые стили для интерфейса */
         :root {
-            --bg-color: #030712;
-            --card-bg: rgba(17, 24, 39, 0.7);
-            --border-color: rgba(31, 41, 55, 0.6);
+            --bg-color: #0b0f19;
+            --card-bg: #111827;
+            --accent-color: #eb0029; /* СТИЛЬ ONEPLUS */
             --text-main: #ffffff;
             --text-muted: #9ca3af;
-            --accent-glow: rgba(235, 0, 41, 0.15);
+            --input-bg: #1f2937;
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Inter', -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-main);
-            min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(235, 0, 41, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.03) 0%, transparent 40%);
-            background-attachment: fixed;
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 16px 40px;
-            background: rgba(3, 7, 18, 0.6);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            padding: 20px 40px;
+            background-color: rgba(17, 24, 39, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #1f2937;
         }
 
         .logo {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
         }
 
         .logo span {
-            background: linear-gradient(to right, #ff1a40, #ff4d6d);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--accent-color);
         }
 
         .auth-buttons button {
-            background: rgba(255, 255, 255, 0.03);
+            background: transparent;
             color: var(--text-main);
-            border: 1px solid var(--border-color);
-            padding: 10px 20px;
-            border-radius: 12px;
+            border: 1px solid var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
         .auth-buttons button:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
+            border-color: var(--text-main);
         }
 
+        /* Главный экран выбора устройств */
         .main-container {
-            max-width: 1000px;
-            margin: 80px auto;
+            max-width: 1200px;
+            margin: 60px auto;
             text-align: center;
-            padding: 0 24px;
+            padding: 0 20px;
         }
 
         .main-title {
-            font-size: 54px;
+            font-size: 48px;
             font-weight: 800;
-            letter-spacing: -1.5px;
-            margin-bottom: 16px;
-            line-height: 1.1;
+            margin-bottom: 10px;
         }
 
         .main-title span {
-            background: linear-gradient(to right, #eb0029, #ff3355);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: var(--accent-color);
         }
 
         .subtitle {
             color: var(--text-muted);
-            margin-bottom: 48px;
-            font-size: 17px;
-            font-weight: 400;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.6;
+            margin-bottom: 40px;
+            font-size: 16px;
         }
 
         .search-container {
             position: relative;
-            max-width: 540px;
-            margin: 0 auto 56px;
+            max-width: 600px;
+            margin: 0 auto 50px;
         }
 
-        .search-container svg {
+        .search-container i {
             position: absolute;
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            width: 18px;
-            height: 18px;
-            pointer-events: none;
         }
 
         .search-input {
             width: 100%;
-            padding: 16px 20px 16px 54px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
+            padding: 16px 16px 16px 50px;
+            background-color: var(--card-bg);
+            border: 1px solid #1f2937;
+            border-radius: 30px;
             color: var(--text-main);
-            font-size: 15px;
+            font-size: 16px;
             box-sizing: border-box;
             outline: none;
-            transition: all 0.2s;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+            transition: border-color 0.2s;
         }
 
         .search-input:focus {
-            border-color: #eb0029;
-            box-shadow: 0 0 20px var(--accent-glow), 0 4px 30px rgba(0, 0, 0, 0.2);
+            border-color: var(--accent-color);
         }
 
+        /* Грид для карточек устройств */
         .devices-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 16px;
+            gap: 20px;
+            justify-content: center;
             max-width: 900px;
             margin: 0 auto;
         }
 
         .device-card {
-            background: var(--card-bg);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 20px 24px;
+            background-color: var(--card-bg);
+            border: 1px solid #1f2937;
+            border-radius: 12px;
+            padding: 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
             text-align: left;
             cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s, border-color 0.2s;
         }
 
         .device-card:hover {
             transform: translateY(-2px);
-            border-color: rgba(235, 0, 41, 0.5);
-            background: rgba(17, 24, 39, 0.9);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border-color: #374151;
         }
 
         .device-info {
@@ -183,64 +149,40 @@
         }
 
         .device-icon-box {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
+            background-color: #1f2937;
+            padding: 12px;
+            border-radius: 8px;
             color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .device-icon-box svg {
-            width: 20px;
-            height: 20px;
         }
 
         .device-name {
             font-weight: 600;
-            font-size: 15px;
+            font-size: 16px;
             margin-bottom: 4px;
-            letter-spacing: -0.2px;
         }
 
         .device-count {
-            font-size: 11px;
-            color: #eb0029;
+            font-size: 12px;
+            color: var(--accent-color);
             text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.5px;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
         }
 
         .arrow-icon {
             color: var(--text-muted);
-            display: flex;
-            align-items: center;
-            transition: transform 0.2s;
-            opacity: 0.6;
         }
 
-        .device-card:hover .arrow-icon {
-            transform: translate(2px, -2px);
-            color: var(--text-main);
-            opacity: 1;
-        }
-
-        /* МОДАЛЬНЫЕ ОКНА АВТОРИЗАЦИИ */
+        /* Модальные окна (Авторизация) */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(3, 7, 18, 0.8);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            background-color: rgba(0, 0, 0, 0.75);
             display: none;
             justify-content: center;
             align-items: center;
@@ -248,31 +190,25 @@
         }
 
         .modal-content {
-            background: #0b0f19;
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
+            background-color: var(--card-bg);
+            border: 1px solid #1f2937;
+            border-radius: 16px;
             width: 100%;
             max-width: 400px;
-            padding: 36px;
+            padding: 32px;
             box-sizing: border-box;
             position: relative;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
         }
 
         .close-modal {
             position: absolute;
-            right: 24px;
-            top: 24px;
+            right: 20px;
+            top: 20px;
             background: transparent;
             border: none;
             color: var(--text-muted);
-            font-size: 24px;
+            font-size: 20px;
             cursor: pointer;
-            transition: color 0.2s;
-        }
-
-        .close-modal:hover {
-            color: var(--text-main);
         }
 
         .form-group {
@@ -282,62 +218,49 @@
 
         .form-group label {
             display: block;
-            font-size: 11px;
-            font-weight: 700;
+            font-size: 12px;
+            font-weight: bold;
             color: var(--text-muted);
             margin-bottom: 8px;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
         .form-group input {
             width: 100%;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            padding: 12px;
+            background-color: var(--input-bg);
+            border: 1px solid #374151;
+            border-radius: 6px;
             color: var(--text-main);
-            font-size: 14px;
             box-sizing: border-box;
             outline: none;
-            transition: border-color 0.2s;
         }
 
         .form-group input:focus {
-            border-color: #eb0029;
+            border-color: var(--accent-color);
         }
 
         .error-message {
-            color: #eb0029;
-            font-size: 13px;
-            margin-bottom: 16px;
+            color: var(--accent-color);
+            font-size: 14px;
+            margin-bottom: 15px;
             text-align: left;
             display: none;
             align-items: center;
-            gap: 8px;
-            background: rgba(235, 0, 41, 0.1);
-            padding: 10px 14px;
-            border-radius: 8px;
-            border: 1px solid rgba(235, 0, 41, 0.2);
+            gap: 6px;
         }
 
         .submit-btn {
             width: 100%;
             padding: 14px;
-            background: #eb0029;
+            background-color: var(--accent-color);
             border: none;
-            border-radius: 12px;
+            border-radius: 6px;
             color: white;
-            font-size: 14px;
-            font-weight: 700;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            margin-bottom: 24px;
-            letter-spacing: 0.5px;
-            transition: background 0.2s;
-        }
-
-        .submit-btn:hover {
-            background: #ff1a40;
+            margin-bottom: 20px;
         }
 
         .divider {
@@ -345,56 +268,50 @@
             align-items: center;
             text-align: center;
             color: var(--text-muted);
-            margin-bottom: 24px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            margin-bottom: 20px;
+            font-size: 14px;
         }
 
         .divider::before, .divider::after {
             content: '';
             flex: 1;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #1f2937;
         }
 
-        .divider:not(:empty)::before { margin-right: 1em; }
-        .divider:not(:empty)::after { margin-left: 1em; }
+        .divider:not(:empty)::before { margin-right: .25em; }
+        .divider:not(:empty)::after { margin-left: .25em; }
 
         .google-btn {
             width: 100%;
             padding: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border-color);
-            border-radius: 12px;
+            background: transparent;
+            border: 1px solid #374151;
+            border-radius: 6px;
             color: var(--text-main);
-            font-size: 14px;
-            font-weight: 600;
+            font-size: 15px;
+            font-weight: 500;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.2s;
+            transition: background-color 0.2s;
         }
 
         .google-btn:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.2);
+            background-color: #1f2937;
         }
 
         .switch-auth-mode {
-            margin-top: 20px;
-            font-size: 13px;
+            margin-top: 15px;
+            font-size: 14px;
             color: var(--text-muted);
         }
 
         .switch-auth-mode a {
-            color: #eb0029;
+            color: var(--text-main);
             text-decoration: none;
-            font-weight: 600;
-        }
-        .switch-auth-mode a:hover {
-            text-decoration: underline;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -403,10 +320,7 @@
     <header>
         <div class="logo">Firmware<span>Cloud</span></div>
         <div class="auth-buttons">
-            <button id="openAuthBtn">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5-4-8-4z"/></svg>
-                <span>Войти</span>
-            </button>
+            <button id="openAuthBtn">Войти</button>
         </div>
     </header>
 
@@ -415,22 +329,24 @@
         <p class="subtitle">Интерактивный доступ к архивам OxygenOS. Выберите модель ниже для просмотра доступных пакетов прошивок.</p>
         
         <div class="search-container">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+            <i class="fa-solid fa-magnifying-glass"></i>
             <input type="text" id="searchInput" class="search-input" placeholder="Поиск смартфона (например, OnePlus 12)...">
         </div>
 
-        <div class="devices-grid" id="devicesGrid"></div>
+        <div class="devices-grid" id="devicesGrid">
+            <p style="color: var(--text-muted)">Загрузка списка устройств...</p>
+        </div>
     </div>
 
     <div class="modal-overlay" id="authModal">
         <div class="modal-content">
             <button class="close-modal" id="closeModalBtn">&times;</button>
-            <h2 id="modalTitle" style="margin-top: 0; margin-bottom: 24px; font-weight: 800; letter-spacing: -0.5px; text-align: left;">Войти</h2>
+            <h2 id="modalTitle" style="margin-top: 0; margin-bottom: 24px; text-align: left;">Войти</h2>
             
             <form id="authForm">
                 <div class="form-group">
-                    <label for="email">Email адрес</label>
-                    <input type="email" id="email" placeholder="name@example.com" required>
+                    <label for="email">Email (для входа)</label>
+                    <input type="email" id="email" placeholder="user@domain.com" required>
                 </div>
                 <div class="form-group">
                     <label for="password">Пароль</label>
@@ -438,8 +354,7 @@
                 </div>
                 
                 <div class="error-message" id="authError">
-                    <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
-                    <span id="errorText">Ошибка</span>
+                    <i class="fa-solid fa-circle-xmark"></i> <span id="errorText">Ошибка сети Google</span>
                 </div>
 
                 <button type="submit" class="submit-btn" id="submitFormBtn">ВОЙТИ</button>
@@ -448,8 +363,7 @@
             <div class="divider">или</div>
 
             <button class="google-btn" id="googleLoginBtn">
-                <svg width="16" height="16" fill="currentColor" viewBox="0 0 24 24"><path d="M12.24 10.285V13.4h6.887c-.275 1.565-1.88 4.604-6.887 4.604-4.33 0-7.866-3.577-7.866-8s3.536-8 7.866-8c2.46 0 4.105 1.025 5.047 1.926l2.427-2.334C17.955 2.192 15.34 1 12.24 1 6.033 1 1 6.033 1 12.24s5.033 11.24 11.24 11.24c6.478 0 10.793-4.537 10.793-11 0-.746-.08-1.32-.176-1.895H12.24z"/></svg>
-                Продолжить с Google
+                <i class="fa-brands fa-google"></i> Продолжить с Google
             </button>
 
             <div class="switch-auth-mode" id="switchAuthBlock">
@@ -470,34 +384,29 @@
             signOut
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-        // ТВОЯ КОНФИГУРАЦИЯ FIREBASE
+        // КОНФИГУРАЦИЯ FIREBASE (Подставь сюда свои настоящие ключи, если они отличаются)
         const firebaseConfig = {
-            apiKey: "ВСТАВЬ_СЮДА_СВОЙ_API_KEY_ИЗ_НАСТРОЕК", 
+            apiKey: "AIzaSyA4...", // ВСТАВЬ СЮДА СВОЙ ДЕЙСТВИТЕЛЬНЫЙ API КЛЮЧ
             authDomain: "fwcloud-70490.firebaseapp.com",
             projectId: "fwcloud-70490",
             storageBucket: "fwcloud-70490.appspot.com",
             messagingSenderId: "562358328378",
-            appId: "1:562358328378:web:757451631be8bf49911e3b"
+            appId: "1:562358328378:web:..." 
         };
 
+        // Инициализируем Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        // Форсируем окно выбора аккаунта Google (без промежуточных зависаний)
         provider.setCustomParameters({
             prompt: 'select_account'
         });
 
-        // БАЗА ДАННЫХ УСТРОЙСТВ ОПЛЮС ПРЯМО В КОДЕ (ФАЙЛ JSON БОЛЬШЕ НЕ НУЖЕН!)
-        const devicesData = [
-            { "name": "OnePlus Ace 2 Pro", "count": "1 СБОРКА" },
-            { "name": "OnePlus Ace 3", "count": "2 СБОРКИ" },
-            { "name": "OnePlus 11", "count": "4 СБОРКИ" },
-            { "name": "OnePlus 12", "count": "3 СБОРКИ" },
-            { "name": "OnePlus Nord 3", "count": "1 СБОРКА" }
-        ];
-
-        let isSignUpMode = false;
+        // ПЕРЕМЕННЫЕ ИНТЕРФЕЙСА
+        let isSignUpMode = false; // Режим: false = Вход, true = Регистрация
+        let devicesData = []; // Сюда скачаем данные из JSON
 
         const authModal = document.getElementById('authModal');
         const openAuthBtn = document.getElementById('openAuthBtn');
@@ -513,18 +422,21 @@
         const devicesGrid = document.getElementById('devicesGrid');
         const searchInput = document.getElementById('searchInput');
 
+        // СЛЕЖКА ЗА СОСТОЯНИЕМ ПОЛЬЗОВАТЕЛЯ (Вошел или вышел)
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                openAuthBtn.querySelector('span').innerText = "Выйти (" + (user.displayName || user.email.split('@')[0]) + ")";
+                console.log("Пользователь авторизован:", user.email);
+                openAuthBtn.innerText = "Выйти (" + (user.displayName || user.email.split('@')[0]) + ")";
                 openAuthBtn.onclick = () => {
                     signOut(auth).then(() => { window.location.reload(); });
                 };
             } else {
-                openAuthBtn.querySelector('span').innerText = "Войти";
+                openAuthBtn.innerText = "Войти";
                 openAuthBtn.onclick = () => { openModal(); };
             }
         });
 
+        // УПРАВЛЕНИЕ МОДАЛКОЙ
         function openModal() {
             authModal.style.display = 'flex';
             hideError();
@@ -536,6 +448,7 @@
         closeModalBtn.onclick = closeModal;
         window.onclick = (e) => { if (e.target === authModal) closeModal(); };
 
+        // ПЕРЕКЛЮЧЕНИЕ МЕЖДУ ВХОДОМ И РЕГИСТРАЦИЕЙ
         toggleAuthModeLink.onclick = (e) => {
             e.preventDefault();
             isSignUpMode = !isSignUpMode;
@@ -549,9 +462,11 @@
                 submitFormBtn.innerText = "ВОЙТИ";
                 switchAuthBlock.innerHTML = 'Нет аккаунта? <a href="#" id="toggleAuthModeLink">Создать аккаунт</a>';
             }
+            // Перепривязываем событие на новую ссылку
             document.getElementById('toggleAuthModeLink').onclick = toggleAuthModeLink.onclick;
         };
 
+        // ФУНКЦИИ ВЫВОДА ОШИБОК
         function showError(msg) {
             errorText.innerText = msg;
             authError.style.display = 'flex';
@@ -560,6 +475,7 @@
             authError.style.display = 'none';
         }
 
+        // ОТПРАВКА ФОРМЫ (Почта + Пароль)
         authForm.onsubmit = async (e) => {
             e.preventDefault();
             hideError();
@@ -568,70 +484,95 @@
 
             try {
                 if (isSignUpMode) {
+                    // Регистрация нового юзера
                     await createUserWithEmailAndPassword(auth, email, password);
+                    console.log("Регистрация успешна!");
                 } else {
+                    // Обычный логин
                     await signInWithEmailAndPassword(auth, email, password);
+                    console.log("Вход успешен!");
                 }
                 closeModal();
             } catch (error) {
+                console.error("Ошибка формы:", error.code);
                 if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') {
                     showError("Неверный email или пароль.");
                 } else if (error.code === 'auth/weak-password') {
                     showError("Пароль должен быть не менее 6 символов.");
                 } else if (error.code === 'auth/email-already-in-use') {
-                    showError("Этот email уже занят.");
+                    showError("Этот email уже зарегистрирован.");
                 } else {
-                    showError(error.message);
+                    showError("Ошибка: " + error.message);
                 }
             }
         };
 
+        // АВТОРИЗАЦИЯ GOOGLE ЧЕРЕЗ POPUP (Идеально фиксит белые экраны)
         googleLoginBtn.onclick = async (e) => {
             e.preventDefault();
             hideError();
             try {
-                await signInWithPopup(auth, provider);
+                const result = await signInWithPopup(auth, provider);
+                console.log("Успешный вход через Google:", result.user.displayName);
                 closeModal();
             } catch (error) {
+                console.error("Ошибка Google Auth:", error.code);
                 if (error.code === 'auth/popup-closed-by-user') {
                     showError("Вход отменен пользователем.");
+                } else if (error.code === 'auth/cancelled-popup-request') {
+                    console.log("Повторный запрос отменил старый поп-ап.");
                 } else {
-                    showError("Ошибка сети. Добавьте dumnitesyt.github.io в Authorized Domains в Firebase.");
+                    showError("Ошибка сети Google. Добавьте dumnitesyt.github.io в Authorized Domains в Firebase!");
                 }
             }
         };
 
+        // ЗАГРУЗКА И ОТОБРАЖЕНИЕ УСТРОЙСТВ ИЗ JSON
+        async function loadDevices() {
+            try {
+                // Относительный fetch работает и на локалхосте, и на гитхабе!
+                const response = await fetch('firmwares.json');
+                if (!response.ok) throw new Error('Ошибка сети при чтении JSON');
+                devicesData = await response.json();
+                renderDevices(devicesData);
+            } catch (error) {
+                console.error(error);
+                devicesGrid.innerHTML = `<p style="color: var(--accent-color)">Ошибка загрузки данных: Failed to fetch json</p>`;
+            }
+        }
+
         function renderDevices(list) {
             if (list.length === 0) {
-                devicesGrid.innerHTML = `<p style="color: var(--text-muted); grid-column: 1/-1;">Ничего не найдено</p>`;
+                devicesGrid.innerHTML = `<p style="color: var(--text-muted)">Ничего не найдено</p>`;
                 return;
             }
             devicesGrid.innerHTML = list.map(device => `
                 <div class="device-card" onclick="alert('Выбрано устройство: ${device.name}')">
                     <div class="device-info">
                         <div class="device-icon-box">
-                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 002-2H6a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
+                            <i class="fa-solid fa-mobile-screen-button"></i>
                         </div>
                         <div>
                             <div class="device-name">${device.name}</div>
-                            <div class="device-count">● ${device.count}</div>
+                            <div class="device-count">● ${device.count || '1 СБОРКА'}</div>
                         </div>
                     </div>
                     <div class="arrow-icon">
-                        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                        <i class="fa-solid fa-arrow-up-right-from-square"></i>
                     </div>
                 </div>
             `).join('');
         }
 
+        // ЖИВОЙ ПОИСК
         searchInput.oninput = (e) => {
             const query = e.target.value.toLowerCase().trim();
             const filtered = devicesData.filter(d => d.name.toLowerCase().includes(query));
             renderDevices(filtered);
         };
 
-        // Сразу выводим девайсы без лишних fetch запросов
-        renderDevices(devicesData);
+        // Запускаем загрузку данных при открытии страницы
+        loadDevices();
     </script>
 </body>
 </html>
