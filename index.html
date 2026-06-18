@@ -180,22 +180,23 @@
         const googleProvider = new GoogleAuthProvider();
         googleProvider.setCustomParameters({ prompt: 'select_account' });
 
+        // Здесь ты можешь прописывать реальные URL-адреса прошивок для скачивания (поле url)
         const DEVICES_DATA = [
           { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 3, firmwares: [
-              { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15" },
-              { version: "OxygenOS 14.0.0.550", type: "Stable", region: "EU", size: "5.1 GB", date: "2026-05-10" },
-              { version: "OxygenOS 15.0.0.010 (Beta)", type: "Beta", region: "Global", size: "5.5 GB", date: "2026-06-01" }
+              { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15", url: "https://oxygenos.oneplus.net/CPH2581_11_A.44_20240305.zip" },
+              { version: "OxygenOS 14.0.0.550", type: "Stable", region: "EU", size: "5.1 GB", date: "2026-05-10", url: "" },
+              { version: "OxygenOS 15.0.0.010 (Beta)", type: "Beta", region: "Global", size: "5.5 GB", date: "2026-06-01", url: "" }
           ]},
           { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
-              { version: "OxygenOS 14.0.0.501", type: "Stable", region: "EU", size: "4.8 GB", date: "2026-05-20" },
-              { version: "OxygenOS 14.0.0.300", type: "Stable", region: "IN", size: "4.7 GB", date: "2026-03-15" }
+              { version: "OxygenOS 14.0.0.501", type: "Stable", region: "EU", size: "4.8 GB", date: "2026-05-20", url: "" },
+              { version: "OxygenOS 14.0.0.300", type: "Stable", region: "IN", size: "4.7 GB", date: "2026-03-15", url: "" }
           ]},
           { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
-              { version: "OxygenOS 14.1.0.110", type: "Stable", region: "IN", size: "4.5 GB", date: "2026-05-02" },
-              { version: "OxygenOS 14.1.0.090", type: "Stable", region: "Global", size: "4.4 GB", date: "2026-04-10" }
+              { version: "OxygenOS 14.1.0.110", type: "Stable", region: "IN", size: "4.5 GB", date: "2026-05-02", url: "" },
+              { version: "OxygenOS 14.1.0.090", type: "Stable", region: "Global", size: "4.4 GB", date: "2026-04-10", url: "" }
           ]},
           { name: "OnePlus Open", imageIcon: "tablet", totalBuilds: 1, firmwares: [
-              { version: "OxygenOS 14.0.0.400", type: "Stable", region: "Global", size: "5.6 GB", date: "2026-04-18" }
+              { version: "OxygenOS 14.0.0.400", type: "Stable", region: "Global", size: "5.6 GB", date: "2026-04-18", url: "" }
           ]}
         ];
 
@@ -203,17 +204,14 @@
         let authMode = 'login';
         let lastMessageTime = 0;
 
-        // Инициализация вывода устройств
         renderDevices(DEVICES_DATA);
 
-        // Поиск по смартфонам
         document.getElementById('search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase().trim();
             const filtered = DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q));
             renderDevices(filtered);
         });
 
-        // Статус авторизации Firebase
         onAuthStateChanged(auth, (user) => {
             const az = document.getElementById('auth-zone');
             if (user) {
@@ -236,7 +234,6 @@
             lucide.createIcons();
         });
 
-        // Стриминг глобального чата
         const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(50));
         onSnapshot(qMessages, (snapshot) => {
             const box = document.getElementById('chat-messages');
@@ -259,7 +256,7 @@
             box.scrollTop = box.scrollHeight;
         });
 
-        // Отправка сообщений в глобальный чат
+        // Исправленная отправка сообщений с МГНОВЕННЫМ кулдауном
         window.sendChatMessage = async function(e) {
             e.preventDefault();
             const input = document.getElementById('chat-input');
@@ -269,6 +266,10 @@
 
             const now = Date.now();
             if (now - lastMessageTime < 2000) return;
+
+            // МГНОВЕННАЯ блокировка до отправки на сервер
+            lastMessageTime = now;
+            triggerCooldown(input, sendBtn);
 
             const urlRegex = /(https?:\/\/[^\s]+)|(www\.[^\s]+)|([a-zA-Z0-9-]+\.(com|ru|net|org|io|biz|info|xyz|me))/gi;
             if (urlRegex.test(txt)) {
@@ -291,11 +292,8 @@
             });
 
             input.value = '';
-            lastMessageTime = now;
-            triggerCooldown(input, sendBtn);
         };
 
-        // Вход и регистрация Email/Пароль
         window.handleAuth = async function(e) {
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
@@ -333,7 +331,6 @@
             }
         };
 
-        // Вход через Google аккаунт
         window.handleGoogleAuth = async function() {
             const errorDiv = document.getElementById('auth-error-msg');
             errorDiv.classList.add('hidden');
@@ -351,7 +348,6 @@
             }
         };
 
-        // Отрисовка списка устройств
         function renderDevices(devices) {
             const container = document.getElementById('devices-container');
             if (devices.length === 0) {
@@ -385,12 +381,13 @@
             lucide.createIcons();
         }
 
-        // Логика модального окна прошивок
         window.openFirmwareModal = function(device) {
             document.getElementById('modal-device-name').innerText = device.name;
             const listContainer = document.getElementById('modal-firmware-list');
             
-            listContainer.innerHTML = device.firmwares.map(fw => `
+            listContainer.innerHTML = device.firmwares.map(fw => {
+                const downloadUrl = fw.url || "https://oxygenos.oneplus.net/Oplus_OxygenOS_mock_dump.zip";
+                return `
                 <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
                     <div class="space-y-1.5">
                         <div class="flex items-center gap-2">
@@ -402,9 +399,9 @@
                     </div>
                     <div class="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-none pt-2 sm:pt-0 border-slate-900">
                         <span class="text-xs text-slate-400 font-space font-medium flex items-center gap-1"><i data-lucide="hard-drive" class="w-3.5 h-3.5"></i> ${fw.size}</span>
-                        <button onclick="downloadFirmware('${device.name}', '${fw.version}')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition cursor-pointer">СКАЧАТЬ</button>
+                        <button onclick="downloadFirmware('${device.name}', '${fw.version}', '${downloadUrl}')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition cursor-pointer">СКАЧАТЬ</button>
                     </div>
-                </div>`).join('');
+                </div>`}).join('');
             
             document.getElementById('firmware-modal').classList.remove('opacity-0', 'pointer-events-none');
             document.getElementById('fw-modal-card').classList.remove('scale-95');
@@ -416,18 +413,24 @@
             document.getElementById('fw-modal-card').classList.add('scale-95');
         };
 
-        window.downloadFirmware = function(devName, version) {
+        // Логика скачивания по прямой ссылке
+        window.downloadFirmware = function(devName, version, downloadUrl) {
             if (!currentUserEmail) {
                 closeFirmwareModal();
                 openAuthModal('login');
                 document.getElementById('auth-error-msg').innerText = "🔒 Авторизуйтесь, чтобы скачать прошивку.";
                 document.getElementById('auth-error-msg').classList.remove('hidden');
             } else {
-                alert(`📥 Начинается скачивание:\n${devName} — ${version}`);
+                // Создаем невидимую ссылку для мгновенного скачивания файла браузером
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.setAttribute('download', '');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
             }
         };
 
-        // Логика окон авторизации
         window.openAuthModal = function(tab = 'login') {
             document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none');
             document.getElementById('auth-modal-card').classList.remove('scale-95');
@@ -462,7 +465,6 @@
             }
         };
 
-        // Открытие/закрытие чата
         window.toggleChat = function() {
             const widget = document.getElementById('chat-widget');
             const icon = document.getElementById('chat-toggle-icon');
@@ -494,7 +496,6 @@
             return `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
         }
         
-        // Закрытие окон кликом по заднему фону
         document.getElementById('firmware-modal').onclick = function(e) {
             if(e.target === this) closeFirmwareModal();
         };
