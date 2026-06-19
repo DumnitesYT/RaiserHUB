@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FirmwareCloud | OnePlus Ecosystem Hub</title>
+    <title>RaiserOS | Next-Gen Ecosystem Hub</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Space+Grotesk:wght=500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -12,195 +12,167 @@
         .font-space { font-family: 'Space Grotesk', sans-serif; }
         
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #030712; }
-        ::-webkit-scrollbar-thumb { background: #1f2937; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: #ef4444; }
+        ::-webkit-scrollbar-track { background: #02020e; }
+        ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
+        /* Успокаивающий живой фон */
+        @keyframes float-bg {
+            0%, 100% { transform: translate(0px, 0px) scale(1); }
+            33% { transform: translate(30px, -50px) scale(1.05); }
+            66% { transform: translate(-20px, 20px) scale(0.95); }
+        }
+        .nebula-1 { animation: float-bg 12s infinite ease-in-out; }
+        .nebula-2 { animation: float-bg 16s infinite ease-in-out -4s; }
+
+        /* Плавные появления */
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(12px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .animate-message {
-            animation: fadeInUp 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .animate-fade-in { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+        /* Анимация печатной машинки */
+        @keyframes blink { 50% { border-color: transparent } }
+        .typing-cursor {
+            border-right: 3px solid #a78bfa;
+            animation: blink 0.75s step-end infinite;
         }
 
-        @keyframes pulse-glow {
-            0%, 100% { opacity: 0.15; transform: scale(1); }
-            50% { opacity: 0.25; transform: scale(1.05); }
+        /* Пульсация логотипа */
+        @keyframes logo-float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-6px) rotate(2deg); }
         }
-        .neon-glow { animation: pulse-glow 8s infinite ease-in-out; }
+        .logo-anime { animation: logo-float 4s infinite ease-in-out; }
     </style>
 </head>
-<body class="bg-[#020613] text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-red-500/30">
+<body class="bg-[#03030f] text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500/30">
 
-    <div class="absolute top-[-10%] left-[-10%] w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[160px] pointer-events-none neon-glow"></div>
-    <div class="absolute top-[30%] right-[-10%] w-[500px] h-[500px] bg-indigo-600/10 rounded-full blur-[140px] pointer-events-none neon-glow" style="animation-delay: -4s;"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[700px] h-[700px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none nebula-1"></div>
+    <div class="absolute top-[40%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none nebula-2"></div>
+    <div class="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none nebula-1" style="animation-delay: -2s;"></div>
 
-    <header class="border-b border-slate-900/60 bg-[#020613]/40 backdrop-blur-md sticky top-0 z-40">
+    <header class="border-b border-indigo-950/40 bg-[#03030f]/60 backdrop-blur-xl sticky top-0 z-40 transition-all duration-300">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-            <div class="flex items-center gap-3 group cursor-pointer" onclick="switchMainTab('firmwares')">
-                <div class="bg-gradient-to-tr from-red-500 via-rose-500 to-orange-500 p-2.5 rounded-xl text-white shadow-lg shadow-red-500/20">
-                    <i data-lucide="box" class="w-5 h-5"></i>
+            <div class="flex items-center gap-3 group cursor-pointer logo-anime">
+                <div class="relative bg-gradient-to-tr from-indigo-600 via-purple-500 to-pink-500 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-300">
+                    <i data-lucide="zap" class="w-5 h-5 fill-current"></i>
+                    <div class="absolute inset-0 bg-indigo-400 rounded-xl blur-md opacity-0 group-hover:opacity-40 transition-opacity"></div>
                 </div>
                 <span class="text-2xl font-black font-space tracking-tight text-white">
-                    FW<span class="text-red-500">CLOUD</span>
+                    Raiser<span class="text-indigo-400">OS</span>
                 </span>
             </div>
 
-            <nav class="hidden md:flex items-center gap-1 bg-slate-950/60 border border-slate-900 p-1.5 rounded-xl font-space text-xs font-bold">
-                <button id="nav-firmwares" onclick="switchMainTab('firmwares')" class="px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer">ПРОШИВКИ</button>
-                <button id="nav-resolver" onclick="switchMainTab('resolver')" class="px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-1.5">
-                    <i data-lucide="link-2" class="w-3.5 h-3.5 text-red-500"></i> РЕЗОЛВЕР (CODE-X)
-                </button>
-            </nav>
+            <div class="flex items-center gap-4">
+                <div class="bg-slate-950 border border-indigo-950/80 rounded-xl p-1 flex gap-1 font-space text-[10px] font-bold">
+                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer">RU</button>
+                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer">EN</button>
+                </div>
 
-            <div id="auth-zone">
-                <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-slate-900 px-5 py-2.5 rounded-xl border border-slate-800 hover:bg-slate-800 transition cursor-pointer">
-                    <i data-lucide="log-in" class="w-4 h-4 text-red-500"></i> Войти
-                </button>
+                <div id="auth-zone">
+                    <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-indigo-950/40 px-5 py-2.5 rounded-xl border border-indigo-900/50 hover:bg-indigo-900/40 hover:border-indigo-500/30 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
+                        <i data-lucide="log-in" class="w-4 h-4 text-indigo-400"></i> <span data-lang="loginBtn">Войти</span>
+                    </button>
+                </div>
             </div>
         </div>
     </header>
 
-    <main id="section-firmwares" class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
-        <div class="text-center max-w-3xl space-y-4 mb-16 w-full">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
-                <span class="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping"></span> Стенд Модифицирован
+    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
+        <div class="text-center max-w-3xl space-y-5 mb-16 w-full animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full text-xs font-bold tracking-wider uppercase font-space transform hover:scale-105 transition-transform">
+                <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span> <span data-lang="badge">Официальный Релиз</span>
             </div>
-            <h1 class="text-4xl sm:text-6xl font-black tracking-tight text-white leading-tight text-center w-full block">
-                Выберите устройство <span class="bg-gradient-to-r from-red-500 to-rose-500 bg-clip-text text-transparent">OnePlus</span>
+            
+            <h1 class="text-5xl sm:text-7xl font-black tracking-tight text-white leading-tight text-center min-h-[70px] sm:min-h-[90px]">
+                <span id="typing-text" class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent typing-cursor"></span>
             </h1>
-            <p class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-medium text-center">
-                Интерактивный доступ к архивам OxygenOS. Выберите модель ниже для просмотра доступных пакетов прошивок.
+            
+            <p data-lang="subtitle" class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-medium transition-all duration-300">
+                Добро пожаловать в хаб плавной, безопасной и кастомизируемой операционной системы. Загрузите сборку для вашего устройства ниже.
             </p>
         </div>
 
-        <div class="w-full max-w-xl mb-14 relative group">
-            <div class="relative bg-[#090d16]/90 border border-slate-800/80 rounded-2xl flex items-center px-4 py-1.5 focus-within:border-red-500/40 transition-colors shadow-inner">
-                <i data-lucide="search" class="w-5 h-5 text-slate-500 mr-3"></i>
-                <input type="text" id="search" placeholder="Поиск смартфона (например, OnePlus 12)..." class="w-full bg-transparent border-none text-white focus:outline-none text-base py-2">
+        <div class="w-full max-w-xl mb-14 relative group animate-fade-in" style="animation-delay: 0.1s;">
+            <div class="relative bg-[#070719]/80 border border-indigo-950 rounded-2xl flex items-center px-4 py-1.5 focus-within:border-indigo-500/40 transition-all duration-300 shadow-2xl">
+                <i data-lucide="search" class="w-5 h-5 text-indigo-400/60 mr-3"></i>
+                <input type="text" id="search" placeholder="Поиск смартфона (OnePlus Ace 2 Pro)..." class="w-full bg-transparent border-none text-white focus:outline-none text-base py-2">
             </div>
         </div>
 
-        <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full"></div>
+        <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full animate-fade-in" style="animation-delay: 0.2s;"></div>
     </main>
 
-    <main id="section-resolver" class="hidden flex-1 max-w-3xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
-        <div class="text-center space-y-4 mb-12 w-full">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/20 text-red-400 rounded-full text-xs font-bold tracking-wider uppercase font-space">
-                <i data-lucide="git-branch" class="w-3.5 h-3.5"></i> ENGINE V2 (FOLLOW-REDIRECTS)
-            </div>
-            <h1 class="text-4xl font-black tracking-tight text-white font-space">
-                Oplus Link <span class="text-red-500">Resolver Pro</span>
-            </h1>
-            <p class="text-slate-400 text-sm max-w-lg mx-auto font-medium">
-                Умный декодер. Поддерживает как `downloadCheck` ссылки, так и сокращенные редирект-линки OTA обновлений (как в приложении CodeSenseiX).
-            </p>
-        </div>
-
-        <div class="w-full bg-[#070b14]/90 border border-slate-800/80 rounded-3xl p-6 sm:p-8 shadow-2xl space-y-6">
-            <div>
-                <label class="text-xs font-bold uppercase text-slate-400 block mb-2 font-space tracking-wide">Вставьте OTA или downloadCheck ссылку:</label>
-                <textarea id="ota-input" rows="4" placeholder="https://component-ota-cn.allawntech.com/downloadCheck?c=...&#10;ИЛИ укороченную ссылку редиректа..." class="w-full bg-slate-950 border border-slate-900 rounded-2xl py-3.5 px-4 text-xs font-mono text-slate-300 focus:outline-none focus:border-red-500/50 resize-none leading-relaxed transition"></textarea>
-            </div>
-
-            <button onclick="resolveOtaLink()" id="resolver-btn" class="w-full bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white font-bold py-4 rounded-xl transition text-sm font-space flex items-center justify-center gap-2 tracking-wide shadow-lg shadow-red-600/10 cursor-pointer">
-                <i data-lucide="play" class="w-4 h-4 fill-current"></i> НАЧАТЬ АНАЛИЗ И СЛЕДОВАНИЕ РЕДИРЕКТАМ
-            </button>
-
-            <div id="resolver-result" class="hidden space-y-4 pt-4 border-t border-slate-900/80 animate-message">
-                <div class="p-4 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-start gap-3">
-                    <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400 shrink-0 mt-0.5"></i>
-                    <div class="text-left space-y-1">
-                        <h4 class="text-sm font-bold text-white font-space">Декодирование успешно завершено!</h4>
-                        <p class="text-xs text-slate-400 leading-normal">Ссылка успешно очищена от токенов времени. Получен прямой доступ к хранилищу образов.</p>
-                    </div>
-                </div>
-                
-                <div class="bg-slate-950 border border-slate-900 p-4 rounded-2xl space-y-3">
-                    <div class="flex items-center justify-between">
-                        <span class="text-[10px] font-bold text-slate-500 font-space uppercase">Прямой URL (.zip архив)</span>
-                        <button onclick="copyResolvedLink()" class="text-xs text-red-400 hover:text-red-300 font-bold font-space flex items-center gap-1 cursor-pointer">
-                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Копировать
-                        </button>
-                    </div>
-                    <p id="resolved-url-text" class="text-xs font-mono text-emerald-400 break-all bg-[#040811] p-3 rounded-xl border border-slate-900 max-h-24 overflow-y-auto text-left"></p>
-                    <a id="resolved-download-btn" href="#" target="_blank" class="w-full mt-2 inline-flex items-center justify-center gap-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs font-space py-3 rounded-xl transition">
-                        <i data-lucide="download" class="w-4 h-4"></i> СКАЧАТЬ НАПРЯМУЮ (БЕЗ ОГРАНИЧЕНИЙ)
-                    </a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#070b14] border border-slate-800/80 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
-            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
+            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition transform hover:rotate-90 duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             <h2 id="modal-device-name" class="text-2xl sm:text-3xl font-black text-white mb-1">Device Name</h2>
-            <p class="text-sm text-slate-400 mb-6">Доступные сборки OxygenOS для данной модели:</p>
+            <p data-lang="modalDesc" class="text-sm text-slate-400 mb-6">Доступные официальные сборки RaiserOS:</p>
             <div id="modal-firmware-list" class="space-y-4"></div>
         </div>
     </div>
 
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#070b14] border border-slate-800/80 w-full max-w-md rounded-3xl p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <div class="flex gap-4 border-b border-slate-900 pb-4 mb-6 font-space text-lg font-bold">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-red-500 pb-2 cursor-pointer">Вход</button>
-                <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-2 cursor-pointer">Регистрация</button>
+        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-md rounded-3xl p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition transform hover:rotate-90 duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex gap-4 border-b border-indigo-950/60 pb-4 mb-6 font-space text-lg font-bold">
+                <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-indigo-500 pb-2 cursor-pointer transition-all">Вход</button>
+                <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-2 cursor-pointer transition-all">Регистрация</button>
             </div>
             <form onsubmit="handleAuth(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Email</label>
-                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
+                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
                 </div>
                 <div>
-                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Пароль</label>
-                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
+                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2" data-lang="passwordLabel">Пароль</label>
+                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
                 </div>
                 <div id="confirm-pass-container" class="hidden">
-                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Повторите пароль</label>
-                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-800 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-red-500/50">
+                    <label class="text-xs font-bold uppercase text-slate-400 block mb-2" data-lang="confirmPasswordLabel">Повторите пароль</label>
+                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
                 </div>
                 <div id="auth-error-msg" class="text-xs font-medium text-red-400 min-h-[16px] hidden"></div>
-                <button type="submit" id="auth-submit-btn" class="w-full bg-red-600 hover:bg-red-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space">ВОЙТИ</button>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space transform hover:scale-[1.01]">ВОЙТИ</button>
                 <div class="relative flex py-2 items-center">
-                    <div class="flex-grow border-t border-slate-900"></div>
-                    <span class="flex-shrink mx-4 text-slate-500 text-xs font-bold font-space">ИЛИ</span>
-                    <div class="flex-grow border-t border-slate-900"></div>
+                    <div class="flex-grow border-t border-indigo-950"></div>
+                    <span class="flex-shrink mx-4 text-slate-600 text-xs font-bold font-space">OR</span>
+                    <div class="flex-grow border-t border-indigo-950"></div>
                 </div>
-                <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-3 bg-slate-900 border border-slate-800 text-white font-bold py-3 rounded-xl hover:bg-slate-800 transition text-sm font-space cursor-pointer">
+                <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-3 bg-slate-950 border border-indigo-950 text-white font-bold py-3 rounded-xl hover:bg-indigo-900/30 transition text-sm font-space transform hover:scale-[1.01] cursor-pointer">
                     <svg class="w-4 h-4" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                         <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
                         <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
                     </svg>
-                    Продолжить с Google
+                    Google
                 </button>
             </form>
         </div>
     </div>
 
-    <div id="chat-widget" class="fixed bottom-6 right-6 z-40 w-80 sm:w-96 flex flex-col transition-all duration-300 translate-y-[380px]">
-        <div onclick="toggleChat()" class="bg-gradient-to-r from-slate-900 to-[#0b1324] border border-slate-800/80 rounded-t-2xl p-4 flex items-center justify-between cursor-pointer shadow-xl">
+    <div id="chat-widget" class="fixed bottom-6 right-6 z-40 w-80 sm:w-96 flex flex-col transition-all duration-500 translate-y-[380px]">
+        <div onclick="toggleChat()" class="bg-gradient-to-r from-indigo-950 to-[#060618] border border-indigo-900/60 rounded-t-2xl p-4 flex items-center justify-between cursor-pointer shadow-2xl">
             <div class="flex items-center gap-2">
-                <div class="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse"></div>
-                <span class="font-bold text-sm font-space tracking-wide">ОБЩИЙ ЧАТ (REALTIME)</span>
+                <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                <span class="font-bold text-sm font-space tracking-wide" data-lang="chatTitle">ОБЩИЙ ЧАТ (REALTIME)</span>
             </div>
-            <i data-lucide="chevron-up" id="chat-toggle-icon" class="w-4 h-4 text-slate-400 transition-transform duration-300"></i>
+            <i data-lucide="chevron-up" id="chat-toggle-icon" class="w-4 h-4 text-indigo-400 transition-transform duration-300"></i>
         </div>
-        <div class="bg-[#070b14]/95 backdrop-blur-md border-x border-b border-slate-800 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
+        <div class="bg-[#050516]/95 backdrop-blur-md border-x border-b border-indigo-950 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
-            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-slate-900 flex gap-2 rounded-b-2xl relative">
-                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-red-500/50">
-                <button type="submit" id="chat-send-btn" class="bg-red-600 hover:bg-red-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
+            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-indigo-950 flex gap-2 rounded-b-2xl relative">
+                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-indigo-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
+                <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition transform active:scale-95"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
             </form>
         </div>
     </div>
 
-    <footer class="border-t border-slate-950 bg-[#02050b] py-8 text-center text-xs text-slate-600 font-bold font-space">
-        &copy; 2026 FIRMWARECLOUD. NEVER SETTLE.
+    <footer class="border-t border-indigo-950/40 bg-[#02020a] py-8 text-center text-xs text-indigo-500/60 font-bold font-space tracking-wider">
+        &copy; 2026 RAISEROS LABS. ELEVATE YOUR EXPERIENCE.
     </footer>
 
     <script type="module">
@@ -223,126 +195,114 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
+        // База данных устройств (Добавлен OnePlus Ace 2 Pro)
         const DEVICES_DATA = [
-          { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 3, firmwares: [
-              { version: "OxygenOS 14.0.0.600", type: "Stable", region: "Global", size: "5.2 GB", date: "2026-06-15", url: "https://oxygenos.oneplus.net/CPH2581_11_A.44_20240305.zip" }
+          { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 1, firmwares: [
+              { version: "RaiserOS v1.0.0-Stable", type: "Stable", region: "Global", size: "4.8 GB", date: "2026-06-18", url: "https://github.com/CodeSenseiX/Link-Resolver" }
           ]},
-          { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 2, firmwares: [] },
-          { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 2, firmwares: [] },
-          { name: "OnePlus Open", imageIcon: "smartphone", totalBuilds: 1, firmwares: [] },
-          { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 1, firmwares: [] }
+          { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] },
+          { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] },
+          { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] },
+          { name: "OnePlus Open", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] }
         ];
 
         let currentUserEmail = null;
         let authMode = 'login';
         let lastMessageTime = 0;
+        let currentLang = 'ru';
 
+        // Словарь локализации
+        const TRANSLATIONS = {
+            ru: {
+                title: "RaiserOS",
+                badge: "Официальный Релиз",
+                subtitle: "Добро пожаловать в хаб плавной, безопасной и кастомизируемой операционной системы. Загрузите сборку для вашего устройства ниже.",
+                searchPlaceholder: "Поиск смартфона (OnePlus Ace 2 Pro)...",
+                builds: "Сборки",
+                noBuilds: "Прошивок пока нет для данной модели.",
+                downloadBtn: "СКАЧАТЬ",
+                modalDesc: "Доступные официальные сборки RaiserOS:",
+                chatTitle: "ОБЩИЙ ЧАТ (REALTIME)",
+                chatNotice: "Ссылки запрещены • Кулдаун 2 сек.",
+                chatCooldown: "Кулдаун 2 сек...",
+                loginBtn: "Войти",
+                passwordLabel: "Пароль",
+                confirmPasswordLabel: "Повторите пароль",
+                chatSystemBlock: "❌ Ссылки запрещены!"
+            },
+            en: {
+                title: "RaiserOS",
+                badge: "Official Release",
+                subtitle: "Welcome to the hub of smooth, secure, and highly customizable operating system. Download the perfect ecosystem build for your device below.",
+                searchPlaceholder: "Search smartphone (OnePlus Ace 2 Pro)...",
+                builds: "Builds",
+                noBuilds: "No firmwares available for this model yet.",
+                downloadBtn: "DOWNLOAD",
+                modalDesc: "Available official RaiserOS builds:",
+                chatTitle: "GLOBAL CHAT (REALTIME)",
+                chatNotice: "Links blocked • Cooldown 2s.",
+                chatCooldown: "Cooldown 2s...",
+                loginBtn: "Sign In",
+                passwordLabel: "Password",
+                confirmPasswordLabel: "Confirm Password",
+                chatSystemBlock: "❌ Links are not allowed!"
+            }
+        };
+
+        // Логика печатной машинки
+        function startTypingAnimation(textToType) {
+            const element = document.getElementById('typing-text');
+            let index = 0;
+            element.innerText = '';
+            
+            function type() {
+                if (index < textToType.length) {
+                    element.innerText += textToType.charAt(index);
+                    index++;
+                    setTimeout(type, 150);
+                }
+            }
+            type();
+        }
+
+        // Переключение языка
+        window.toggleLanguage = function(lang) {
+            currentLang = lang;
+            document.getElementById('lang-ru').className = lang === 'ru' ? "px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer" : "px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer";
+            document.getElementById('lang-en').className = lang === 'en' ? "px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer" : "px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer";
+            
+            // Замена статичных текстов
+            document.querySelectorAll('[data-lang]').forEach(el => {
+                const key = el.getAttribute('data-lang');
+                if (TRANSLATIONS[lang][key]) el.innerText = TRANSLATIONS[lang][key];
+            });
+
+            document.getElementById('search').placeholder = TRANSLATIONS[lang].searchPlaceholder;
+            
+            renderDevices(DEVICES_DATA);
+            startTypingAnimation(TRANSLATIONS[lang].title);
+        };
+
+        // Запуск базовой отрисовки и анимации при старте
         renderDevices(DEVICES_DATA);
+        toggleLanguage('ru');
 
-        window.switchMainTab = function(tab) {
-            const fSec = document.getElementById('section-firmwares');
-            const rSec = document.getElementById('section-resolver');
-            const fBtn = document.getElementById('nav-firmwares');
-            const rBtn = document.getElementById('nav-resolver');
-
-            if(tab === 'firmwares') {
-                fSec.classList.remove('hidden');
-                rSec.classList.add('hidden');
-                fBtn.className = "px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer";
-                rBtn.className = "px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer flex items-center gap-1.5";
-            } else {
-                fSec.classList.add('hidden');
-                rSec.classList.remove('hidden');
-                fBtn.className = "px-5 py-2 rounded-lg text-slate-400 hover:text-white transition cursor-pointer";
-                rBtn.className = "px-5 py-2 rounded-lg bg-red-600 text-white transition cursor-pointer flex items-center gap-1.5";
-            }
-        };
-
-        // ПОРТИРОВАННЫЙ СМАРТ-ДЕСЕРИАЛИЗАТОР ИЗ КЛАССОВ CODE-SENSEIX
-        window.resolveOtaLink = async function() {
-            const input = document.getElementById('ota-input').value.trim();
-            const btn = document.getElementById('resolver-btn');
-            const resultBox = document.getElementById('resolver-result');
-            const txtOutput = document.getElementById('resolved-url-text');
-            const dlBtn = document.getElementById('resolved-download-btn');
-
-            if(!input) {
-                alert("Пожалуйста, введите ссылку.");
-                return;
-            }
-
-            btn.disabled = true;
-            btn.innerHTML = `<i data-lucide="loader-2" class="w-4 h-4 animate-spin"></i> СЛЕДОВАНИЕ ПО ЦЕПОЧКЕ URL...`;
-            lucide.createIcons();
-            resultBox.classList.add('hidden');
-
-            try {
-                // Используем продвинутый прозрачный прокси, умеющий работать напрямую с HTTP заголовками и отдавать результат редиректа
-                const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(input)}`;
-                
-                const response = await fetch(proxyUrl);
-                if(!response.ok) throw new Error(`HTTP Error Status: ${response.status}`);
-                
-                // Проверяем: если нам вернули прямую ссылку (.zip) в конечном счете через редирект прокси
-                if (response.url && response.url.includes('.zip')) {
-                    displaySuccess(response.url);
-                    return;
-                }
-
-                // Иначе пробуем распарсить как классический json-ответ от downloadCheck (если это сырой запрос)
-                const textData = await response.text();
-                try {
-                    const otaData = JSON.parse(textData);
-                    if ((otaData.responseCode === 200 || otaData.responseCode === "200") && otaData.body?.fileList?.length > 0) {
-                        displaySuccess(otaData.body.fileList[0].url);
-                    } else {
-                        const errCode = otaData.responseCode || "Параметры не приняты";
-                        alert(`❌ Ссылка устарела или вернула пустой список файлов (Code ${errCode}). Обновите OTA-токен.`);
-                    }
-                } catch(e) {
-                    // Если это не JSON, но в самом теле ответа прокси лежит итоговая ссылка (или перенаправление)
-                    if(textData.includes('http') && textData.includes('.zip')) {
-                        const match = textData.match(/(https?:\/\/[^\s"']+\.zip)/);
-                        if(match) { displaySuccess(match[0]); return; }
-                    }
-                    throw new Error("Не удалось извлечь zip из потока данных.");
-                }
-            } catch (err) {
-                console.error(err);
-                alert(`❌ Ошибка разбора ссылки.\nПричина: ${err.message}\n\nУбедитесь, что ссылка скопирована верно и не истек её жизненный цикл.`);
-            } finally {
-                btn.disabled = false;
-                btn.innerHTML = `<i data-lucide="play" class="w-4 h-4 fill-current"></i> НАЧАТЬ АНАЛИЗ И СЛЕДОВАНИЕ РЕДИРЕКТАМ`;
-                lucide.createIcons();
-            }
-
-            function displaySuccess(url) {
-                txtOutput.innerText = url;
-                dlBtn.href = url;
-                resultBox.classList.remove('hidden');
-            }
-        };
-
-        window.copyResolvedLink = function() {
-            const text = document.getElementById('resolved-url-text').innerText;
-            navigator.clipboard.writeText(text).then(() => alert("Ссылка скопирована!"));
-        };
-
-        // Базовая логика интерфейса (Firebase & Отрисовка)
+        // Живой поиск
         document.getElementById('search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase().trim();
             renderDevices(DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q)));
         });
 
+        // Firebase Auth наблюдатель
         onAuthStateChanged(auth, (user) => {
             const az = document.getElementById('auth-zone');
             if (user) {
                 currentUserEmail = user.email;
                 const shortName = user.email.split('@')[0];
                 az.innerHTML = `
-                    <div class="flex items-center gap-3 bg-slate-900/60 border border-slate-800 rounded-2xl py-1.5 pl-4 pr-2">
+                    <div class="flex items-center gap-3 bg-[#070719]/80 border border-indigo-950 rounded-2xl py-1.5 pl-4 pr-2 transform hover:scale-105 transition-all">
                         <span class="text-sm font-bold text-white">${shortName}</span>
-                        <div class="w-8 h-8 bg-gradient-to-tr from-red-500 to-rose-500 rounded-lg flex items-center justify-center font-bold text-xs text-white">${shortName.charAt(0).toUpperCase()}</div>
+                        <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-xs text-white">${shortName.charAt(0).toUpperCase()}</div>
                         <button id="logout-btn" class="text-slate-500 hover:text-red-400 p-1 transition cursor-pointer"><i data-lucide="log-out" class="w-4 h-4"></i></button>
                     </div>`;
                 document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => window.location.reload());
@@ -350,20 +310,21 @@
             lucide.createIcons();
         });
 
+        // Firestore Realtime рендеринг чата
         const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(50));
         onSnapshot(qMessages, (snapshot) => {
             const box = document.getElementById('chat-messages');
-            let html = `<div class="text-slate-500 text-[11px] text-center py-2 border-b border-slate-900 font-medium">Ссылки запрещены • Кулдаун 2 сек.</div>`;
+            let html = `<div class="text-indigo-400/50 text-[11px] text-center py-2 border-b border-indigo-950/60 font-medium font-space">${TRANSLATIONS[currentLang].chatNotice}</div>`;
             snapshot.forEach((doc) => {
                 const msg = doc.data();
-                const shortName = msg.user ? msg.user.split('@')[0] : "Аноним";
+                const shortName = msg.user ? msg.user.split('@')[0] : "Anon";
                 html += `
-                    <div class="bg-slate-900/40 p-2.5 rounded-xl border border-slate-900/60 animate-message">
+                    <div class="bg-indigo-950/20 p-2.5 rounded-xl border border-indigo-950/40 transform hover:translate-x-1 transition-transform">
                         <div class="flex items-center justify-between mb-1">
-                            <span class="font-bold text-xs ${msg.user === currentUserEmail ? 'text-red-400' : 'text-indigo-400'}">${shortName}</span>
+                            <span class="font-bold text-xs ${msg.user === currentUserEmail ? 'text-indigo-400' : 'text-purple-400'}">${shortName}</span>
                             <span class="text-[10px] text-slate-600 font-space">${msg.time || ''}</span>
                         </div>
-                        <p class="${msg.system ? 'text-rose-400 italic' : 'text-slate-300'} text-xs leading-relaxed">${msg.text || ''}</p>
+                        <p class="${msg.system ? 'text-pink-400 italic' : 'text-slate-300'} text-xs leading-relaxed">${msg.text || ''}</p>
                     </div>`;
             });
             box.innerHTML = html;
@@ -382,14 +343,14 @@
             lastMessageTime = now;
 
             input.disabled = true; sendBtn.disabled = true;
-            let orig = input.placeholder; input.placeholder = "Кулдаун 2 сек...";
+            let orig = input.placeholder; input.placeholder = TRANSLATIONS[currentLang].chatCooldown;
             setTimeout(() => { input.disabled = false; sendBtn.disabled = false; input.placeholder = orig; }, 2000);
 
             if (/(https?:\/\/[^\s]+)/gi.test(txt)) {
-                await addDoc(collection(db, "messages"), { user: "Система", text: "❌ Ссылки запрещены!", time: getCurrentTimeStr(), timestamp: now, system: true });
+                await addDoc(collection(db, "messages"), { user: "System", text: TRANSLATIONS[currentLang].chatSystemBlock, time: getCurrentTimeStr(), timestamp: now, system: true });
                 input.value = ''; return;
             }
-            await addDoc(collection(db, "messages"), { user: currentUserEmail || "Анонимный Ванпласер", text: txt, time: getCurrentTimeStr(), timestamp: now });
+            await addDoc(collection(db, "messages"), { user: currentUserEmail || "Raiser User", text: txt, time: getCurrentTimeStr(), timestamp: now });
             input.value = '';
         };
 
@@ -411,13 +372,16 @@
         function renderDevices(devices) {
             const container = document.getElementById('devices-container');
             container.innerHTML = devices.map((dev) => `
-                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="relative p-[1px] bg-slate-900 border border-slate-900/60 rounded-2xl hover:bg-gradient-to-br hover:from-red-500 hover:to-orange-500 transition-all duration-300 cursor-pointer group shadow-xl">
-                    <div class="bg-[#070b15]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full">
+                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="relative p-[1px] bg-indigo-950/40 border border-indigo-950 rounded-2xl hover:bg-gradient-to-br hover:from-indigo-600 hover:to-purple-500 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-1 cursor-pointer group shadow-2xl">
+                    <div class="bg-[#050515]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full">
                         <div class="flex items-center gap-4">
-                            <div class="w-12 h-12 bg-[#02050b] rounded-xl flex items-center justify-center text-slate-400 group-hover:text-red-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
-                            <div class="text-left"><h3 class="text-lg font-bold text-white group-hover:text-red-400 transition-colors">${dev.name}</h3><p class="text-[11px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1 h-1 rounded-full bg-red-500 inline-block"></span> ${dev.totalBuilds || 0} Сборки</p></div>
+                            <div class="w-12 h-12 bg-[#02020a] rounded-xl flex items-center justify-center text-slate-400 group-hover:text-indigo-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
+                            <div class="text-left">
+                                <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">${dev.name}</h3>
+                                <p class="text-[11px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1 h-1 rounded-full bg-indigo-500 inline-block"></span> ${dev.totalBuilds || 0} ${TRANSLATIONS[currentLang].builds}</p>
+                            </div>
                         </div>
-                        <div class="w-8 h-8 rounded-lg bg-slate-900/40 text-slate-600 group-hover:text-red-400 flex items-center justify-center"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></div>
+                        <div class="w-8 h-8 rounded-lg bg-indigo-950/40 text-indigo-900/60 group-hover:text-indigo-400 flex items-center justify-center transition-colors"><i data-lucide="arrow-up-right" class="w-4 h-4"></i></div>
                     </div>
                 </div>`).join('');
             lucide.createIcons();
@@ -426,27 +390,35 @@
         window.openFirmwareModal = function(device) {
             document.getElementById('modal-device-name').innerText = device.name;
             if(!device.firmwares || device.firmwares.length === 0) {
-                document.getElementById('modal-firmware-list').innerHTML = `<p class="text-xs text-slate-500 font-medium py-4 text-center">Прошивок пока нет для данной модели.</p>`;
+                document.getElementById('modal-firmware-list').innerHTML = `<p class="text-xs text-slate-500 font-medium py-8 text-center">${TRANSLATIONS[currentLang].noBuilds}</p>`;
             } else {
                 document.getElementById('modal-firmware-list').innerHTML = device.firmwares.map(fw => `
-                    <div class="bg-slate-950/80 border border-slate-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left">
+                    <div class="bg-slate-950/40 border border-indigo-950/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transform hover:scale-[1.01] transition-transform">
                         <div class="space-y-1.5">
-                            <div class="flex items-center gap-2"><span class="text-[10px] font-bold px-2 py-0.5 rounded ${fw.type === 'Beta' ? 'bg-orange-500/10 text-orange-400' : 'bg-emerald-500/10 text-emerald-400'}">${fw.type}</span><span class="text-xs text-slate-500 ml-2">${fw.date}</span></div>
-                            <h4 class="text-white font-bold text-base">${fw.version}</h4>
+                            <div class="flex items-center gap-2">
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300">${fw.type}</span>
+                                <span class="text-xs text-slate-500 ml-2 font-space">${fw.date}</span>
+                                <span class="text-xs text-indigo-400/60 font-bold font-space ml-2">${fw.size}</span>
+                            </div>
+                            <h4 class="text-white font-bold text-base tracking-tight">${fw.version}</h4>
                         </div>
-                        <button onclick="window.open('${fw.url || '#'}', '_blank')" class="bg-red-600 hover:bg-red-500 text-white text-xs font-bold font-space px-4 py-2.5 rounded-xl transition">СКАЧАТЬ</button>
+                        <button onclick="window.open('${fw.url || '#'}', '_blank')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/10 active:scale-95 cursor-pointer">${TRANSLATIONS[currentLang].downloadBtn}</button>
                     </div>`).join('');
             }
-            document.getElementById('firmware-modal').classList.remove('opacity-0', 'pointer-events-none');
+            const modal = document.getElementById('firmware-modal');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
             document.getElementById('fw-modal-card').classList.remove('scale-95');
             lucide.createIcons();
         };
 
-        window.closeFirmwareModal = function() { document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none'); };
+        window.closeFirmwareModal = function() { 
+            document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none'); 
+            document.getElementById('fw-modal-card').classList.add('scale-95');
+        };
         window.openAuthModal = function(tab = 'login') { document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none'); switchAuthTab(tab); };
         window.closeAuthModal = function() { document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none'); };
-        window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ" : "СОЗДАТЬ АККАУНТ"; };
-        window.toggleChat = function() { const w = document.getElementById('chat-widget'); w.classList.toggle('translate-y-[380px]'); };
+        window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ / SIGN IN" : "СОЗДАТЬ / SIGN UP"; };
+        window.toggleChat = function() { const w = document.getElementById('chat-widget'); w.classList.toggle('translate-y-[380px]'); document.getElementById('chat-toggle-icon').classList.toggle('rotate-180'); };
         function getCurrentTimeStr() { const n = new Date(); return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`; }
     </script>
 </body>
