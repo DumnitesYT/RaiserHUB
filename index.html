@@ -16,7 +16,7 @@
         ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
-        /* Улучшенная, плавная анимация движения и пульсации неонового глоу */
+        /* Живой анимированный фон */
         @keyframes dynamic-glow-1 {
             0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.15; }
             50% { transform: translate(40px, -60px) scale(1.15); opacity: 0.25; }
@@ -48,6 +48,8 @@
     </style>
 </head>
 <body class="bg-[#03030f] text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500/30">
+
+    <div id="toast-container" class="fixed top-6 right-6 z-50 space-y-3 pointer-events-none max-w-sm w-full px-4"></div>
 
     <div class="absolute top-[-10%] left-[-10%] w-[750px] h-[750px] bg-indigo-600 rounded-full blur-[160px] pointer-events-none nebula-1"></div>
     <div class="absolute top-[35%] right-[-10%] w-[650px] h-[650px] bg-purple-600 rounded-full blur-[150px] pointer-events-none nebula-2"></div>
@@ -103,6 +105,32 @@
 
         <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full justify-center animate-fade-in" style="animation-delay: 0.2s;"></div>
     </main>
+
+    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="profile-modal-card">
+            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition transform hover:rotate-90 duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex flex-col items-center text-center space-y-4">
+                <div id="profile-avatar" class="w-20 h-20 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center font-black text-3xl text-white shadow-xl shadow-indigo-500/20">U</div>
+                <div>
+                    <h3 id="profile-username" class="text-xl font-bold text-white">Username</h3>
+                    <p id="profile-email" class="text-xs text-slate-500 font-space mt-0.5">user@domain.com</p>
+                </div>
+                
+                <div id="admin-panel" class="hidden w-full bg-red-500/5 border border-red-500/20 rounded-2xl p-4 text-left space-y-2">
+                    <div class="flex items-center gap-2 text-red-400 font-bold text-xs tracking-wider uppercase font-space">
+                        <i data-lucide="shield-alert" class="w-4 h-4"></i> Панель Разработчика
+                    </div>
+                    <p class="text-slate-400 text-[11px]">Добро пожаловать, глава проекта. Сервера работают в штатном режиме.</p>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <button onclick="showToast('Система перезагружена', 'success')" class="bg-red-950/40 hover:bg-red-900/40 border border-red-900/50 text-[11px] font-bold text-red-300 py-2 rounded-xl transition cursor-pointer">Reboot Node</button>
+                        <button onclick="showToast('Логи сохранены', 'info')" class="bg-slate-900 hover:bg-slate-800 border border-indigo-950 text-[11px] font-bold text-slate-300 py-2 rounded-xl transition cursor-pointer">Clear Logs</button>
+                    </div>
+                </div>
+
+                <button onclick="signOutAndReload()" class="w-full bg-indigo-950/40 border border-indigo-900/50 text-red-400 font-bold py-3 rounded-xl hover:bg-red-500/10 hover:border-red-500/20 transition text-sm font-space cursor-pointer">ВЫЙТИ ИЗ АККАУНТА</button>
+            </div>
+        </div>
+    </div>
 
     <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
         <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
@@ -164,7 +192,7 @@
         <div class="bg-[#050516]/95 backdrop-blur-md border-x border-b border-indigo-950 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
             <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-indigo-950 flex gap-2 rounded-b-2xl relative">
-                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-indigo-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50">
+                <input type="text" id="chat-input" placeholder="Авторизуйтесь, чтобы писать..." autocomplete="off" class="flex-1 bg-slate-900 border border-indigo-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50">
                 <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
             </form>
         </div>
@@ -204,6 +232,7 @@
         let authMode = 'login';
         let lastMessageTime = 0;
         let currentLang = 'ru';
+        let typingTimeout = null; // Фикс бага наложения текста
 
         const TRANSLATIONS = {
             ru: {
@@ -221,7 +250,8 @@
                 loginBtn: "Войти",
                 passwordLabel: "Пароль",
                 confirmPasswordLabel: "Повторите пароль",
-                chatSystemBlock: "❌ Ссылки запрещены!"
+                chatSystemBlock: "❌ Ссылки запрещены!",
+                chatGuestBlock: "🔒 Писать могут только авторизованные пользователи!"
             },
             en: {
                 title: "RaiserOS",
@@ -238,19 +268,46 @@
                 loginBtn: "Sign In",
                 passwordLabel: "Password",
                 confirmPasswordLabel: "Confirm Password",
-                chatSystemBlock: "❌ Links are not allowed!"
+                chatSystemBlock: "❌ Links are not allowed!",
+                chatGuestBlock: "🔒 Only authorized users can chat!"
             }
         };
 
+        // КАСТОМНАЯ СИСТЕМА УВЕДОМЛЕНИЙ (Взамен старых плашек окон)
+        window.showToast = function(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `p-4 rounded-2xl border text-xs font-bold tracking-wide backdrop-blur-xl shadow-2xl flex items-center gap-3 transition-all duration-300 transform translate-x-20 opacity-0 pointer-events-auto bg-[#050515]/95`;
+            
+            if (type === 'error') toast.className += ' border-red-500/30 text-red-400';
+            else if (type === 'success') toast.className += ' border-green-500/30 text-green-400';
+            else toast.className += ' border-indigo-500/30 text-indigo-400';
+
+            const icon = type === 'error' ? 'circle-alert' : (type === 'success' ? 'circle-check' : 'info');
+            toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i> <span>${message}</span>`;
+            
+            container.appendChild(toast);
+            lucide.createIcons();
+
+            setTimeout(() => { toast.classList.remove('translate-x-20', 'opacity-0'); }, 10);
+            setTimeout(() => {
+                toast.classList.add('translate-x-20', 'opacity-0');
+                setTimeout(() => { toast.remove(); }, 300);
+            }, 3500);
+        };
+
+        // НАДЕЖНЫЙ ФИКС АНИМАЦИИ ТЕКСТА (Без багов наложения)
         function startTypingAnimation(textToType) {
+            if (typingTimeout) clearTimeout(typingTimeout);
             const element = document.getElementById('typing-text');
             let index = 0;
             element.innerText = '';
+            
             function type() {
                 if (index < textToType.length) {
                     element.innerText += textToType.charAt(index);
                     index++;
-                    setTimeout(type, 150);
+                    typingTimeout = setTimeout(type, 150);
                 }
             }
             type();
@@ -279,21 +336,44 @@
             renderDevices(DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q)));
         });
 
+        // ПРОВЕРКА АВТОРИЗАЦИИ, И СИСТЕМА АДМИН-ПАНЕЛИ ДЛЯ THEDUMNITES
         onAuthStateChanged(auth, (user) => {
             const az = document.getElementById('auth-zone');
+            const chatInput = document.getElementById('chat-input');
+            
             if (user) {
                 currentUserEmail = user.email;
                 const shortName = user.email.split('@')[0];
+                
+                chatInput.placeholder = "Напишите сообщение...";
+
                 az.innerHTML = `
-                    <div class="flex items-center gap-3 bg-[#070719]/80 border border-indigo-950 rounded-2xl py-1.5 pl-4 pr-2 transform hover:scale-105 transition-all">
-                        <span class="text-sm font-bold text-white">${shortName}</span>
+                    <div onclick="openProfileModal()" class="flex items-center gap-3 bg-[#070719]/80 border border-indigo-950 rounded-2xl py-1.5 pl-4 pr-2 transform hover:scale-[1.03] transition-all cursor-pointer group">
+                        <span class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">${shortName}</span>
                         <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-xs text-white">${shortName.charAt(0).toUpperCase()}</div>
-                        <button id="logout-btn" class="text-slate-500 hover:text-red-400 p-1 transition cursor-pointer"><i data-lucide="log-out" class="w-4 h-4"></i></button>
                     </div>`;
-                document.getElementById('logout-btn').onclick = () => signOut(auth).then(() => window.location.reload());
-            } else { currentUserEmail = null; }
+
+                // Инициализация данных профиля
+                document.getElementById('profile-username').innerText = shortName;
+                document.getElementById('profile-email').innerText = user.email;
+                document.getElementById('profile-avatar').innerText = shortName.charAt(0).toUpperCase();
+
+                // Проверка на админа thedumnites
+                if (shortName.toLowerCase() === 'thedumnites' || user.email.includes('thedumnites')) {
+                    document.getElementById('admin-panel').classList.remove('hidden');
+                } else {
+                    document.getElementById('admin-panel').classList.add('hidden');
+                }
+            } else { 
+                currentUserEmail = null;
+                chatInput.placeholder = "Авторизуйтесь, чтобы писать...";
+            }
             lucide.createIcons();
         });
+
+        window.signOutAndReload = function() {
+            signOut(auth).then(() => window.location.reload());
+        };
 
         const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(50));
         onSnapshot(qMessages, (snapshot) => {
@@ -315,8 +395,14 @@
             box.scrollTop = box.scrollHeight;
         });
 
+        // ФИКС ЧАТА: ЗАПРЕТ ОТПРАВКИ БЕЗ РЕГИСТРАЦИИ
         window.sendChatMessage = async function(e) {
             e.preventDefault();
+            if (!currentUserEmail) {
+                showToast(TRANSLATIONS[currentLang].chatGuestBlock, 'error');
+                return;
+            }
+
             const input = document.getElementById('chat-input');
             const sendBtn = document.getElementById('chat-send-btn');
             const txt = input.value.trim();
@@ -334,7 +420,7 @@
                 await addDoc(collection(db, "messages"), { user: "System", text: TRANSLATIONS[currentLang].chatSystemBlock, time: getCurrentTimeStr(), timestamp: now, system: true });
                 input.value = ''; return;
             }
-            await addDoc(collection(db, "messages"), { user: currentUserEmail || "Raiser User", text: txt, time: getCurrentTimeStr(), timestamp: now });
+            await addDoc(collection(db, "messages"), { user: currentUserEmail, text: txt, time: getCurrentTimeStr(), timestamp: now });
             input.value = '';
         };
 
@@ -346,12 +432,13 @@
                 if (authMode === 'login') { await signInWithEmailAndPassword(auth, email, pass); } 
                 else { await createUserWithEmailAndPassword(auth, email, pass); }
                 closeAuthModal();
-            } catch (err) { alert(err.message); }
+                showToast('Успешная авторизация!', 'success');
+            } catch (err) { showToast(err.message, 'error'); }
         };
 
-        // ЛОГИКА ВХОДА ЧЕРЕЗ GOOGLE
         window.handleGoogleAuth = async function() {
-            try { await signInWithPopup(auth, googleProvider); closeAuthModal(); } catch (err) { alert(err.message); }
+            try { await signInWithPopup(auth, googleProvider); closeAuthModal(); showToast('Вход через Google выполнен!', 'success'); } 
+            catch (err) { showToast(err.message, 'error'); }
         };
 
         function renderDevices(devices) {
@@ -400,6 +487,16 @@
             document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none'); 
             document.getElementById('fw-modal-card').classList.add('scale-95');
         };
+        
+        window.openProfileModal = function() {
+            document.getElementById('profile-modal').classList.remove('opacity-0', 'pointer-events-none');
+            document.getElementById('profile-modal-card').classList.remove('scale-95');
+        };
+        window.closeProfileModal = function() {
+            document.getElementById('profile-modal').classList.add('opacity-0', 'pointer-events-none');
+            document.getElementById('profile-modal-card').classList.add('scale-95');
+        };
+
         window.openAuthModal = function(tab = 'login') { document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none'); switchAuthTab(tab); };
         window.closeAuthModal = function() { document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none'); };
         window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ" : "СОЗДАТЬ"; };
