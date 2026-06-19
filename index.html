@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RaiserOS | Next-Gen Ecosystem Hub</title>
+    <title>RaiserOS | Early Beta</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght=300;400;500;600;700;800&family=Space+Grotesk:wght=500;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
@@ -16,7 +16,6 @@
         ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
-        /* Успокаивающий живой фон */
         @keyframes float-bg {
             0%, 100% { transform: translate(0px, 0px) scale(1); }
             33% { transform: translate(30px, -50px) scale(1.05); }
@@ -25,21 +24,18 @@
         .nebula-1 { animation: float-bg 12s infinite ease-in-out; }
         .nebula-2 { animation: float-bg 16s infinite ease-in-out -4s; }
 
-        /* Плавные появления */
         @keyframes fadeInUp {
             from { opacity: 0; transform: translateY(16px); }
             to { opacity: 1; transform: translateY(0); }
         }
         .animate-fade-in { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
-        /* Анимация печатной машинки */
         @keyframes blink { 50% { border-color: transparent } }
         .typing-cursor {
             border-right: 3px solid #a78bfa;
             animation: blink 0.75s step-end infinite;
         }
 
-        /* Пульсация логотипа */
         @keyframes logo-float {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-6px) rotate(2deg); }
@@ -51,9 +47,8 @@
 
     <div class="absolute top-[-10%] left-[-10%] w-[700px] h-[700px] bg-indigo-600/15 rounded-full blur-[160px] pointer-events-none nebula-1"></div>
     <div class="absolute top-[40%] right-[-10%] w-[600px] h-[600px] bg-purple-600/10 rounded-full blur-[150px] pointer-events-none nebula-2"></div>
-    <div class="absolute bottom-[-10%] left-[20%] w-[500px] h-[500px] bg-blue-600/10 rounded-full blur-[140px] pointer-events-none nebula-1" style="animation-delay: -2s;"></div>
 
-    <header class="border-b border-indigo-950/40 bg-[#03030f]/60 backdrop-blur-xl sticky top-0 z-40 transition-all duration-300">
+    <header class="border-b border-indigo-950/40 bg-[#03030f]/60 backdrop-blur-xl sticky top-0 z-40">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 group cursor-pointer logo-anime">
                 <div class="relative bg-gradient-to-tr from-indigo-600 via-purple-500 to-pink-500 p-2.5 rounded-xl text-white shadow-lg shadow-indigo-500/30 group-hover:scale-105 transition-transform duration-300">
@@ -82,7 +77,7 @@
 
     <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
         <div class="text-center max-w-3xl space-y-5 mb-16 w-full animate-fade-in">
-            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full text-xs font-bold tracking-wider uppercase font-space transform hover:scale-105 transition-transform">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full text-xs font-bold tracking-wider uppercase font-space">
                 <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span> <span data-lang="badge">Официальный Релиз</span>
             </div>
             
@@ -90,7 +85,7 @@
                 <span id="typing-text" class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent typing-cursor"></span>
             </h1>
             
-            <p data-lang="subtitle" class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-medium transition-all duration-300">
+            <p data-lang="subtitle" class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-medium">
                 Добро пожаловать в хаб плавной, безопасной и кастомизируемой операционной системы. Загрузите сборку для вашего устройства ниже.
             </p>
         </div>
@@ -102,7 +97,7 @@
             </div>
         </div>
 
-        <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full animate-fade-in" style="animation-delay: 0.2s;"></div>
+        <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full justify-center animate-fade-in" style="animation-delay: 0.2s;"></div>
     </main>
 
     <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
@@ -124,32 +119,17 @@
             <form onsubmit="handleAuth(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Email</label>
-                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
+                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50">
                 </div>
                 <div>
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2" data-lang="passwordLabel">Пароль</label>
-                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
+                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50">
                 </div>
                 <div id="confirm-pass-container" class="hidden">
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2" data-lang="confirmPasswordLabel">Повторите пароль</label>
-                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
+                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50">
                 </div>
-                <div id="auth-error-msg" class="text-xs font-medium text-red-400 min-h-[16px] hidden"></div>
-                <button type="submit" id="auth-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space transform hover:scale-[1.01]">ВОЙТИ</button>
-                <div class="relative flex py-2 items-center">
-                    <div class="flex-grow border-t border-indigo-950"></div>
-                    <span class="flex-shrink mx-4 text-slate-600 text-xs font-bold font-space">OR</span>
-                    <div class="flex-grow border-t border-indigo-950"></div>
-                </div>
-                <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-3 bg-slate-950 border border-indigo-950 text-white font-bold py-3 rounded-xl hover:bg-indigo-900/30 transition text-sm font-space transform hover:scale-[1.01] cursor-pointer">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24">
-                        <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                        <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                        <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
-                        <path fill="currentColor" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-                    </svg>
-                    Google
-                </button>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space">ВОЙТИ</button>
             </form>
         </div>
     </div>
@@ -165,8 +145,8 @@
         <div class="bg-[#050516]/95 backdrop-blur-md border-x border-b border-indigo-950 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
             <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
             <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-indigo-950 flex gap-2 rounded-b-2xl relative">
-                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-indigo-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50 transition-colors">
-                <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition transform active:scale-95"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
+                <input type="text" id="chat-input" placeholder="Напишите что-нибудь..." autocomplete="off" class="flex-1 bg-slate-900 border border-indigo-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50">
+                <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
             </form>
         </div>
     </div>
@@ -193,17 +173,13 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const googleProvider = new GoogleAuthProvider();
 
-        // База данных устройств (Добавлен OnePlus Ace 2 Pro)
+        // Оставлен ТОЛЬКО OnePlus Ace 2 Pro, версия RaiserOS 1.0.0, BETA, 7.9 GB
+        // Замени ровную ссылку в поле 'url' на свою прямую (прямой zip-архив)
         const DEVICES_DATA = [
           { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 1, firmwares: [
-              { version: "RaiserOS v1.0.0-Stable", type: "Stable", region: "Global", size: "4.8 GB", date: "2026-06-18", url: "https://github.com/CodeSenseiX/Link-Resolver" }
-          ]},
-          { name: "OnePlus 12", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] },
-          { name: "OnePlus 11", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] },
-          { name: "OnePlus Nord 4", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] },
-          { name: "OnePlus Open", imageIcon: "smartphone", totalBuilds: 0, firmwares: [] }
+              { version: "RaiserOS 1.0.0", type: "BETA", region: "Global", size: "7.9 GB", date: "2026-06-19", url: "https://your-direct-link.com/file.zip" }
+          ]}
         ];
 
         let currentUserEmail = null;
@@ -211,7 +187,6 @@
         let lastMessageTime = 0;
         let currentLang = 'ru';
 
-        // Словарь локализации
         const TRANSLATIONS = {
             ru: {
                 title: "RaiserOS",
@@ -220,7 +195,7 @@
                 searchPlaceholder: "Поиск смартфона (OnePlus Ace 2 Pro)...",
                 builds: "Сборки",
                 noBuilds: "Прошивок пока нет для данной модели.",
-                downloadBtn: "СКАЧАТЬ",
+                downloadBtn: "СКАЧАТЬ НАПРЯМУЮ",
                 modalDesc: "Доступные официальные сборки RaiserOS:",
                 chatTitle: "ОБЩИЙ ЧАТ (REALTIME)",
                 chatNotice: "Ссылки запрещены • Кулдаун 2 сек.",
@@ -237,7 +212,7 @@
                 searchPlaceholder: "Search smartphone (OnePlus Ace 2 Pro)...",
                 builds: "Builds",
                 noBuilds: "No firmwares available for this model yet.",
-                downloadBtn: "DOWNLOAD",
+                downloadBtn: "DIRECT DOWNLOAD",
                 modalDesc: "Available official RaiserOS builds:",
                 chatTitle: "GLOBAL CHAT (REALTIME)",
                 chatNotice: "Links blocked • Cooldown 2s.",
@@ -249,12 +224,10 @@
             }
         };
 
-        // Логика печатной машинки
         function startTypingAnimation(textToType) {
             const element = document.getElementById('typing-text');
             let index = 0;
             element.innerText = '';
-            
             function type() {
                 if (index < textToType.length) {
                     element.innerText += textToType.charAt(index);
@@ -265,35 +238,29 @@
             type();
         }
 
-        // Переключение языка
         window.toggleLanguage = function(lang) {
             currentLang = lang;
             document.getElementById('lang-ru').className = lang === 'ru' ? "px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer" : "px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer";
             document.getElementById('lang-en').className = lang === 'en' ? "px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer" : "px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer";
             
-            // Замена статичных текстов
             document.querySelectorAll('[data-lang]').forEach(el => {
                 const key = el.getAttribute('data-lang');
                 if (TRANSLATIONS[lang][key]) el.innerText = TRANSLATIONS[lang][key];
             });
 
             document.getElementById('search').placeholder = TRANSLATIONS[lang].searchPlaceholder;
-            
             renderDevices(DEVICES_DATA);
             startTypingAnimation(TRANSLATIONS[lang].title);
         };
 
-        // Запуск базовой отрисовки и анимации при старте
         renderDevices(DEVICES_DATA);
         toggleLanguage('ru');
 
-        // Живой поиск
         document.getElementById('search').addEventListener('input', (e) => {
             const q = e.target.value.toLowerCase().trim();
             renderDevices(DEVICES_DATA.filter(d => d.name.toLowerCase().includes(q)));
         });
 
-        // Firebase Auth наблюдатель
         onAuthStateChanged(auth, (user) => {
             const az = document.getElementById('auth-zone');
             if (user) {
@@ -310,7 +277,6 @@
             lucide.createIcons();
         });
 
-        // Firestore Realtime рендеринг чата
         const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(50));
         onSnapshot(qMessages, (snapshot) => {
             const box = document.getElementById('chat-messages');
@@ -365,10 +331,6 @@
             } catch (err) { alert(err.message); }
         };
 
-        window.handleGoogleAuth = async function() {
-            try { await signInWithPopup(auth, googleProvider); closeAuthModal(); } catch (err) { console.error(err); }
-        };
-
         function renderDevices(devices) {
             const container = document.getElementById('devices-container');
             container.innerHTML = devices.map((dev) => `
@@ -396,13 +358,13 @@
                     <div class="bg-slate-950/40 border border-indigo-950/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transform hover:scale-[1.01] transition-transform">
                         <div class="space-y-1.5">
                             <div class="flex items-center gap-2">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300">${fw.type}</span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">${fw.type}</span>
                                 <span class="text-xs text-slate-500 ml-2 font-space">${fw.date}</span>
                                 <span class="text-xs text-indigo-400/60 font-bold font-space ml-2">${fw.size}</span>
                             </div>
                             <h4 class="text-white font-bold text-base tracking-tight">${fw.version}</h4>
                         </div>
-                        <button onclick="window.open('${fw.url || '#'}', '_blank')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/10 active:scale-95 cursor-pointer">${TRANSLATIONS[currentLang].downloadBtn}</button>
+                        <a href="${fw.url || '#'}" download class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/10 active:scale-95 text-center cursor-pointer">${TRANSLATIONS[currentLang].downloadBtn}</a>
                     </div>`).join('');
             }
             const modal = document.getElementById('firmware-modal');
@@ -417,7 +379,7 @@
         };
         window.openAuthModal = function(tab = 'login') { document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none'); switchAuthTab(tab); };
         window.closeAuthModal = function() { document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none'); };
-        window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ / SIGN IN" : "СОЗДАТЬ / SIGN UP"; };
+        window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ" : "СОЗДАТЬ"; };
         window.toggleChat = function() { const w = document.getElementById('chat-widget'); w.classList.toggle('translate-y-[380px]'); document.getElementById('chat-toggle-icon').classList.toggle('rotate-180'); };
         function getCurrentTimeStr() { const n = new Date(); return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`; }
     </script>
