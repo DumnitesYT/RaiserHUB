@@ -23,7 +23,7 @@
         /* Фоновые туманности */
         @keyframes dynamic-glow-1 {
             0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.15; }
-            50% { transform: translate(40px, -60px) scale(1.15); opacity: 0.25; }
+            50 { transform: translate(40px, -60px) scale(1.15); opacity: 0.25; }
         }
         @keyframes dynamic-glow-2 {
             0%, 100% { transform: translate(0px, 0px) scale(1.1); opacity: 0.1; }
@@ -66,25 +66,25 @@
     <div class="absolute top-[35%] right-[-10%] w-[650px] h-[650px] bg-purple-600 rounded-full blur-[150px] pointer-events-none nebula-2 z-0"></div>
 
     <header class="border-b border-indigo-950/40 bg-[#03030f]/60 backdrop-blur-xl sticky top-0 z-40">
-        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3 group cursor-pointer logo-anime">
                 <div class="relative bg-gradient-to-tr from-indigo-500 via-indigo-600 to-purple-600 p-2 rounded-xl text-white shadow-xl shadow-indigo-500/10 group-hover:shadow-indigo-500/30 transition-all duration-300">
                     <i data-lucide="activity" class="w-5 h-5"></i>
                     <div class="absolute inset-0 bg-indigo-400 rounded-xl blur-md opacity-0 group-hover:opacity-30 transition-opacity"></div>
                 </div>
-                <span class="text-xl font-bold font-space tracking-wide text-white">
+                <span class="text-lg sm:text-xl font-bold font-space tracking-wide text-white">
                     RAISER<span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">OS</span>
                 </span>
             </div>
 
-            <div class="flex items-center gap-4">
+            <div class="flex items-center gap-2 sm:gap-4">
                 <div class="bg-slate-950 border border-indigo-950/80 rounded-xl p-1 flex gap-1 font-space text-[10px] font-bold">
-                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2.5 py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer">RU</button>
-                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2.5 py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer">EN</button>
+                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg bg-indigo-600 text-white transition-all cursor-pointer">RU</button>
+                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-slate-400 hover:text-white transition-all cursor-pointer">EN</button>
                 </div>
 
                 <div id="auth-zone">
-                    <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-sm font-semibold text-white bg-indigo-950/40 px-5 py-2.5 rounded-xl border border-indigo-900/50 hover:bg-indigo-900/40 hover:border-indigo-500/30 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
+                    <button onclick="openAuthModal('login')" class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-white bg-indigo-950/40 px-3 py-2 sm:px-5 sm:py-2.5 rounded-xl border border-indigo-900/50 hover:bg-indigo-900/40 hover:border-indigo-500/30 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer">
                         <i data-lucide="log-in" class="w-4 h-4 text-indigo-400"></i> <span data-lang="loginBtn">Войти</span>
                     </button>
                 </div>
@@ -92,25 +92,25 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-6 py-16 relative z-10 flex flex-col items-center">
-        <div class="text-center max-w-3xl space-y-5 mb-16 w-full animate-fade-in">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-12 sm:py-16 relative z-10 flex flex-col items-center">
+        <div class="text-center max-w-3xl space-y-5 mb-12 sm:mb-16 w-full animate-fade-in">
             <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full text-xs font-bold tracking-wider uppercase font-space">
                 <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span> <span data-lang="badge">Early beta</span>
             </div>
             
-            <h1 class="text-5xl sm:text-7xl font-black tracking-tight text-white leading-tight text-center min-h-[70px] sm:min-h-[90px]">
+            <h1 class="text-4xl sm:text-7xl font-black tracking-tight text-white leading-tight text-center min-h-[60px] sm:min-h-[90px]">
                 <span id="typing-text" class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent typing-cursor"></span>
             </h1>
             
-            <p data-lang="subtitle" class="text-slate-400 max-w-xl mx-auto text-sm sm:text-base font-medium">
+            <p data-lang="subtitle" class="text-slate-400 max-w-xl mx-auto text-xs sm:text-base font-medium px-2">
                 Добро пожаловать в хаб плавной, безопасной и кастомизируемой операционной системы. Загрузите сборку для вашего устройства ниже.
             </p>
         </div>
 
-        <div class="w-full max-w-xl mb-14 relative group animate-fade-in" style="animation-delay: 0.1s;">
+        <div class="w-full max-w-xl mb-10 sm:mb-14 relative group animate-fade-in" style="animation-delay: 0.1s;">
             <div class="relative bg-[#070719]/80 border border-indigo-950 rounded-2xl flex items-center px-4 py-1.5 focus-within:border-indigo-500/40 focus-within:shadow-[0_0_20px_rgba(99,102,241,0.15)] transition-all duration-300 shadow-2xl">
                 <i data-lucide="search" class="w-5 h-5 text-indigo-400/60 mr-3"></i>
-                <input type="text" id="search" placeholder="Поиск смартфона (OnePlus Ace 2 Pro)..." class="w-full bg-transparent border-none text-white focus:outline-none text-base py-2">
+                <input type="text" id="search" placeholder="Поиск смартфона (OnePlus Ace 2 Pro)..." class="w-full bg-transparent border-none text-white focus:outline-none text-sm sm:text-base py-2">
             </div>
         </div>
 
@@ -148,16 +148,16 @@
     </div>
 
     <div id="firmware-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-2xl rounded-3xl p-6 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
+        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-2xl rounded-3xl p-5 sm:p-8 shadow-2xl relative max-h-[90vh] overflow-y-auto transform scale-95 transition-all duration-300" id="fw-modal-card">
             <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition transform hover:rotate-90 duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <h2 id="modal-device-name" class="text-2xl sm:text-3xl font-black text-white mb-1">Device Name</h2>
-            <p data-lang="modalDesc" class="text-sm text-slate-400 mb-6">Доступные официальные сборки RaiserOS:</p>
+            <h2 id="modal-device-name" class="text-xl sm:text-3xl font-black text-white mb-1 pr-6">Device Name</h2>
+            <p data-lang="modalDesc" class="text-xs sm:text-sm text-slate-400 mb-6">Доступные официальные сборки RaiserOS:</p>
             <div id="modal-firmware-list" class="space-y-4"></div>
         </div>
     </div>
 
     <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-md rounded-3xl p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
+        <div class="bg-[#050515] border border-indigo-950/80 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
             <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition transform hover:rotate-90 duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="flex gap-4 border-b border-indigo-950/60 pb-4 mb-6 font-space text-lg font-bold">
                 <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-indigo-500 pb-2 cursor-pointer transition-all">Вход</button>
@@ -166,15 +166,15 @@
             <form onsubmit="handleAuth(event)" class="space-y-4">
                 <div>
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2">Email</label>
-                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50">
+                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 text-sm">
                 </div>
                 <div>
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2" data-lang="passwordLabel">Пароль</label>
-                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50">
+                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 text-sm">
                 </div>
                 <div id="confirm-pass-container" class="hidden">
                     <label class="text-xs font-bold uppercase text-slate-400 block mb-2" data-lang="confirmPasswordLabel">Повторите пароль</label>
-                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50">
+                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-3 px-4 text-white focus:outline-none focus:border-indigo-500/50 text-sm">
                 </div>
                 <button type="submit" id="auth-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3.5 rounded-xl transition text-sm font-space">ВОЙТИ</button>
                 
@@ -196,24 +196,24 @@
         </div>
     </div>
 
-    <div id="chat-widget" class="fixed bottom-6 right-6 z-40 w-80 sm:w-96 flex flex-col transition-all duration-500 translate-y-[380px]">
-        <div onclick="toggleChat()" class="bg-gradient-to-r from-indigo-950 to-[#060618] border border-indigo-900/60 rounded-t-2xl p-4 flex items-center justify-between cursor-pointer shadow-2xl">
+    <div id="chat-widget" class="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-40 w-full sm:w-96 flex flex-col transition-all duration-500 translate-y-[380px]">
+        <div onclick="toggleChat()" class="bg-gradient-to-r from-indigo-950 to-[#060618] border-t sm:border border-indigo-900/60 rounded-t-2xl p-4 flex items-center justify-between cursor-pointer shadow-2xl">
             <div class="flex items-center gap-2">
                 <div class="w-2.5 h-2.5 rounded-full bg-indigo-500 animate-pulse"></div>
-                <span class="font-bold text-sm font-space tracking-wide" data-lang="chatTitle">ОБЩИЙ ЧАТ (REALTIME)</span>
+                <span class="font-bold text-xs sm:text-sm font-space tracking-wide" data-lang="chatTitle">ОБЩИЙ ЧАТ (REALTIME)</span>
             </div>
             <i data-lucide="chevron-up" id="chat-toggle-icon" class="w-4 h-4 text-indigo-400 transition-transform duration-300"></i>
         </div>
-        <div class="bg-[#050516]/95 backdrop-blur-md border-x border-b border-indigo-950 h-[360px] flex flex-col justify-between rounded-b-2xl shadow-2xl">
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-sm"></div>
-            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-indigo-950 flex gap-2 rounded-b-2xl relative">
+        <div class="bg-[#050516]/95 backdrop-blur-md border-x border-b border-indigo-950 h-[360px] flex flex-col justify-between rounded-b-none sm:rounded-b-2xl shadow-2xl">
+            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3 text-xs sm:text-sm"></div>
+            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/80 border-t border-indigo-950 flex gap-2 rounded-b-none sm:rounded-b-2xl relative">
                 <input type="text" id="chat-input" placeholder="Авторизуйтесь, чтобы писать..." autocomplete="off" class="flex-1 bg-slate-900 border border-indigo-950 rounded-xl px-3 py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/50">
                 <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-800 text-white p-2.5 rounded-xl transition"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
             </form>
         </div>
     </div>
 
-    <footer class="border-t border-indigo-950/40 bg-[#02020a] py-8 text-center text-xs text-indigo-500/60 font-bold font-space tracking-wider z-10">
+    <footer class="border-t border-indigo-950/40 bg-[#02020a] py-8 text-center text-[10px] sm:text-xs text-indigo-500/60 font-bold font-space tracking-wider z-10">
         &copy; 2026 RAISEROS LABS. ELEVATE YOUR EXPERIENCE.
     </footer>
 
@@ -237,9 +237,11 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
+        // Обновленная база данных прошивок с Mega-ссылками и тегами PORT
         const DEVICES_DATA = [
-          { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 1, firmwares: [
-              { version: "RaiserOS 1.0.0", type: "BETA", region: "Global", size: "7.9 GB", date: "2026-06-19", url: "https://drive.usercontent.google.com/download?id=1_KRJTmDP2tRS4TjYlaJH5fXtftzd5n2S&export=download&authuser=0" }
+          { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
+              { version: "RaiserOS 1.1 (16.0.8 port)", type: "BETA", isPort: true, region: "Global", size: "3.2 GB", date: "2026-06-20", url: "https://mega.nz/file/OqI03T5L#KAuvBv-W7BhYZsX81tHT1zVDYcUdp46vw3lZHtwykF8" },
+              { version: "ColorOS 16.0.8 Port", type: "", isPort: true, region: "Global", size: "4.1 GB", date: "2026-06-20", url: "https://mega.nz/file/nmZTlAqS#psy3BjhkWOsklTnB2cOyFp2JOchUqQodYHNvl7uH7Tk_" }
           ]}
         ];
 
@@ -336,7 +338,7 @@
             type();
         }
 
-        // Фикс скачивания: Мгновенное и надежное открытие потока загрузки файлов
+        // Прямой запуск скачивания с серверов Mega
         window.triggerDirectDownload = function(url) {
             showToast('Загрузка прошивки запущена напрямую!', 'success');
             window.open(url, '_blank');
@@ -376,7 +378,7 @@
 
                 az.innerHTML = `
                     <div onclick="openProfileModal()" class="flex items-center gap-3 bg-[#070719]/80 border border-indigo-950 rounded-2xl py-1.5 pl-4 pr-2 transform hover:scale-[1.03] transition-all cursor-pointer group">
-                        <span class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">${shortName}</span>
+                        <span class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors max-w-[80px] truncate">${shortName}</span>
                         <div class="w-8 h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-xs text-white">${shortName.charAt(0).toUpperCase()}</div>
                     </div>`;
 
@@ -468,12 +470,12 @@
         function renderDevices(devices) {
             const container = document.getElementById('devices-container');
             container.innerHTML = devices.map((dev) => `
-                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="relative p-[1px] bg-indigo-950/40 border border-indigo-950 rounded-2xl hover:border-indigo-500/50 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-1 cursor-pointer group shadow-2xl">
-                    <div class="bg-[#050515]/95 rounded-2xl p-6 flex items-center justify-between w-full h-full">
+                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="relative p-[1px] w-full max-w-sm sm:max-w-none bg-indigo-950/40 border border-indigo-950 rounded-2xl hover:border-indigo-500/50 transition-all duration-300 transform hover:scale-[1.02] hover:-translate-y-1 cursor-pointer group shadow-2xl mx-auto">
+                    <div class="bg-[#050515]/95 rounded-2xl p-5 sm:p-6 flex items-center justify-between w-full h-full">
                         <div class="flex items-center gap-4">
                             <div class="w-12 h-12 bg-[#02020a] rounded-xl flex items-center justify-center text-slate-400 group-hover:text-indigo-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
                             <div class="text-left">
-                                <h3 class="text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">${dev.name}</h3>
+                                <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-indigo-400 transition-colors">${dev.name}</h3>
                                 <p class="text-[11px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1 h-1 rounded-full bg-indigo-500 inline-block"></span> ${dev.totalBuilds || 0} ${TRANSLATIONS[currentLang].builds}</p>
                             </div>
                         </div>
@@ -488,18 +490,25 @@
             if(!device.firmwares || device.firmwares.length === 0) {
                 document.getElementById('modal-firmware-list').innerHTML = `<p class="text-xs text-slate-500 font-medium py-8 text-center">${TRANSLATIONS[currentLang].noBuilds}</p>`;
             } else {
-                document.getElementById('modal-firmware-list').innerHTML = device.firmwares.map(fw => `
+                document.getElementById('modal-firmware-list').innerHTML = device.firmwares.map(fw => {
+                    // Генерация тегов BETA и синего тега PORT
+                    const betaTag = fw.type ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">${fw.type}</span>` : '';
+                    const portTag = fw.isPort ? `<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 border border-blue-500/20">PORT</span>` : '';
+                    
+                    return `
                     <div class="bg-slate-950/40 border border-indigo-950/60 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 text-left transform hover:scale-[1.01] transition-transform">
                         <div class="space-y-1.5">
-                            <div class="flex items-center gap-2">
-                                <span class="text-[10px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">${fw.type}</span>
-                                <span class="text-xs text-slate-500 ml-2 font-space">${fw.date}</span>
-                                <span class="text-xs text-indigo-400/60 font-bold font-space ml-2">${fw.size}</span>
+                            <div class="flex flex-wrap items-center gap-2">
+                                ${betaTag}
+                                ${portTag}
+                                <span class="text-xs text-slate-500 font-space">${fw.date}</span>
+                                <span class="text-xs text-indigo-400/60 font-bold font-space">${fw.size}</span>
                             </div>
-                            <h4 class="text-white font-bold text-base tracking-tight">${fw.version}</h4>
+                            <h4 class="text-white font-bold text-sm sm:text-base tracking-tight">${fw.version}</h4>
                         </div>
-                        <button onclick="triggerDirectDownload('${fw.url}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/10 active:scale-95 text-center cursor-pointer">${TRANSLATIONS[currentLang].downloadBtn}</button>
-                    </div>`).join('');
+                        <button onclick="triggerDirectDownload('${fw.url}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all shadow-lg shadow-indigo-600/10 active:scale-95 text-center cursor-pointer w-full sm:w-auto">${TRANSLATIONS[currentLang].downloadBtn}</button>
+                    </div>`;
+                }).join('');
             }
             const modal = document.getElementById('firmware-modal');
             modal.classList.remove('opacity-0', 'pointer-events-none');
