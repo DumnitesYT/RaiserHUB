@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>RaiserOS | Early beta</title>
+    <title>RaiserHUB | Early beta</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E">
 
@@ -20,22 +20,23 @@
         ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
-        /* Фоновые небулы */
+        /* Фоновые небулы с поддержкой плавной смены цвета */
         @keyframes dynamic-nebula-1 {
-            0% { transform: translate(0px, 0px) scale(1) rotate(0deg); opacity: 0.25; }
-            25% { transform: translate(120px, 80px) scale(1.3) rotate(90deg); opacity: 0.35; }
-            50% { transform: translate(40px, 180px) scale(0.9) rotate(180deg); opacity: 0.22; }
-            75% { transform: translate(-80px, 90px) scale(1.2) rotate(270deg); opacity: 0.38; }
-            100% { transform: translate(0px, 0px) scale(1) rotate(360deg); opacity: 0.25; }
+            0% { transform: translate(0px, 0px) scale(1) rotate(0deg); }
+            25% { transform: translate(120px, 80px) scale(1.3) rotate(90deg); }
+            50% { transform: translate(40px, 180px) scale(0.9) rotate(180deg); }
+            75% { transform: translate(-80px, 90px) scale(1.2) rotate(270deg); }
+            100% { transform: translate(0px, 0px) scale(1) rotate(360deg); }
         }
         @keyframes dynamic-nebula-2 {
-            0% { transform: translate(0px, 0px) scale(1.1) rotate(0deg); opacity: 0.2; }
-            33% { transform: translate(-140px, -60px) scale(0.85) rotate(-120deg); opacity: 0.33; }
-            66% { transform: translate(60px, -150px) scale(1.25) rotate(-240deg); opacity: 0.25; }
-            100% { transform: translate(0px, 0px) scale(1.1) rotate(-360deg); opacity: 0.2; }
+            0% { transform: translate(0px, 0px) scale(1.1) rotate(0deg); }
+            33% { transform: translate(-140px, -60px) scale(0.85) rotate(-120deg); }
+            66% { transform: translate(60px, -150px) scale(1.25) rotate(-240deg); }
+            100% { transform: translate(0px, 0px) scale(1.1) rotate(-360deg); }
         }
-        .nebula-1 { animation: dynamic-nebula-1 22s infinite ease-in-out; }
-        .nebula-2 { animation: dynamic-nebula-2 26s infinite ease-in-out; }
+        
+        .nebula-1 { animation: dynamic-nebula-1 22s infinite ease-in-out; transition: background-color 0.8s ease, opacity 0.8s ease; }
+        .nebula-2 { animation: dynamic-nebula-2 26s infinite ease-in-out; transition: background-color 0.8s ease, opacity 0.8s ease; }
 
         /* Пульсация кружка Early Beta */
         @keyframes radar-pulse {
@@ -99,17 +100,17 @@
 
     <div id="toast-container" class="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 space-y-3 pointer-events-none max-w-sm w-[calc(100%-32px)] sm:w-full"></div>
 
-    <div class="absolute top-[-5%] left-[-5%] w-[350px] h-[350px] sm:w-[700px] sm:h-[700px] bg-indigo-600 rounded-full blur-[130px] pointer-events-none nebula-1 z-0"></div>
-    <div class="absolute top-[30%] right-[-5%] w-[320px] h-[320px] sm:w-[600px] sm:h-[600px] bg-purple-600 rounded-full blur-[130px] pointer-events-none nebula-2 z-0"></div>
+    <div id="bg-nebula-1" class="absolute top-[-5%] left-[-5%] w-[350px] h-[350px] sm:w-[700px] sm:h-[700px] bg-indigo-600 rounded-full blur-[130px] pointer-events-none nebula-1 z-0 opacity-25"></div>
+    <div id="bg-nebula-2" class="absolute top-[30%] right-[-5%] w-[320px] h-[320px] sm:w-[600px] sm:h-[600px] bg-purple-600 rounded-full blur-[130px] pointer-events-none nebula-2 z-0 opacity-20"></div>
 
     <header class="border-b border-indigo-500/10 bg-[#040414]/40 backdrop-blur-xl sticky top-0 z-40 flex-shrink-0 shadow-[inset_0_1px_1px_rgba(255,255,255,0.03),0_10px_30px_rgba(0,0,0,0.4)]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2 group cursor-pointer">
                 <div class="relative bg-gradient-to-tr from-indigo-500 to-purple-600 p-1.5 rounded-xl text-white shadow-xl">
-                    <i data-lucide="activity" class="w-4 h-4 sm:w-5 sm:h-5"></i>
+                    <i data-lucide="layers" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 </div>
                 <span class="text-base sm:text-xl font-bold font-space tracking-wide text-white">
-                    RAISER<span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">OS</span>
+                    Raiser<span class="bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">HUB</span>
                 </span>
             </div>
 
@@ -260,7 +261,7 @@
     </div>
 
     <footer class="border-t border-indigo-950/40 bg-[#02020a] py-6 text-center text-[10px] text-indigo-500/40 font-bold font-space tracking-widest z-10 mt-auto flex-shrink-0">
-        &copy; 2026 RAISEROS LABS. ELEVATE YOUR EXPERIENCE.
+        &copy; 2026 RaiserHUB LABS. ELEVATE YOUR EXPERIENCE.
     </footer>
 
     <script type="module">
@@ -283,7 +284,6 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Дата разбита по категориям
         const ALL_DEVICES = {
             official: [
                 { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 1, firmwares: [
@@ -308,7 +308,7 @@
 
         const TRANSLATIONS = {
             ru: {
-                title: "RaiserOS", badge: "Early Beta",
+                title: "RaiserHUB", badge: "Early Beta",
                 subtitle: "Добро пожаловать в хаб плавной, безопасной и кастомизируемой операционной системы. Загрузите сборку для вашего устройства ниже.",
                 searchPlaceholder: "Поиск смартфона (OnePlus Ace 2 Pro)...", builds: "Сборки",
                 noBuilds: "Прошивок пока нет для данной модели.", downloadBtn: "СКАЧАТЬ",
@@ -320,7 +320,7 @@
                 chatSystemBlock: "❌ Ссылки запрещены!", chatGuestBlock: "🔒 Авторизуйтесь, чтобы писать в чат!"
             },
             en: {
-                title: "RaiserOS", badge: "Early Beta",
+                title: "RaiserHUB", badge: "Early Beta",
                 subtitle: "Welcome to the hub of smooth, secure, and highly customizable operating system. Download the perfect ecosystem build for your device below.",
                 searchPlaceholder: "Search smartphone (OnePlus Ace 2 Pro)...", builds: "Builds",
                 noBuilds: "No firmwares available for this model yet.", downloadBtn: "DOWNLOAD",
@@ -337,16 +337,29 @@
             currentCategory = cat;
             const btnOff = document.getElementById('tab-category-official');
             const btnDph = document.getElementById('tab-category-dph');
+            const nebula1 = document.getElementById('bg-nebula-1');
+            const nebula2 = document.getElementById('bg-nebula-2');
             
             if (cat === 'official') {
                 btnOff.className = "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-indigo-600 text-white transition-all cursor-pointer";
                 btnDph.className = "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-slate-400 hover:text-amber-500 transition-all cursor-pointer";
+                
+                // Возвращаем сине-фиолетовый космический фон
+                nebula1.style.backgroundColor = '#4f46e5'; 
+                nebula2.style.backgroundColor = '#9333ea';
+                nebula1.style.opacity = '0.25';
+                nebula2.style.opacity = '0.2';
             } else {
                 btnDph.className = "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-orange-600 to-red-600 text-white transition-all cursor-pointer shadow-[0_0_20px_rgba(234,88,12,0.2)]";
                 btnOff.className = "flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-slate-400 hover:text-indigo-400 transition-all cursor-pointer";
+                
+                // Перекрашиваем фон в огненный красно-оранжевый (DPH стиль)
+                nebula1.style.backgroundColor = '#ea580c'; 
+                nebula2.style.backgroundColor = '#dc2626';
+                nebula1.style.opacity = '0.28';
+                nebula2.style.opacity = '0.22';
             }
             
-            // Сброс строки поиска и фильтрация
             document.getElementById('search').value = '';
             renderDevices(ALL_DEVICES[cat]);
         };
@@ -463,7 +476,6 @@
                 listEl.innerHTML = `<p class="text-xs text-slate-500 font-medium py-8 text-center">${TRANSLATIONS[currentLang].noBuilds}</p>`;
             } else {
                 listEl.innerHTML = device.firmwares.map(fw => {
-                    // Генерация тегов только для оффициальной вкладки
                     let tagsHtml = '';
                     if (!isDph) {
                         if (fw.type) tagsHtml += `<span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20 font-space">BETA</span>`;
@@ -662,7 +674,6 @@
             renderDevices(ALL_DEVICES[currentCategory].filter(d => d.name.toLowerCase().includes(q)));
         });
 
-        // Первичный запуск
         switchCategory('official');
         toggleLanguage('ru');
     </script>
