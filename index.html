@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>RaiserOS | Early beta</title>
     
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236366f1' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 12h-4l-3 9L9 3l-3 9H2'/%3E%3C/svg%3E">
@@ -19,14 +19,14 @@
         ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
-        /* Фоновые туманности */
+        /* Безопасные фоновые туманности без создания горизонтального скролла */
         @keyframes dynamic-glow-1 {
             0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.15; }
-            50% { transform: translate(30px, -40px) scale(1.1); opacity: 0.22; }
+            50% { transform: translate(20px, -30px) scale(1.05); opacity: 0.22; }
         }
         @keyframes dynamic-glow-2 {
-            0%, 100% { transform: translate(0px, 0px) scale(1.05); opacity: 0.1; }
-            50% { transform: translate(-30px, 20px) scale(0.95); opacity: 0.18; }
+            0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.1; }
+            50% { transform: translate(-20px, 20px) scale(0.95); opacity: 0.18; }
         }
         .nebula-1 { animation: dynamic-glow-1 12s infinite ease-in-out; }
         .nebula-2 { animation: dynamic-glow-2 15s infinite ease-in-out -2s; }
@@ -38,10 +38,10 @@
         .animate-fade-in { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         @keyframes msgIn {
-            from { opacity: 0; transform: translateX(-10px) scale(0.98); }
-            to { opacity: 1; transform: translateX(0) scale(1); }
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
-        .animate-msg { animation: msgIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+        .animate-msg { animation: msgIn 0.2s ease-out forwards; }
 
         @keyframes pulse-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .typing-cursor::after {
@@ -49,16 +49,15 @@
             display: inline-block; animation: pulse-cursor 0.8s infinite steps(2, start);
         }
 
-        /* Анимированный border-flow для карточек */
         .neon-card-border {
             position: relative;
             background: linear-gradient(90deg, #1e1b4b, #312e81);
-            transition: background 0.4s ease;
+            transition: background 0.3s ease;
         }
         .neon-card-border:hover {
             background: linear-gradient(135deg, #6366f1, #a855f7, #6366f1);
             background-size: 200% 200%;
-            animation: borderGradient 3s linear infinite;
+            animation: borderGradient 2s linear infinite;
         }
         @keyframes borderGradient {
             0% { background-position: 0% 50%; }
@@ -69,16 +68,16 @@
 </head>
 <body class="bg-[#03030f] text-slate-100 min-h-screen flex flex-col relative overflow-x-hidden selection:bg-indigo-500/30">
 
-    <div id="toast-container" class="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 space-y-3 pointer-events-none max-w-sm w-full px-4"></div>
+    <div id="toast-container" class="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 space-y-3 pointer-events-none max-w-sm w-[calc(100%-32px)] sm:w-full"></div>
 
-    <div id="mouse-glow" class="absolute w-[350px] h-[350px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none transition-all duration-300 ease-out z-0 opacity-0 hidden sm:block"></div>
-    <div class="absolute top-[-5%] left-[-5%] w-[500px] h-[500px] sm:w-[750px] sm:h-[750px] bg-indigo-600 rounded-full blur-[140px] pointer-events-none nebula-1 z-0"></div>
-    <div class="absolute top-[40%] right-[-5%] w-[450px] h-[450px] sm:w-[650px] sm:h-[650px] bg-purple-600 rounded-full blur-[130px] pointer-events-none nebula-2 z-0"></div>
+    <div id="mouse-glow" class="absolute w-[300px] h-[300px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none transition-all duration-300 ease-out z-0 opacity-0 hidden sm:block"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[280px] h-[280px] sm:w-[600px] sm:h-[600px] bg-indigo-600 rounded-full blur-[120px] pointer-events-none nebula-1 z-0"></div>
+    <div class="absolute top-[35%] right-[-10%] w-[280px] h-[280px] sm:w-[500px] sm:h-[500px] bg-purple-600 rounded-full blur-[120px] pointer-events-none nebula-2 z-0"></div>
 
-    <header class="border-b border-indigo-950/40 bg-[#03030f]/70 backdrop-blur-xl sticky top-0 z-40">
+    <header class="border-b border-indigo-950/40 bg-[#03030f]/80 backdrop-blur-xl sticky top-0 z-40 flex-shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
-            <div class="flex items-center gap-2 sm:gap-3 group cursor-pointer">
-                <div class="relative bg-gradient-to-tr from-indigo-500 via-indigo-600 to-purple-600 p-1.5 sm:p-2 rounded-xl text-white shadow-xl shadow-indigo-500/10 transition-all duration-300">
+            <div class="flex items-center gap-2 group cursor-pointer">
+                <div class="relative bg-gradient-to-tr from-indigo-500 to-purple-600 p-1.5 rounded-xl text-white shadow-xl">
                     <i data-lucide="activity" class="w-4 h-4 sm:w-5 sm:h-5"></i>
                 </div>
                 <span class="text-base sm:text-xl font-bold font-space tracking-wide text-white">
@@ -87,13 +86,13 @@
             </div>
 
             <div class="flex items-center gap-2 sm:gap-4">
-                <div class="bg-slate-950/80 border border-indigo-950 rounded-xl p-0.5 sm:p-1 flex gap-0.5 font-space text-[9px] sm:text-[10px] font-bold">
-                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer transition-colors">RU</button>
-                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2 py-1 text-slate-400 hover:text-white cursor-pointer transition-colors">EN</button>
+                <div class="bg-slate-950/80 border border-indigo-950 rounded-xl p-0.5 flex gap-0.5 font-space text-[10px] font-bold">
+                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer">RU</button>
+                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2 py-1 text-slate-400 hover:text-white cursor-pointer">EN</button>
                 </div>
 
                 <div id="auth-zone">
-                    <button onclick="openAuthModal('login')" class="flex items-center gap-1.5 text-xs font-semibold text-white bg-indigo-950/40 px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl border border-indigo-900/50 hover:bg-indigo-900/40 hover:border-indigo-500/30 transition-all duration-300 cursor-pointer">
+                    <button onclick="openAuthModal('login')" class="flex items-center gap-1.5 text-xs font-semibold text-white bg-indigo-950/40 px-3 py-2 rounded-xl border border-indigo-900/50 hover:bg-indigo-900/40 transition-all cursor-pointer">
                         <i data-lucide="log-in" class="w-3.5 h-3.5 text-indigo-400"></i> <span data-lang="loginBtn">Войти</span>
                     </button>
                 </div>
@@ -101,13 +100,13 @@
         </div>
     </header>
 
-    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-10 sm:py-16 relative z-10 flex flex-col items-center">
-        <div class="text-center max-w-3xl space-y-4 sm:space-y-5 mb-10 sm:mb-16 w-full animate-fade-in">
-            <div class="inline-flex items-center gap-2 px-3 py-0.5 sm:py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full text-[10px] sm:text-xs font-bold tracking-wider uppercase font-space">
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 py-8 sm:py-16 relative z-10 flex flex-col items-center">
+        <div class="text-center max-w-3xl space-y-4 mb-8 sm:mb-14 w-full animate-fade-in">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-indigo-500/10 border border-indigo-500/20 text-indigo-300 rounded-full text-[10px] sm:text-xs font-bold tracking-wider uppercase font-space">
                 <span class="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-pulse"></span> <span data-lang="badge">Early beta</span>
             </div>
             
-            <h1 class="text-3xl sm:text-7xl font-black tracking-tight text-white leading-tight min-h-[50px] sm:min-h-[90px]">
+            <h1 class="text-3xl sm:text-6xl font-black tracking-tight text-white leading-tight min-h-[45px] sm:min-h-[80px]">
                 <span id="typing-text" class="bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent typing-cursor"></span>
             </h1>
             
@@ -116,87 +115,85 @@
             </p>
         </div>
 
-        <div class="w-full max-w-xl mb-8 sm:mb-14 relative group animate-fade-in" style="animation-delay: 0.1s;">
-            <div class="relative bg-[#070719]/80 border border-indigo-950 rounded-2xl flex items-center px-4 py-1.5 focus-within:border-indigo-500/40 focus-within:shadow-[0_0_25px_rgba(99,102,241,0.12)] transition-all duration-300">
-                <i data-lucide="search" class="w-4 h-4 sm:w-5 sm:h-5 text-indigo-400/60 mr-2.5"></i>
-                <input type="text" id="search" placeholder="Поиск смартфона (OnePlus Ace 2 Pro)..." class="w-full bg-transparent border-none text-white focus:outline-none text-xs sm:text-base py-1.5 sm:py-2">
+        <div class="w-full max-w-xl mb-6 sm:mb-10 relative group animate-fade-in" style="animation-delay: 0.1s;">
+            <div class="relative bg-[#070719]/80 border border-indigo-950 rounded-2xl flex items-center px-4 py-1 focus-within:border-indigo-500/40 transition-all">
+                <i data-lucide="search" class="w-4 h-4 text-indigo-400/60 mr-2.5"></i>
+                <input type="text" id="search" placeholder="Поиск смартфона (OnePlus Ace 2 Pro)..." class="w-full bg-transparent border-none text-white focus:outline-none text-sm py-2.5">
             </div>
         </div>
 
-        <div id="devices-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 w-full justify-center animate-fade-in" style="animation-delay: 0.2s;"></div>
+        <div id="devices-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full justify-center animate-fade-in" style="animation-delay: 0.2s;"></div>
     </main>
 
-    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#050515] border border-indigo-950 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="profile-modal-card">
-            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-transform duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+    <div id="profile-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-[#050515] border border-indigo-950 w-full max-w-md rounded-3xl p-5 sm:p-8 shadow-2xl relative transform scale-95 transition-all" id="profile-modal-card">
+            <button onclick="closeProfileModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="flex flex-col items-center text-center space-y-4">
-                <div id="profile-avatar" class="w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center font-black text-2xl sm:text-3xl text-white shadow-xl">U</div>
+                <div id="profile-avatar" class="w-14 h-14 sm:w-18 sm:h-18 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl text-white">U</div>
                 <div>
-                    <h3 id="profile-username" class="text-lg sm:text-xl font-bold text-white">Username</h3>
+                    <h3 id="profile-username" class="text-base sm:text-lg font-bold text-white">Username</h3>
                     <p id="profile-email" class="text-xs text-slate-500 font-space mt-0.5">user@domain.com</p>
                 </div>
                 
                 <div id="admin-panel" class="hidden w-full bg-indigo-500/5 border border-indigo-950 rounded-2xl p-4 text-left space-y-3">
                     <div class="flex items-center gap-2 text-indigo-400 font-bold text-[10px] sm:text-xs tracking-wider uppercase font-space">
-                        <i data-lucide="activity" class="w-4 h-4"></i> СТАТИСТИКА RAISER LABS
+                        <i data-lucide="activity" class="w-3.5 h-3.5"></i> СТАТИСТИКА RAISER LABS
                     </div>
                     <div class="bg-slate-950 border border-indigo-950/60 rounded-xl p-3 space-y-2 text-xs">
                         <div class="flex justify-between items-center"><span class="text-slate-400">Пользователи онлайн:</span><span id="stat-online" class="text-green-400 font-bold font-space">1</span></div>
                         <div class="flex justify-between items-center"><span class="text-slate-400">Сообщений в базе чата:</span><span id="stat-api" class="text-indigo-400 font-bold font-space">0</span></div>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 pt-1">
-                        <button onclick="showToast('Данные обновлены', 'success')" class="bg-indigo-950/40 hover:bg-indigo-900/40 border border-indigo-900/40 text-[10px] font-bold text-indigo-300 py-2 rounded-xl transition cursor-pointer">Refresh Sync</button>
-                        <button onclick="showToast('Логи чисты', 'info')" class="bg-slate-900 hover:bg-slate-800 border border-indigo-950 text-[10px] font-bold text-slate-400 py-2 rounded-xl transition cursor-pointer">System Check</button>
-                    </div>
                 </div>
 
-                <button onclick="signOutAndReload()" class="w-full bg-indigo-950/20 border border-indigo-900/40 text-red-400/80 font-bold py-3 rounded-xl hover:bg-red-500/10 transition text-xs sm:text-sm font-space cursor-pointer">ВЫЙТИ ИЗ АККАУНТА</button>
+                <button onclick="signOutAndReload()" class="w-full bg-indigo-950/20 border border-indigo-900/40 text-red-400/80 font-bold py-2.5 rounded-xl hover:bg-red-500/10 transition text-xs font-space cursor-pointer">ВЫЙТИ ИЗ АККАУНТА</button>
             </div>
         </div>
     </div>
 
-    <div id="firmware-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#050515] border-t sm:border border-indigo-950 w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl p-5 sm:p-8 shadow-2xl relative max-h-[85vh] overflow-y-auto transform translate-y-20 sm:translate-y-0 sm:scale-95 transition-all duration-300" id="fw-modal-card">
-            <div class="w-12 h-1 bg-indigo-950 rounded-full mx-auto mb-4 sm:hidden"></div>
-            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-transform duration-300 cursor-pointer hidden sm:block"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <div class="flex justify-between items-start mb-1 pr-0 sm:pr-6">
-                <h2 id="modal-device-name" class="text-xl sm:text-3xl font-black text-white">Device Name</h2>
-                <button onclick="closeFirmwareModal()" class="text-xs font-bold text-slate-500 sm:hidden bg-slate-900 px-3 py-1.5 rounded-xl border border-indigo-950">Закрыть</button>
+    <div id="firmware-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-all duration-300 p-0 sm:p-4">
+        <div class="bg-[#050515] border-t sm:border border-indigo-950 w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl p-5 sm:p-7 shadow-2xl relative max-h-[85vh] sm:max-h-[80vh] flex flex-col transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300" id="fw-modal-card">
+            <div class="w-12 h-1 bg-indigo-950 rounded-full mx-auto mb-4 sm:hidden flex-shrink-0"></div>
+            <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white cursor-pointer hidden sm:block"><i data-lucide="x" class="w-5 h-5"></i></button>
+            
+            <div class="flex justify-between items-start mb-1 pr-0 sm:pr-6 flex-shrink-0">
+                <h2 id="modal-device-name" class="text-lg sm:text-2xl font-black text-white truncate mr-2">Device Name</h2>
+                <button onclick="closeFirmwareModal()" class="text-[11px] font-bold text-slate-400 sm:hidden bg-slate-900 px-3 py-1.5 rounded-xl border border-indigo-950">Закрыть</button>
             </div>
-            <p data-lang="modalDesc" class="text-xs sm:text-sm text-slate-400 mb-5">Доступные официальные сборки RaiserOS:</p>
-            <div id="modal-firmware-list" class="space-y-3.5"></div>
+            <p data-lang="modalDesc" class="text-xs text-slate-400 mb-4 flex-shrink-0">Доступные официальные сборки RaiserOS:</p>
+            
+            <div id="modal-firmware-list" class="space-y-3 overflow-y-auto pr-1 flex-1"></div>
         </div>
     </div>
 
-    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xl opacity-0 pointer-events-none transition-all duration-300">
-        <div class="bg-[#050515] border border-indigo-950 w-full max-w-md rounded-3xl p-6 sm:p-8 shadow-2xl relative transform scale-95 transition-all duration-300" id="auth-modal-card">
-            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white transition-transform duration-300 cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
-            <div class="flex gap-4 border-b border-indigo-950/60 pb-3 mb-5 font-space text-base sm:text-lg font-bold">
+    <div id="auth-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-all duration-300">
+        <div class="bg-[#050515] border border-indigo-950 w-full max-w-md rounded-3xl p-5 sm:p-8 shadow-2xl relative transform scale-95 transition-all" id="auth-modal-card">
+            <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
+            <div class="flex gap-4 border-b border-indigo-950/60 pb-2 mb-4 font-space text-base font-bold">
                 <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer">Вход</button>
                 <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer">Регистрация</button>
             </div>
-            <form onsubmit="handleAuth(event)" class="space-y-4">
+            <form onsubmit="handleAuth(event)" class="space-y-3.5">
                 <div>
-                    <label class="text-[11px] font-bold uppercase text-slate-400 block mb-1.5">Email</label>
-                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:outline-none focus:border-indigo-500/40 text-sm">
+                    <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1">Email</label>
+                    <input type="email" id="auth-email" required placeholder="user@domain.com" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-2.5 px-3.5 text-white focus:outline-none focus:border-indigo-500/40 text-xs">
                 </div>
                 <div>
-                    <label class="text-[11px] font-bold uppercase text-slate-400 block mb-1.5" data-lang="passwordLabel">Пароль</label>
-                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:outline-none focus:border-indigo-500/40 text-sm">
+                    <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1" data-lang="passwordLabel">Пароль</label>
+                    <input type="password" id="auth-pass" required placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-2.5 px-3.5 text-white focus:outline-none focus:border-indigo-500/40 text-xs">
                 </div>
                 <div id="confirm-pass-container" class="hidden">
-                    <label class="text-[11px] font-bold uppercase text-slate-400 block mb-1.5" data-lang="confirmPasswordLabel">Повторите пароль</label>
-                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-2.5 sm:py-3 px-4 text-white focus:outline-none focus:border-indigo-500/40 text-sm">
+                    <label class="text-[10px] font-bold uppercase text-slate-400 block mb-1" data-lang="confirmPasswordLabel">Повторите пароль</label>
+                    <input type="password" id="auth-pass-confirm" placeholder="••••••••" class="w-full bg-slate-950 border border-indigo-950 rounded-xl py-2.5 px-3.5 text-white focus:outline-none focus:border-indigo-500/40 text-xs">
                 </div>
-                <button type="submit" id="auth-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition text-xs sm:text-sm font-space">ВОЙТИ</button>
+                <button type="submit" id="auth-submit-btn" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-2.5 rounded-xl transition text-xs font-space uppercase">ВОЙТИ</button>
                 
-                <div class="relative flex py-1 items-center">
+                <div class="relative flex py-0.5 items-center">
                     <div class="flex-grow border-t border-indigo-950"></div>
-                    <span class="flex-shrink mx-3 text-slate-600 text-[10px] font-bold font-space">OR</span>
+                    <span class="flex-shrink mx-2 text-slate-600 text-[9px] font-bold font-space">ИЛИ</span>
                     <div class="flex-grow border-t border-indigo-950"></div>
                 </div>
-                <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-2.5 bg-slate-950 border border-indigo-950 text-white font-bold py-2.5 rounded-xl hover:bg-indigo-900/20 transition text-xs sm:text-sm font-space cursor-pointer">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24">
+                <button type="button" onclick="handleGoogleAuth()" class="w-full flex items-center justify-center gap-2 bg-slate-950 border border-indigo-950 text-white font-bold py-2 rounded-xl hover:bg-indigo-900/20 transition text-xs font-space cursor-pointer">
+                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
                         <path fill="currentColor" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
                         <path fill="currentColor" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" fill="#FBBC05"/>
@@ -208,24 +205,24 @@
         </div>
     </div>
 
-    <div id="chat-widget" class="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-40 w-full sm:w-96 flex flex-col transition-all duration-500 translate-y-[385px]">
-        <div onclick="toggleChat()" class="bg-slate-950/90 backdrop-blur-xl border-t sm:border border-indigo-900/40 rounded-t-2xl p-4 flex items-center justify-between cursor-pointer shadow-2xl">
+    <div id="chat-widget" class="fixed bottom-0 right-0 sm:bottom-6 sm:right-6 z-40 w-full sm:w-80 md:w-96 flex flex-col transition-all duration-500 translate-y-[315px] sm:translate-y-[365px]">
+        <div onclick="toggleChat()" class="bg-slate-950/95 backdrop-blur-xl border-t sm:border border-indigo-900/40 rounded-t-2xl p-3.5 flex items-center justify-between cursor-pointer shadow-2xl">
             <div class="flex items-center gap-2">
-                <div class="w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></div>
-                <span class="font-bold text-xs sm:text-sm font-space tracking-wider text-slate-200" data-lang="chatTitle">ОБЩИЙ ЧАТ (REALTIME)</span>
+                <div class="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse"></div>
+                <span class="font-bold text-xs font-space tracking-wider text-slate-200" data-lang="chatTitle">ОБЩИЙ ЧАТ (REALTIME)</span>
             </div>
             <i data-lucide="chevron-up" id="chat-toggle-icon" class="w-4 h-4 text-indigo-400 transition-transform duration-300"></i>
         </div>
-        <div class="bg-[#050516]/90 backdrop-blur-xl border-x border-b border-indigo-950/60 h-[360px] flex flex-col justify-between rounded-b-none sm:rounded-b-2xl shadow-2xl">
-            <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-3"></div>
-            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-3 bg-slate-950/90 border-t border-indigo-950/60 flex gap-2 rounded-b-none sm:rounded-b-2xl">
-                <input type="text" id="chat-input" placeholder="Авторизуйтесь, чтобы писать..." autocomplete="off" class="flex-1 bg-[#02020a] border border-indigo-950 rounded-xl px-3.5 py-2 sm:py-2.5 text-xs text-white focus:outline-none focus:border-indigo-500/40">
-                <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-900/60 disabled:text-slate-600 text-white px-4 rounded-xl transition-all"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
+        <div class="bg-[#050516]/95 backdrop-blur-xl border-x border-b border-indigo-950/60 h-[290px] sm:h-[340px] flex flex-col justify-between rounded-b-none sm:rounded-b-2xl shadow-2xl">
+            <div id="chat-messages" class="flex-1 p-3.5 overflow-y-auto space-y-2.5"></div>
+            <form onsubmit="sendChatMessage(event)" id="chat-form" class="p-2 sm:p-3 bg-slate-950/95 border-t border-indigo-950/60 flex gap-2 rounded-b-none sm:rounded-b-2xl">
+                <input type="text" id="chat-input" placeholder="Авторизуйтесь, чтобы писать..." autocomplete="off" class="flex-1 bg-[#02020a] border border-indigo-950 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
+                <button type="submit" id="chat-send-btn" class="bg-indigo-600 hover:bg-indigo-500 disabled:bg-slate-900/60 disabled:text-slate-600 text-white px-3.5 rounded-xl transition-all"><i data-lucide="send" class="w-3.5 h-3.5"></i></button>
             </form>
         </div>
     </div>
 
-    <footer class="border-t border-indigo-950/40 bg-[#02020a] py-8 text-center text-[10px] sm:text-xs text-indigo-500/50 font-bold font-space tracking-widest z-10">
+    <footer class="border-t border-indigo-950/40 bg-[#02020a] py-6 text-center text-[10px] text-indigo-500/40 font-bold font-space tracking-widest z-10 mt-auto flex-shrink-0">
         &copy; 2026 RAISEROS LABS. ELEVATE YOUR EXPERIENCE.
     </footer>
 
@@ -249,7 +246,6 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Честная база прошивок с точным весом, регионами, тегами Mod и Supported
         const DEVICES_DATA = [
           { name: "OnePlus Ace 2 Pro", imageIcon: "smartphone", totalBuilds: 2, firmwares: [
               { version: "RaiserOS 1.1 (16.0.8 port)", type: "BETA", isPort: true, isMod: true, isSupported: true, region: "China", size: "6.3 GB", date: "2026-06-20", url: "https://mega.nz/file/OqI03T5L#KAuvBv-W7BhYZsX81tHT1zVDYcUdp46vw3lZHtwykF8" },
@@ -262,9 +258,7 @@
         let lastMessageTime = 0;
         let currentLang = 'ru';
         let typingTimeout = null;
-
-        // Генерация честного хэша для счетчика людей онлайн в сессии
-        const sessionOnlineCount = Math.floor(Math.random() * 4) + 2; 
+        const sessionOnlineCount = Math.floor(Math.random() * 4) + 2;
 
         const TRANSLATIONS = {
             ru: {
@@ -305,20 +299,19 @@
             }
         };
 
-        // Движение неонового блика за курсором (только ПК)
         document.addEventListener('mousemove', (e) => {
             const glow = document.getElementById('mouse-glow');
             if (glow) {
                 glow.style.opacity = '1';
-                glow.style.left = `${e.pageX - 175}px`;
-                glow.style.top = `${e.pageY - 175}px`;
+                glow.style.left = `${e.pageX - 150}px`;
+                glow.style.top = `${e.pageY - 150}px`;
             }
         });
 
         window.showToast = function(message, type = 'info') {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `p-3.5 rounded-xl border text-xs font-bold backdrop-blur-xl shadow-2xl flex items-center gap-2.5 transition-all duration-300 transform translate-y-4 sm:translate-y-0 sm:translate-x-10 opacity-0 pointer-events-auto bg-[#050515]/95`;
+            toast.className = `p-3 rounded-xl border text-xs font-bold backdrop-blur-xl shadow-2xl flex items-center gap-2 transition-all duration-300 transform translate-y-2 opacity-0 pointer-events-auto bg-[#050515]/95`;
             
             if (type === 'error') toast.className += ' border-red-500/20 text-red-400';
             else if (type === 'success') toast.className += ' border-green-500/20 text-green-400';
@@ -326,11 +319,10 @@
 
             const icon = type === 'error' ? 'circle-alert' : (type === 'success' ? 'circle-check' : 'info');
             toast.innerHTML = `<i data-lucide="${icon}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
-            
             container.appendChild(toast);
             lucide.createIcons();
 
-            setTimeout(() => { toast.classList.remove('translate-y-4', 'sm:translate-x-10', 'opacity-0'); }, 10);
+            setTimeout(() => { toast.classList.remove('translate-y-2', 'opacity-0'); }, 10);
             setTimeout(() => {
                 toast.classList.add('opacity-0');
                 setTimeout(() => { toast.remove(); }, 300);
@@ -345,7 +337,7 @@
                 if (index < textToType.length) {
                     element.innerText += textToType.charAt(index);
                     index++;
-                    typingTimeout = setTimeout(type, 130);
+                    typingTimeout = setTimeout(type, 120);
                 }
             }
             type();
@@ -358,8 +350,8 @@
 
         window.toggleLanguage = function(lang) {
             currentLang = lang;
-            document.getElementById('lang-ru').className = lang === 'ru' ? "px-2.5 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer transition-colors" : "px-2.5 py-1 text-slate-400 hover:text-white cursor-pointer transition-colors";
-            document.getElementById('lang-en').className = lang === 'en' ? "px-2.5 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer transition-colors" : "px-2.5 py-1 text-slate-400 hover:text-white cursor-pointer transition-colors";
+            document.getElementById('lang-ru').className = lang === 'ru' ? "px-2 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer" : "px-2 py-1 text-slate-400 hover:text-white cursor-pointer";
+            document.getElementById('lang-en').className = lang === 'en' ? "px-2 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer" : "px-2 py-1 text-slate-400 hover:text-white cursor-pointer";
             
             document.querySelectorAll('[data-lang]').forEach(el => {
                 const key = el.getAttribute('data-lang');
@@ -389,21 +381,19 @@
                 chatInput.placeholder = "Напишите сообщение...";
 
                 az.innerHTML = `
-                    <div onclick="openProfileModal()" class="flex items-center gap-2 sm:gap-3 bg-[#070719]/80 border border-indigo-950 rounded-2xl py-1 sm:py-1.5 pl-3 pr-1.5 transform hover:scale-[1.02] transition-all cursor-pointer group">
-                        <span class="text-xs sm:text-sm font-bold text-white group-hover:text-indigo-400 transition-colors max-w-[70px] sm:max-w-[100px] truncate">${shortName}</span>
-                        <div class="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-xs text-white">${shortName.charAt(0).toUpperCase()}</div>
+                    <div onclick="openProfileModal()" class="flex items-center gap-2 bg-[#070719]/80 border border-indigo-950 rounded-2xl py-1 pl-3 pr-1.5 hover:scale-[1.02] transition-all cursor-pointer group">
+                        <span class="text-xs font-bold text-white group-hover:text-indigo-400 transition-colors max-w-[80px] truncate">${shortName}</span>
+                        <div class="w-7 h-7 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center font-bold text-xs text-white">${shortName.charAt(0).toUpperCase()}</div>
                     </div>`;
 
                 document.getElementById('profile-username').innerText = shortName;
                 document.getElementById('profile-email').innerText = user.email;
                 document.getElementById('profile-avatar').innerText = shortName.charAt(0).toUpperCase();
                 document.getElementById('admin-panel').classList.remove('hidden');
-                
-                // Вывод реального количества людей онлайн прямо сейчас в дев-панель
                 document.getElementById('stat-online').innerText = sessionOnlineCount;
             } else { 
                 currentUserEmail = null;
-                chatInput.placeholder = "Авторизуйтесь, чтобы писать..."
+                chatInput.placeholder = "Авторизуйтесь, чтобы писать...";
             }
             lucide.createIcons();
         });
@@ -412,13 +402,11 @@
             signOut(auth).then(() => window.location.reload());
         };
 
-        // Загрузка реального лога чата и автоматический пересчет размера базы данных (Количество API-запросов)
-        const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(60));
+        const qMessages = query(collection(db, "messages"), orderBy("timestamp", "asc"), limit(50));
         onSnapshot(qMessages, (snapshot) => {
             const box = document.getElementById('chat-messages');
             let totalDocs = snapshot.size;
             
-            // Вывод реального счетчика записей в панель без заглушек
             const statApiEl = document.getElementById('stat-api');
             if(statApiEl) statApiEl.innerText = totalDocs;
 
@@ -427,9 +415,9 @@
                 const msg = doc.data();
                 const shortName = msg.user ? msg.user.split('@')[0] : "Anon";
                 html += `
-                    <div class="bg-indigo-950/10 p-2 sm:p-2.5 rounded-xl border border-indigo-950/30 animate-msg">
+                    <div class="bg-indigo-950/10 p-2 rounded-xl border border-indigo-950/30 animate-msg">
                         <div class="flex items-center justify-between mb-0.5">
-                            <span class="font-bold text-[11px] sm:text-xs ${msg.user === currentUserEmail ? 'text-indigo-400' : 'text-purple-400'}">${shortName}</span>
+                            <span class="font-bold text-[11px] ${msg.user === currentUserEmail ? 'text-indigo-400' : 'text-purple-400'}">${shortName}</span>
                             <span class="text-[9px] text-slate-600 font-space">${msg.time || ''}</span>
                         </div>
                         <p class="${msg.system ? 'text-pink-400/90 italic' : 'text-slate-300'} text-xs leading-relaxed break-words">${msg.text || ''}</p>
@@ -471,12 +459,24 @@
             e.preventDefault();
             const email = document.getElementById('auth-email').value.trim();
             const pass = document.getElementById('auth-pass').value;
+            const confirmPassContainer = document.getElementById('confirm-pass-container');
+            
             try {
-                if (authMode === 'login') { await signInWithEmailAndPassword(auth, email, pass); } 
-                else { await createUserWithEmailAndPassword(auth, email, pass); }
+                if (authMode === 'login') { 
+                    await signInWithEmailAndPassword(auth, email, pass); 
+                } else { 
+                    const confirmPass = document.getElementById('auth-pass-confirm').value;
+                    if (pass !== confirmPass) {
+                        showToast('Пароли не совпадают!', 'error');
+                        return;
+                    }
+                    await createUserWithEmailAndPassword(auth, email, pass); 
+                }
                 closeAuthModal();
                 showToast('Успешно авторизован!', 'success');
-            } catch (err) { showToast(err.message, 'error'); }
+            } catch (err) { 
+                showToast(err.message, 'error'); 
+            }
         };
 
         window.handleGoogleAuth = async function() {
@@ -487,12 +487,12 @@
         function renderDevices(devices) {
             const container = document.getElementById('devices-container');
             container.innerHTML = devices.map((dev) => `
-                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="neon-card-border p-[1px] w-full bg-indigo-950/40 border border-indigo-950/60 rounded-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer group shadow-2xl">
-                    <div class="bg-[#050515]/95 rounded-2xl p-5 flex items-center justify-between w-full h-full">
-                        <div class="flex items-center gap-3.5">
-                            <div class="w-11 h-11 bg-[#02020a] rounded-xl flex items-center justify-center text-slate-500 group-hover:text-indigo-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
+                <div onclick="openFirmwareModal(${JSON.stringify(dev).replace(/"/g, '&quot;')})" class="neon-card-border p-[1px] w-full bg-indigo-950/40 border border-indigo-950/60 rounded-2xl transition-all transform hover:-translate-y-1 cursor-pointer group shadow-2xl">
+                    <div class="bg-[#050515]/95 rounded-2xl p-4 flex items-center justify-between w-full h-full">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 bg-[#02020a] rounded-xl flex items-center justify-center text-slate-500 group-hover:text-indigo-400 transition-colors"><i data-lucide="${dev.imageIcon || 'smartphone'}" class="w-5 h-5"></i></div>
                             <div class="text-left">
-                                <h3 class="text-sm sm:text-base font-bold text-white group-hover:text-indigo-400 transition-colors">${dev.name}</h3>
+                                <h3 class="text-sm font-bold text-white group-hover:text-indigo-400 transition-colors">${dev.name}</h3>
                                 <p class="text-[10px] text-slate-500 font-bold font-space mt-0.5"><span class="w-1.5 h-1.5 rounded-full bg-indigo-500 inline-block mr-1"></span>${dev.totalBuilds || 0} ${TRANSLATIONS[currentLang].builds}</p>
                             </div>
                         </div>
@@ -521,12 +521,12 @@
                                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 border border-indigo-950/80 text-slate-400 font-bold font-space">${fw.region}</span>
                                 <span class="text-[11px] text-slate-500 font-space ml-1">${fw.date}</span>
                             </div>
-                            <h4 class="text-white font-bold text-sm sm:text-base tracking-tight">${fw.version}</h4>
+                            <h4 class="text-white font-bold text-sm tracking-tight">${fw.version}</h4>
                         </div>
                         <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-none border-indigo-950/40 pt-2.5 sm:pt-0">
                             <span class="text-xs font-bold font-space text-indigo-400/70 sm:hidden">${fw.size}</span>
-                            <button onclick="triggerDirectDownload('${fw.url}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all shadow-lg active:scale-95 text-center cursor-pointer w-full sm:w-auto flex items-center justify-center gap-2">
-                                <span class="hidden sm:inline">${fw.size} |</span> ${TRANSLATIONS[currentLang].downloadBtn}
+                            <button onclick="triggerDirectDownload('${fw.url}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all w-full sm:w-auto flex items-center justify-center">
+                                <span class="hidden sm:inline">${fw.size} | </span>&nbsp;${TRANSLATIONS[currentLang].downloadBtn}
                             </button>
                         </div>
                     </div>`;
@@ -535,13 +535,13 @@
             const modal = document.getElementById('firmware-modal');
             modal.classList.remove('opacity-0', 'pointer-events-none');
             const card = document.getElementById('fw-modal-card');
-            card.classList.remove('translate-y-20', 'sm:scale-95');
+            card.classList.remove('translate-y-full', 'sm:scale-95');
             lucide.createIcons();
         };
 
         window.closeFirmwareModal = function() { 
             document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none'); 
-            document.getElementById('fw-modal-card').classList.add('translate-y-20', 'sm:scale-95');
+            document.getElementById('fw-modal-card').classList.add('translate-y-full', 'sm:scale-95');
         };
         
         window.openProfileModal = function() {
@@ -555,8 +555,37 @@
 
         window.openAuthModal = function(tab = 'login') { document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none'); switchAuthTab(tab); };
         window.closeAuthModal = function() { document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none'); };
-        window.switchAuthTab = function(tab) { authMode = tab; document.getElementById('auth-submit-btn').innerText = tab === 'login' ? "ВОЙТИ" : "СОЗДАТЬ"; };
-        window.toggleChat = function() { const w = document.getElementById('chat-widget'); w.classList.toggle('translate-y-[385px]'); document.getElementById('chat-toggle-icon').classList.toggle('rotate-180'); };
+        
+        window.switchAuthTab = function(tab) { 
+            authMode = tab; 
+            const tLogin = document.getElementById('tab-login');
+            const tReg = document.getElementById('tab-register');
+            const confirmBox = document.getElementById('confirm-pass-container');
+            const submitBtn = document.getElementById('auth-submit-btn');
+
+            if (tab === 'login') {
+                tLogin.className = "text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer";
+                tReg.className = "text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer";
+                confirmBox.classList.add('hidden');
+                submitBtn.innerText = "ВОЙТИ";
+            } else {
+                tReg.className = "text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer";
+                tLogin.className = "text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer";
+                confirmBox.classList.remove('hidden');
+                submitBtn.innerText = "СОЗДАТЬ";
+            }
+        };
+
+        window.toggleChat = function() { 
+            const w = document.getElementById('chat-widget'); 
+            const isMobile = window.innerWidth < 640;
+            if (w.classList.contains('translate-y-[315px]') || w.classList.contains('translate-y-[365px]')) {
+                w.classList.remove('translate-y-[315px]', 'translate-y-[365px]');
+            } else {
+                w.classList.add(isMobile ? 'translate-y-[315px]' : 'translate-y-[365px]');
+            }
+            document.getElementById('chat-toggle-icon').classList.toggle('rotate-180'); 
+        };
         function getCurrentTimeStr() { const n = new Date(); return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`; }
     </script>
 </body>
