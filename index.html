@@ -19,29 +19,28 @@
         ::-webkit-scrollbar-thumb { background: #1e1b4b; border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: #6366f1; }
 
-        /* Безопасные фоновые туманности без создания горизонтального скролла */
         @keyframes dynamic-glow-1 {
-            0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.15; }
-            50% { transform: translate(20px, -30px) scale(1.05); opacity: 0.22; }
+            0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.12; }
+            50% { transform: translate(20px, -20px) scale(1.05); opacity: 0.18; }
         }
         @keyframes dynamic-glow-2 {
-            0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.1; }
-            50% { transform: translate(-20px, 20px) scale(0.95); opacity: 0.18; }
+            0%, 100% { transform: translate(0px, 0px) scale(1); opacity: 0.08; }
+            50% { transform: translate(-20px, 20px) scale(0.95); opacity: 0.15; }
         }
-        .nebula-1 { animation: dynamic-glow-1 12s infinite ease-in-out; }
-        .nebula-2 { animation: dynamic-glow-2 15s infinite ease-in-out -2s; }
+        .nebula-1 { animation: dynamic-glow-1 10s infinite ease-in-out; }
+        .nebula-2 { animation: dynamic-glow-2 12s infinite ease-in-out -2s; }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(15px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-fade-in { animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+        .animate-fade-in { animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
 
         @keyframes msgIn {
-            from { opacity: 0; transform: translateY(8px); }
+            from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
         }
-        .animate-msg { animation: msgIn 0.2s ease-out forwards; }
+        .animate-msg { animation: msgIn 0.25s ease-out forwards; }
 
         @keyframes pulse-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
         .typing-cursor::after {
@@ -70,11 +69,10 @@
 
     <div id="toast-container" class="fixed top-4 right-4 sm:top-6 sm:right-6 z-50 space-y-3 pointer-events-none max-w-sm w-[calc(100%-32px)] sm:w-full"></div>
 
-    <div id="mouse-glow" class="absolute w-[300px] h-[300px] bg-indigo-500/10 rounded-full blur-[100px] pointer-events-none transition-all duration-300 ease-out z-0 opacity-0 hidden sm:block"></div>
-    <div class="absolute top-[-10%] left-[-10%] w-[280px] h-[280px] sm:w-[600px] sm:h-[600px] bg-indigo-600 rounded-full blur-[120px] pointer-events-none nebula-1 z-0"></div>
-    <div class="absolute top-[35%] right-[-10%] w-[280px] h-[280px] sm:w-[500px] sm:h-[500px] bg-purple-600 rounded-full blur-[120px] pointer-events-none nebula-2 z-0"></div>
+    <div class="absolute top-[-10%] left-[-10%] w-[320px] h-[320px] sm:w-[600px] sm:h-[600px] bg-indigo-600 rounded-full blur-[120px] pointer-events-none nebula-1 z-0"></div>
+    <div class="absolute top-[30%] right-[-10%] w-[300px] h-[300px] sm:w-[500px] sm:h-[500px] bg-purple-600 rounded-full blur-[120px] pointer-events-none nebula-2 z-0"></div>
 
-    <header class="border-b border-indigo-950/40 bg-[#03030f]/80 backdrop-blur-xl sticky top-0 z-40 flex-shrink-0">
+    <header class="border-b border-indigo-950/40 bg-[#03030f]/60 backdrop-blur-md sticky top-0 z-40 flex-shrink-0">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between">
             <div class="flex items-center gap-2 group cursor-pointer">
                 <div class="relative bg-gradient-to-tr from-indigo-500 to-purple-600 p-1.5 rounded-xl text-white shadow-xl">
@@ -87,8 +85,8 @@
 
             <div class="flex items-center gap-2 sm:gap-4">
                 <div class="bg-slate-950/80 border border-indigo-950 rounded-xl p-0.5 flex gap-0.5 font-space text-[10px] font-bold">
-                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer">RU</button>
-                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2 py-1 text-slate-400 hover:text-white cursor-pointer">EN</button>
+                    <button id="lang-ru" onclick="toggleLanguage('ru')" class="px-2 py-1 rounded-lg bg-indigo-600 text-white cursor-pointer transition-colors">RU</button>
+                    <button id="lang-en" onclick="toggleLanguage('en')" class="px-2 py-1 text-slate-400 hover:text-white cursor-pointer transition-colors">EN</button>
                 </div>
 
                 <div id="auth-zone">
@@ -151,13 +149,13 @@
     </div>
 
     <div id="firmware-modal" class="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-lg opacity-0 pointer-events-none transition-all duration-300 p-0 sm:p-4">
-        <div class="bg-[#050515] border-t sm:border border-indigo-950 w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl p-5 sm:p-7 shadow-2xl relative max-h-[85vh] sm:max-h-[80vh] flex flex-col transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300" id="fw-modal-card">
+        <div class="bg-[#050515] border-t sm:border border-indigo-950 w-full sm:max-w-2xl rounded-t-3xl sm:rounded-3xl p-5 sm:p-7 shadow-2xl relative max-h-[90vh] sm:max-h-[85vh] flex flex-col transform translate-y-full sm:translate-y-0 sm:scale-95 transition-all duration-300" id="fw-modal-card">
             <div class="w-12 h-1 bg-indigo-950 rounded-full mx-auto mb-4 sm:hidden flex-shrink-0"></div>
             <button onclick="closeFirmwareModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white cursor-pointer hidden sm:block"><i data-lucide="x" class="w-5 h-5"></i></button>
             
             <div class="flex justify-between items-start mb-1 pr-0 sm:pr-6 flex-shrink-0">
                 <h2 id="modal-device-name" class="text-lg sm:text-2xl font-black text-white truncate mr-2">Device Name</h2>
-                <button onclick="closeFirmwareModal()" class="text-[11px] font-bold text-slate-400 sm:hidden bg-slate-900 px-3 py-1.5 rounded-xl border border-indigo-950">Закрыть</button>
+                <button onclick="closeFirmwareModal()" class="text-[11px] font-bold text-slate-400 sm:hidden bg-slate-900 px-3 py-1.5 rounded-xl border border-indigo-950 active:scale-95 transition-transform">Закрыть</button>
             </div>
             <p data-lang="modalDesc" class="text-xs text-slate-400 mb-4 flex-shrink-0">Доступные официальные сборки RaiserOS:</p>
             
@@ -169,8 +167,8 @@
         <div class="bg-[#050515] border border-indigo-950 w-full max-w-md rounded-3xl p-5 sm:p-8 shadow-2xl relative transform scale-95 transition-all" id="auth-modal-card">
             <button onclick="closeAuthModal()" class="absolute top-5 right-5 text-slate-500 hover:text-white cursor-pointer"><i data-lucide="x" class="w-5 h-5"></i></button>
             <div class="flex gap-4 border-b border-indigo-950/60 pb-2 mb-4 font-space text-base font-bold">
-                <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer">Вход</button>
-                <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer">Регистрация</button>
+                <button id="tab-login" onclick="switchAuthTab('login')" class="text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer transition-all">Вход</button>
+                <button id="tab-register" onclick="switchAuthTab('register')" class="text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer transition-all">Регистрация</button>
             </div>
             <form onsubmit="handleAuth(event)" class="space-y-3.5">
                 <div>
@@ -299,14 +297,7 @@
             }
         };
 
-        document.addEventListener('mousemove', (e) => {
-            const glow = document.getElementById('mouse-glow');
-            if (glow) {
-                glow.style.opacity = '1';
-                glow.style.left = `${e.pageX - 150}px`;
-                glow.style.top = `${e.pageY - 150}px`;
-            }
-        });
+        const toggleGlowOff = () => { }; 
 
         window.showToast = function(message, type = 'info') {
             const container = document.getElementById('toast-container');
@@ -519,74 +510,4 @@
                             <div class="flex flex-wrap items-center gap-1.5">
                                 ${betaTag} ${portTag} ${modTag} ${supportedTag}
                                 <span class="text-[10px] px-1.5 py-0.5 rounded bg-slate-900 border border-indigo-950/80 text-slate-400 font-bold font-space">${fw.region}</span>
-                                <span class="text-[11px] text-slate-500 font-space ml-1">${fw.date}</span>
-                            </div>
-                            <h4 class="text-white font-bold text-sm tracking-tight">${fw.version}</h4>
-                        </div>
-                        <div class="flex items-center justify-between sm:justify-end gap-3 border-t sm:border-none border-indigo-950/40 pt-2.5 sm:pt-0">
-                            <span class="text-xs font-bold font-space text-indigo-400/70 sm:hidden">${fw.size}</span>
-                            <button onclick="triggerDirectDownload('${fw.url}')" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold font-space px-5 py-2.5 rounded-xl transition-all w-full sm:w-auto flex items-center justify-center">
-                                <span class="hidden sm:inline">${fw.size} | </span>&nbsp;${TRANSLATIONS[currentLang].downloadBtn}
-                            </button>
-                        </div>
-                    </div>`;
-                }).join('');
-            }
-            const modal = document.getElementById('firmware-modal');
-            modal.classList.remove('opacity-0', 'pointer-events-none');
-            const card = document.getElementById('fw-modal-card');
-            card.classList.remove('translate-y-full', 'sm:scale-95');
-            lucide.createIcons();
-        };
-
-        window.closeFirmwareModal = function() { 
-            document.getElementById('firmware-modal').classList.add('opacity-0', 'pointer-events-none'); 
-            document.getElementById('fw-modal-card').classList.add('translate-y-full', 'sm:scale-95');
-        };
-        
-        window.openProfileModal = function() {
-            document.getElementById('profile-modal').classList.remove('opacity-0', 'pointer-events-none');
-            document.getElementById('profile-modal-card').classList.remove('scale-95');
-        };
-        window.closeProfileModal = function() {
-            document.getElementById('profile-modal').classList.add('opacity-0', 'pointer-events-none');
-            document.getElementById('profile-modal-card').classList.add('scale-95');
-        };
-
-        window.openAuthModal = function(tab = 'login') { document.getElementById('auth-modal').classList.remove('opacity-0', 'pointer-events-none'); switchAuthTab(tab); };
-        window.closeAuthModal = function() { document.getElementById('auth-modal').classList.add('opacity-0', 'pointer-events-none'); };
-        
-        window.switchAuthTab = function(tab) { 
-            authMode = tab; 
-            const tLogin = document.getElementById('tab-login');
-            const tReg = document.getElementById('tab-register');
-            const confirmBox = document.getElementById('confirm-pass-container');
-            const submitBtn = document.getElementById('auth-submit-btn');
-
-            if (tab === 'login') {
-                tLogin.className = "text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer";
-                tReg.className = "text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer";
-                confirmBox.classList.add('hidden');
-                submitBtn.innerText = "ВОЙТИ";
-            } else {
-                tReg.className = "text-white border-b-2 border-indigo-500 pb-1.5 cursor-pointer";
-                tLogin.className = "text-slate-500 hover:text-slate-300 pb-1.5 cursor-pointer";
-                confirmBox.classList.remove('hidden');
-                submitBtn.innerText = "СОЗДАТЬ";
-            }
-        };
-
-        window.toggleChat = function() { 
-            const w = document.getElementById('chat-widget'); 
-            const isMobile = window.innerWidth < 640;
-            if (w.classList.contains('translate-y-[315px]') || w.classList.contains('translate-y-[365px]')) {
-                w.classList.remove('translate-y-[315px]', 'translate-y-[365px]');
-            } else {
-                w.classList.add(isMobile ? 'translate-y-[315px]' : 'translate-y-[365px]');
-            }
-            document.getElementById('chat-toggle-icon').classList.toggle('rotate-180'); 
-        };
-        function getCurrentTimeStr() { const n = new Date(); return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`; }
-    </script>
-</body>
-</html>
+                               Source not provided
